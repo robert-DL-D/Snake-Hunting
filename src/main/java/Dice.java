@@ -1,87 +1,94 @@
-import java.awt.Color;
-import java.awt.Graphics;
+import java.util.Random;
 
-import javafx.scene.control.Button;
-
+/**
+ * @author WeiYi Yu
+ * @date 2019-08-24
+ */
 public class Dice {
 
-    int n = -1;
-    Board sl;
+//    private static final int DICE_LENGTH = 45;
+//    private static final int DOT_LENGTH = 5;
 
-    public void draw(Graphics g) {
-        g.setColor(Color.BLACK);
-        g.fill3DRect(500, 400, 45, 45, false);
-        g.setColor(Color.WHITE);
+    private static final int DICE_NUM_MIN = 1;
+    private static final int DICE_NUM_MAX = 6;
 
-        if (n == 1) {
-            g.fillOval(520, 420, 5, 5);
-        } else if (n == 2) {
-            g.fillOval(510, 420, 5, 5);
-            g.fillOval(530, 420, 5, 5);
-        } else if (n == 3) {
-            g.fillOval(520, 410, 5, 5);
-            g.fillOval(510, 430, 5, 5);
-            g.fillOval(530, 430, 5, 5);
-        } else if (n == 4) {
-            g.fillOval(510, 410, 5, 5);
-            g.fillOval(530, 410, 5, 5);
-            g.fillOval(510, 430, 5, 5);
-            g.fillOval(530, 430, 5, 5);
-        } else if (n == 5) {
-            g.fillOval(510, 410, 5, 5);
-            g.fillOval(530, 410, 5, 5);
-            g.fillOval(520, 420, 5, 5);
-            g.fillOval(510, 430, 5, 5);
-            g.fillOval(530, 430, 5, 5);
-        } else if (n == 6) {
-            g.fillOval(510, 410, 5, 5);
-            g.fillOval(530, 410, 5, 5);
-            g.fillOval(510, 420, 5, 5);
-            g.fillOval(530, 420, 5, 5);
-            g.fillOval(510, 430, 5, 5);
-            g.fillOval(530, 430, 5, 5);
-        }
-    }
+    private Random random;
+    private int lastNum = 1;
+    private Board board;
 
-    public Dice(Board sl) {
-        this.sl = sl;
+    public Dice() {
+        random = new Random();
     }
 
     public int roll() {
-        int n = 0;
-
-        for (int i = 1; i <= 20; i++) {
-            n = (int) (Math.random() * 6) + 1;
-            //n = 1; // for testing
-            set(n);
-
-            // This creates the fake dice roll animation
-            try {
-                Thread.sleep(100);
-            } catch (Exception e) {
-                System.out.println("Dice roll exception " + e);
-            }
-        }
-        sl.setPiece(1, sl.getP1Location() + n);
-
-        return n;
+        lastNum = getRandomNumber(DICE_NUM_MIN, DICE_NUM_MAX);
+        return lastNum;
     }
 
-    public int set(int val) {
-        if (val >= 1 && val <= 6) {
-            n = val;
-        } else if (val < 1) {
-            n = 1;
-        } else {
-            n = 6;
-        }
-        sl.repaint();
-        return n;
-    }
+//    public Dice(Board board) {
+//        random = new Random();
+//        this.board = board;
+//    }
 
-    // This is not being call
-    static int getThrow() {
-        return (int) (Math.random() * 6) + 1;
-    }
+//    public int roll() {
+//        int num;
+//
+//        // fake dice animation
+//        for (int i = 1; i <= 20; i++) {
+//            do {
+//                num = getRandomNumber(1, 6);
+//            } while (lastNum == num);
+//            lastNum = num;
+//            board.repaint();
+//
+//            // This creates the fake dice roll animation
+//            try {
+//                Thread.sleep(100);
+//            } catch (Exception e) {
+//                System.out.println("Dice roll exception " + e);
+//            }
+//        }
+//        board.setPiece(1, board.getP1Location() + lastNum);
+//
+//        return lastNum;
+//    }
 
+//    public void draw(Graphics graphics) {
+//        graphics.setColor(Color.BLACK);
+//        graphics.fill3DRect(500, 400, DICE_LENGTH, DICE_LENGTH, false);
+//        graphics.setColor(Color.WHITE);
+//
+//        if (lastNum == 1) {
+//            graphics.fillOval(520, 420, DOT_LENGTH, DOT_LENGTH);
+//        } else if (lastNum == 2) {
+//            graphics.fillOval(510, 420, DOT_LENGTH, DOT_LENGTH);
+//            graphics.fillOval(530, 420, DOT_LENGTH, DOT_LENGTH);
+//        } else if (lastNum == 3) {
+//            graphics.fillOval(520, 410, DOT_LENGTH, DOT_LENGTH);
+//            graphics.fillOval(510, 430, DOT_LENGTH, DOT_LENGTH);
+//            graphics.fillOval(530, 430, DOT_LENGTH, DOT_LENGTH);
+//        } else if (lastNum == 4) {
+//            graphics.fillOval(510, 410, DOT_LENGTH, DOT_LENGTH);
+//            graphics.fillOval(530, 410, DOT_LENGTH, DOT_LENGTH);
+//            graphics.fillOval(510, 430, DOT_LENGTH, DOT_LENGTH);
+//            graphics.fillOval(530, 430, DOT_LENGTH, DOT_LENGTH);
+//        } else if (lastNum == 5) {
+//            graphics.fillOval(510, 410, DOT_LENGTH, DOT_LENGTH);
+//            graphics.fillOval(530, 410, DOT_LENGTH, DOT_LENGTH);
+//            graphics.fillOval(520, 420, DOT_LENGTH, DOT_LENGTH);
+//            graphics.fillOval(510, 430, DOT_LENGTH, DOT_LENGTH);
+//            graphics.fillOval(530, 430, DOT_LENGTH, DOT_LENGTH);
+//        } else if (lastNum == 6) {
+//            graphics.fillOval(510, 410, DOT_LENGTH, DOT_LENGTH);
+//            graphics.fillOval(530, 410, DOT_LENGTH, DOT_LENGTH);
+//            graphics.fillOval(510, 420, DOT_LENGTH, DOT_LENGTH);
+//            graphics.fillOval(530, 420, DOT_LENGTH, DOT_LENGTH);
+//            graphics.fillOval(510, 430, DOT_LENGTH, DOT_LENGTH);
+//            graphics.fillOval(530, 430, DOT_LENGTH, DOT_LENGTH);
+//        }
+//    }
+
+    private int getRandomNumber(int min, int max) {
+        return random.nextInt(max) + min;
+    }
 }
