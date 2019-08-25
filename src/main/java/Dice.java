@@ -9,8 +9,8 @@ public class Dice {
 //    private static final int DICE_LENGTH = 45;
 //    private static final int DOT_LENGTH = 5;
 
-    private static final int DICE_NUM_MIN = 1;
-    private static final int DICE_NUM_MAX = 6;
+    public static final int DICE_NUM_MIN = 1;
+    public static final int DICE_NUM_MAX = 6;
 
     private Random random;
     private int lastNum = 1;
@@ -25,7 +25,17 @@ public class Dice {
         return lastNum;
     }
 
-//    public Dice(Board board) {
+    // test method: return a fix number
+    public int roll(int num) {
+        lastNum = num;
+        return lastNum;
+    }
+
+    public int getLastNum() {
+        return lastNum;
+    }
+
+    //    public Dice(Board board) {
 //        random = new Random();
 //        this.board = board;
 //    }

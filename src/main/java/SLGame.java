@@ -137,7 +137,7 @@ public class SLGame {
             if (s.equals("roll")) {
                 dice.roll();
             } else if (checkInput(s)) {
-                dice.set(Integer.parseInt(s));
+//                dice.set(Integer.parseInt(s));
                 bd.setPiece(1, bd.getP1Location() + Integer.parseInt(s));
             } else {
                 bd.moveSnake(s);
