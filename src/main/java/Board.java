@@ -45,7 +45,7 @@ public class Board
 
         b = new JButton("Roll Dice");
         b.setBounds(475, 450, 95, 30);
-        b.addActionListener(e -> dice.roll());
+        //b.addActionListener(e -> dice.roll());
         contentPane.add(b);
 
         frame.getContentPane().add(this, BorderLayout.CENTER);
