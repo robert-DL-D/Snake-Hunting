@@ -2,7 +2,7 @@ import java.util.HashMap;
 
 class Piece {
 
-    private int paralyzedTurns;
+    private int paralyzedTurns = 3;
     private HashMap <Integer, Ladder> laddersClimbed;
 
     public Piece(){
@@ -14,6 +14,10 @@ class Piece {
     }
 
     public void setParalyzedTurns(){
+        this.paralyzedTurns = 3;
+    }
+
+    public void decreaseParalyzedTurns(){
         if (this.paralyzedTurns > 0) {
             this.paralyzedTurns -= 1;
         }
