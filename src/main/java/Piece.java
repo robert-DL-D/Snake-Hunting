@@ -2,6 +2,7 @@ import java.util.HashMap;
 
 class Piece {
 
+    //hello
     private int paralyzedTurns = 3;
     private HashMap <Integer, Ladder> laddersClimbed;
 
