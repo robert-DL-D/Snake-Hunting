@@ -148,8 +148,13 @@ fabric.properties
 
 # Editor-based Rest Client
 .idea/httpRequests
+.idea/misc.xml
 
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
 
 $PRODUCT_WORKSPACE_FILE$
+.DS_Store
+target/classes/META-INF/
+target/generated-sources/
+target/generated-test-sources/
