@@ -33,7 +33,7 @@ public class Board
     int trapsCount = 0;
 
     public Board(int n) {
-        dice = new Dice(this);
+//        dice = new Dice(this);
 
         if (n > 4 || n < 2) {
             System.out.println("Minimum 2 players and Maximum 4 players");
@@ -350,7 +350,7 @@ public class Board
 
         drawPieces(g);
 
-        dice.draw(g);
+//        dice.draw(g);
 
     }
 
