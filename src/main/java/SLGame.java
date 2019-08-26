@@ -348,7 +348,7 @@ public class SLGame {
 
         for (int i = 10; i < 15; i++) {
 
-            bd.add(new Ladder(slList.get(i), slList.get(i + 5)));
+            bd.add(new Ladder(1, slList.get(i), slList.get(i + 5)));
         }
 
     }

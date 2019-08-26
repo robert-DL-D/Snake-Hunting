@@ -270,10 +270,10 @@ public class Setup
         JButton btnStart = new JButton("Check");
         btnStart.addActionListener(e -> {
             slg.setUpValidation(getSetup());
-            // slg.control();
-            // bd.repaint();
-            // start = true;
-            // System.out.println(start);
+            slg.control();
+            //bd.repaint();
+            start = true;
+            System.out.println(start);
         });
         btnStart.setBounds(432, 228, 89, 23);
         myPanel.add(btnStart);
