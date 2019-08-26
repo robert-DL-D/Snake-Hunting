@@ -8,6 +8,7 @@ public class SLGameNew {
 
     private static final int MAX_GUARDS = 3;
 
+    private boolean isGameOver = false;
     private GameStage gameStage;
     private Board board;
     private Dice dice;
@@ -18,44 +19,36 @@ public class SLGameNew {
     private int numOfGuards = 0;
     private int numOfTurns = 0;
 
-    public static void main(String[] args) {
-        SLGameNew slGame = new SLGameNew();
-        slGame.execute();
-    }
+    public SLGameNew(Board board, Dice dice, HashMap<Integer, Player> playerMap) {
+        this.board = board;
+        this.dice = dice;
+        this.playerMap = playerMap;
 
-    public void execute() {
-        setupVariables();
-    }
-
-    private void setupVariables() {
         setGameStage(GameStage.INITIAL);
-        setupPlayers(2);
-
-        dice = new Dice();
-        board = new Board();
     }
 
-    // Fixed to 2 players for now
-    private void setupPlayers(int numOfPlayers) {
-        playerMap = new HashMap<>();
-
-        for (int i = 1; i <= numOfPlayers; i++) {
-            Player player = new Player();
-            playerMap.put(i % numOfPlayers, player);
+    public void start() {
+        while (!isGameOver()) {
+            nextTurn();
         }
+        gameOver();
     }
 
-    private void nextTurn() {
+    void gameOver() {
+        // TODO: print the info of game
+    }
+
+    void nextTurn() {
         numOfTurns++;
         currentPlayer = getNextPlayer(numOfTurns);
     }
 
-    private Player getNextPlayer(int numOfTurns) {
+    Player getNextPlayer(int numOfTurns) {
         int index = numOfTurns % playerMap.size();
         return playerMap.get(index);
     }
 
-    private boolean addGuards(int position) {
+    boolean addGuards(int position) {
         if (numOfGuards == MAX_GUARDS) {
             return false;
         }
@@ -67,7 +60,50 @@ public class SLGameNew {
         return true;
     }
 
-    private void setGameStage(GameStage gameStage) {
+    void setGameStage(GameStage gameStage) {
         this.gameStage = gameStage;
     }
+
+    GameStage getGameStage() {
+        return gameStage;
+    }
+
+    //region getter/setter
+    public static int getMaxGuards() {
+        return MAX_GUARDS;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public int getNumOfGuards() {
+        return numOfGuards;
+    }
+
+    public void setNumOfGuards(int numOfGuards) {
+        this.numOfGuards = numOfGuards;
+    }
+
+    public int getNumOfTurns() {
+        return numOfTurns;
+    }
+
+    public void setNumOfTurns(int numOfTurns) {
+        this.numOfTurns = numOfTurns;
+    }
+
+    public boolean isGameOver() {
+        // TODO: check every conditions which can finish the game
+        return isGameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        isGameOver = gameOver;
+    }
+    //endregion
 }
