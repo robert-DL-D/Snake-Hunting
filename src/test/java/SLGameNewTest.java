@@ -17,6 +17,8 @@ import static org.junit.Assert.assertTrue;
 @RunWith(MockitoJUnitRunner.class)
 public class SLGameNewTest {
 
+    private static final int NUM_OF_PLAYERS = 4;
+
     private SLGameNew slGame;
 
     @Before
@@ -27,10 +29,15 @@ public class SLGameNewTest {
     //region getNextPlayer
     @Test
     public void testGetNextPlayer() {
-        assertEquals("Player 1", slGame.getNextPlayer(1).getName());
-        assertEquals("Player 2", slGame.getNextPlayer(2).getName());
-        assertEquals("Player 2", slGame.getNextPlayer(50).getName());
-        assertEquals("Player 1", slGame.getNextPlayer(51).getName());
+        assertEquals("Player 1", slGame.getPlayer(1).getName());
+        assertEquals("Player 2", slGame.getPlayer(2).getName());
+        assertEquals("Player 3", slGame.getPlayer(3).getName());
+        assertEquals("Player 4", slGame.getPlayer(4).getName());
+
+        assertEquals("Player 1", slGame.getPlayer(45).getName());
+        assertEquals("Player 2", slGame.getPlayer(46).getName());
+        assertEquals("Player 3", slGame.getPlayer(47).getName());
+        assertEquals("Player 4", slGame.getPlayer(48).getName());
     }
     //endregion
 
@@ -70,12 +77,11 @@ public class SLGameNewTest {
     //endregion
 
     private static HashMap<Integer, Player> getPlayers() {
-        int numOfPlayers = 2;
         HashMap<Integer, Player> players = new HashMap<>();
 
-        for (int i = 1; i <= numOfPlayers; i++) {
+        for (int i = 1; i <= NUM_OF_PLAYERS; i++) {
             Player player = new Player("Player " + i);
-            players.put(i % numOfPlayers, player);
+            players.put(i % NUM_OF_PLAYERS, player);
         }
         return players;
     }

@@ -40,10 +40,10 @@ public class SLGameNew {
 
     void nextTurn() {
         numOfTurns++;
-        currentPlayer = getNextPlayer(numOfTurns);
+        currentPlayer = getPlayer(numOfTurns);
     }
 
-    Player getNextPlayer(int numOfTurns) {
+    Player getPlayer(int numOfTurns) {
         int index = numOfTurns % playerMap.size();
         return playerMap.get(index);
     }
