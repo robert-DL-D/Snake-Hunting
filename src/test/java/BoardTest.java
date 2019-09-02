@@ -10,17 +10,21 @@ import static org.junit.Assert.*;
  */
 public class BoardTest {
 
-    public Board testBoard;
+    public BoardNew testBoard;
     @Before
     public void setUp() throws Exception {
 
-        testBoard = new Board(2);
+        testBoard = new BoardNew(1, 2);
     }
 
     @Test
     public void getDice_before_initialization() throws Exception {
-        assertEquals(true, true);
+        assertTrue(true);
 
+    }
+
+    public void checkBoardHeightAndWidth() throws  Exception {
+        assertEquals(testBoard.getSquares(), new Square[1][2]);
     }
 
 
