@@ -49,6 +49,21 @@ public class GameController
 //    }
 
 
+    @Override
+    public void onAddSnakeClick() {
+        gameView.showSnakeBuilder();
+    }
+
+    @Override
+    public void onSnakeBuilt(int head, int tail) {
+        gameView.addSnake(head, tail);
+    }
+
+    @Override
+    public void onAddLadderClick() {
+
+    }
+
     //region interaction
     @Override
     public void onStartClick() {

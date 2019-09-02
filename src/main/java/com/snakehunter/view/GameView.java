@@ -3,11 +3,15 @@ package com.snakehunter.view;
 import com.snakehunter.model.exception.NumberRangeException;
 
 import java.awt.Container;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  * @author WeiYi Yu
@@ -21,8 +25,6 @@ public class GameView
 
     private Board board;
     private Dice dice;
-
-    private int factor = 1;
 
     public GameView() {
         super("Snakes n Ladders!");
@@ -45,22 +47,45 @@ public class GameView
         contentPane.add(settingPanel);
 
         setVisible(true);
-//        new Thread(this).start();
-    }
-
-    public void run() {
-        while (true) {
-            try {
-                Thread.sleep(1000);
-            } catch (Exception e) {
-            }
-            factor = -factor;
-            repaint();
-        }
     }
 
     public void rollTheDice() {
         dice.roll();
+    }
+
+    public void showSnakeBuilder() {
+        JPanel pane = new JPanel();
+        pane.setLayout(new GridLayout(0, 2, 2, 2));
+
+        JTextField daysField = new JTextField(5);
+        JTextField assignmentField = new JTextField(5);
+
+        pane.add(new JLabel("Head position"));
+        pane.add(daysField);
+
+        pane.add(new JLabel("Tail position"));
+        pane.add(assignmentField);
+
+        int option = JOptionPane.showConfirmDialog(this, pane, "Please fill all the fields", JOptionPane.YES_NO_OPTION,
+                                                   JOptionPane.INFORMATION_MESSAGE);
+
+        if (option == JOptionPane.YES_OPTION) {
+
+            String daysInput = daysField.getText();
+            String assignmentsInput = assignmentField.getText();
+
+            try {
+                int head = Integer.parseInt(daysInput);
+                int tail = Integer.parseInt(assignmentsInput);
+                listener.onSnakeBuilt(head, tail);
+            } catch (NumberFormatException nfe) {
+                nfe.printStackTrace();
+            }
+        }
+    }
+
+    public void addSnake(int head, int tail){
+        board.addSnake(head, tail);
     }
 
     public void showHowManyPlayers() throws NumberRangeException {
@@ -99,8 +124,10 @@ public class GameView
 
         switch (e.getActionCommand()) {
         case "Add Snake":
+            listener.onAddSnakeClick();
             break;
         case "Add Ladder":
+            listener.onAddLadderClick();
             break;
         case "Start":
             listener.onStartClick();
@@ -112,6 +139,12 @@ public class GameView
     }
 
     public interface GameViewListener {
+        void onAddSnakeClick();
+
+        void onSnakeBuilt(int head, int tail);
+
+        void onAddLadderClick();
+
         void onStartClick();
 
         void onDiceClick();
