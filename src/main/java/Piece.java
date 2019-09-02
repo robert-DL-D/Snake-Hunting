@@ -1,6 +1,6 @@
 import java.util.HashMap;
 
-class Piece {
+class Piece implements Placeable{
 
     //hello
     private int paralyzedTurns = 3;
@@ -37,4 +37,52 @@ class Piece {
         }
     }
 
+    @Override
+    public int getBottomPos() {
+        return 0;
+    }
+
+    @Override
+    public void setTopPos(int i) {
+
+    }
+
+    @Override
+    public void setBottomPos(int i) {
+
+    }
+
+    @Override
+    public int getLength() {
+        return 0;
+    }
+
+    @Override
+    public int getMaxLength() {
+        return 0;
+    }
+
+    @Override
+    public int getMinLength() {
+        return 0;
+    }
+
+    @Override
+    public void setMaxLength(int i) {
+
+    }
+
+    @Override
+    public void setMinLength(int i) {
+
+    }
+
+    @Override
+    public void move(int i) {
+
+    }
+
+    public int getTopPos(){
+        return 0;
+    }
 }
