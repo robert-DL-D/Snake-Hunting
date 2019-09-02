@@ -6,6 +6,8 @@ import com.snakehunter.model.exception.NumberRangeException;
 import com.snakehunter.view.GameView;
 import com.snakehunter.view.GameView.GameViewListener;
 
+import javax.swing.JOptionPane;
+
 /**
  * @author WeiYi Yu
  * @date 2019-08-25
@@ -60,6 +62,11 @@ public class GameController
     @Override
     public void onDiceClick() {
         gameView.rollTheDice();
+    }
+
+    @Override
+    public void onDiceRolled(int num) {
+        JOptionPane.showMessageDialog(gameView, "Num:" + num);
     }
 
     @Override

@@ -1,8 +1,8 @@
 
 interface Placeable {
 
-    Square topPos = 0;
-    Square bottomPos = 0;
+//    Square topPos = 0;
+//    Square bottomPos = 0;
     int length = 0;
     int maxLength = 0;
     int minLength = 0;

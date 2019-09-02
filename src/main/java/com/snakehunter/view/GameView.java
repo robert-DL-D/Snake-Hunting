@@ -15,8 +15,7 @@ import javax.swing.JOptionPane;
  */
 public class GameView
         extends JFrame
-        implements ActionListener,
-                   Runnable {
+        implements ActionListener {
 
     private GameViewListener listener;
 
@@ -58,8 +57,7 @@ public class GameView
     }
 
     public void rollTheDice() {
-        // FIXME
-        new Thread(dice).start();
+        dice.roll();
     }
 
     public void showHowManyPlayers() throws NumberRangeException {
@@ -101,6 +99,8 @@ public class GameView
         void onStartClick();
 
         void onDiceClick();
+
+        void onDiceRolled(int num);
 
         void onNumOfPlayersEntered(int numOfPlayers);
     }

@@ -13,7 +13,7 @@ import java.util.Random;
  * @date 2019-08-24
  */
 public class Dice
-        extends ClickablePanel implements Runnable {
+        extends ClickablePanel {
 
     private static final int DICE_LENGTH = 45;
     private static final int DOT_LENGTH = 5;
@@ -84,35 +84,32 @@ public class Dice
         return lastNum;
     }
 
-    public int roll() {
-        int num;
+    public void roll() {
+        new Thread(() -> {
+            int num;
 
-        System.out.println("roll");
-        // fake dice animation
-        for (int i = 1; i <= 20; i++) {
-            do {
-                num = getRandomNumber(1, 6);
-            } while (lastNum == num);
-            lastNum = num;
+            // fake dice animation
+            for (int i = 1; i <= 20; i++) {
+                do {
+                    num = getRandomNumber(1, 6);
+                } while (lastNum == num);
+                lastNum = num;
 
-            repaint();
-            // This creates the fake dice roll animation
-            try {
-                Thread.sleep(100);
-            } catch (Exception e) {
-                System.out.println("Dice roll exception " + e);
+                repaint();
+                // This creates the fake dice roll animation
+                try {
+                    Thread.sleep(100);
+                } catch (Exception e) {
+                    System.out.println("Dice roll exception " + e);
+                }
             }
-        }
 
-        return lastNum;
+            listener.onDiceRolled(lastNum);
+        }).start();
+
     }
 
     private int getRandomNumber(int min, int max) {
         return random.nextInt(max) + min;
-    }
-
-    @Override
-    public void run() {
-        roll();
     }
 }
