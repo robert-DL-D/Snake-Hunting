@@ -1,9 +1,13 @@
+package com.snakehunter;
+
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 /**
  * @author WeiYi Yu
- * @date 2019-08-24
+ * @date 2019-09-02
  */
 public class DiceTest {
 

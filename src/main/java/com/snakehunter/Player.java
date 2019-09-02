@@ -1,3 +1,5 @@
+package com.snakehunter;
+
 /**
  * @author WeiYi Yu
  * @date 2019-08-25

@@ -1,27 +1,31 @@
-import java.util.HashMap;
+package com.snakehunter.controller;
+
+import com.snakehunter.GameStage;
+import com.snakehunter.Player;
+import com.snakehunter.view.BoardView;
+
+import java.util.Map;
 
 /**
  * @author WeiYi Yu
  * @date 2019-08-25
  */
-public class SLGameNew {
+public class GameController {
 
     private static final int MAX_GUARDS = 3;
 
     private boolean isGameOver = false;
     private GameStage gameStage;
-    private Board board;
-    private Dice dice;
+    private BoardView boardView;
 
     private Player currentPlayer;
-    private HashMap<Integer, Player> playerMap;
+    private Map<Integer, Player> playerMap;
 
     private int numOfGuards = 0;
     private int numOfTurns = 0;
 
-    public SLGameNew(Board board, Dice dice, HashMap<Integer, Player> playerMap) {
-        this.board = board;
-        this.dice = dice;
+    public GameController(BoardView board, Map<Integer, Player> playerMap) {
+        this.boardView = board;
         this.playerMap = playerMap;
 
         setGameStage(GameStage.INITIAL);

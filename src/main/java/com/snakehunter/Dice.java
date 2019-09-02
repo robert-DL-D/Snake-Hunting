@@ -1,3 +1,5 @@
+package com.snakehunter;
+
 import java.util.Random;
 
 /**
@@ -14,7 +16,7 @@ public class Dice {
 
     private Random random;
     private int lastNum = 1;
-    private Board board;
+//    private Board board;
 
     public Dice() {
         random = new Random();
