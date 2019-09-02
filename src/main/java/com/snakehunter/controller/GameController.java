@@ -1,106 +1,74 @@
 package com.snakehunter.controller;
 
 import com.snakehunter.GameStage;
-import com.snakehunter.Player;
-import com.snakehunter.view.BoardView;
-
-import java.util.Map;
+import com.snakehunter.model.GameModel;
+import com.snakehunter.model.exception.NumberRangeException;
+import com.snakehunter.view.GameView;
+import com.snakehunter.view.GameView.GameViewListener;
 
 /**
  * @author WeiYi Yu
  * @date 2019-08-25
  */
-public class GameController {
+public class GameController
+        implements GameViewListener {
 
-    private static final int MAX_GUARDS = 3;
 
     private boolean isGameOver = false;
-    private GameStage gameStage;
-    private BoardView boardView;
+    private GameView gameView;
+    private GameModel gameModel;
 
-    private Player currentPlayer;
-    private Map<Integer, Player> playerMap;
+    public GameController(GameView gameView, GameModel gameModel) {
+        this.gameView = gameView;
+        this.gameModel = gameModel;
 
-    private int numOfGuards = 0;
-    private int numOfTurns = 0;
-
-    public GameController(BoardView board, Map<Integer, Player> playerMap) {
-        this.boardView = board;
-        this.playerMap = playerMap;
-
-        setGameStage(GameStage.INITIAL);
-    }
-
-    public void start() {
-        while (!isGameOver()) {
-            nextTurn();
-        }
-        gameOver();
+        gameModel.setGameStage(GameStage.INITIAL);
     }
 
     void gameOver() {
         // TODO: print the info of game
     }
 
-    void nextTurn() {
-        numOfTurns++;
-        currentPlayer = getPlayer(numOfTurns);
-    }
+//    void nextTurn() {
+//        numOfTurns++;
+//        currentPlayer = getPlayer(numOfTurns);
+//    }
+//
+//    boolean addGuards(int position) {
+//        if (numOfGuards == MAX_GUARDS) {
+//            return false;
+//        }
+//
+//        // TODO:
+//        //  1. check if position available
+//        //  2. put the guard into the corresponding position
+//        numOfGuards++;
+//        return true;
+//    }
 
-    Player getPlayer(int numOfTurns) {
-        int index = numOfTurns % playerMap.size();
-        return playerMap.get(index);
-    }
 
-    boolean addGuards(int position) {
-        if (numOfGuards == MAX_GUARDS) {
-            return false;
+    //region interaction
+    @Override
+    public void onStartClick() {
+        try {
+            gameView.showHowManyPlayers();
+        } catch (NumberRangeException e) {
+            gameView.showErrorDialog("Please enter a number between 2 ~ 4.");
         }
-
-        // TODO:
-        //  1. check if position available
-        //  2. put the guard into the corresponding position
-        numOfGuards++;
-        return true;
     }
 
-    void setGameStage(GameStage gameStage) {
-        this.gameStage = gameStage;
+    @Override
+    public void onDiceClick() {
+        gameView.rollTheDice();
     }
 
-    GameStage getGameStage() {
-        return gameStage;
+    @Override
+    public void onNumOfPlayersEntered(int numOfPlayers) {
+        gameModel.setPlayers(numOfPlayers);
     }
+    //endregion
 
     //region getter/setter
-    public static int getMaxGuards() {
-        return MAX_GUARDS;
-    }
-
-    public Player getCurrentPlayer() {
-        return currentPlayer;
-    }
-
-    public void setCurrentPlayer(Player currentPlayer) {
-        this.currentPlayer = currentPlayer;
-    }
-
-    public int getNumOfGuards() {
-        return numOfGuards;
-    }
-
-    public void setNumOfGuards(int numOfGuards) {
-        this.numOfGuards = numOfGuards;
-    }
-
-    public int getNumOfTurns() {
-        return numOfTurns;
-    }
-
-    public void setNumOfTurns(int numOfTurns) {
-        this.numOfTurns = numOfTurns;
-    }
-
     public boolean isGameOver() {
         // TODO: check every conditions which can finish the game
         return isGameOver;

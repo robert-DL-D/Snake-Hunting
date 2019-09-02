@@ -1,9 +1,8 @@
 package com.snakehunter;
 
 import com.snakehunter.controller.GameController;
-import com.snakehunter.view.BoardView;
-
-import java.util.HashMap;
+import com.snakehunter.model.GameModel;
+import com.snakehunter.view.GameView;
 
 /**
  * @author WeiYi Yu
@@ -12,23 +11,13 @@ import java.util.HashMap;
 public class Main {
 
     public static void main(String[] args) {
+        GameView gameView = new GameView();
+        GameModel gameModel = new GameModel();
+        GameController gameController = new GameController(gameView, gameModel);
+        gameView.setListener(gameController);
+
         // TODO:
         //  1. setup board (including any objects position)
         //  2. add players
-        // Start the game after initialize finished.
-        GameController gameController = new GameController(new BoardView(), getPlayers());
-        gameController.start();
-    }
-
-    // Fixed to 2 players for now
-    private static HashMap<Integer, Player> getPlayers() {
-        int numOfPlayers = 2;
-        HashMap<Integer, Player> players = new HashMap<>();
-
-        for (int i = 1; i <= numOfPlayers; i++) {
-            Player player = new Player("Player " + i);
-            players.put(i % numOfPlayers, player);
-        }
-        return players;
     }
 }
