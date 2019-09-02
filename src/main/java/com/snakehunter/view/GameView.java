@@ -29,19 +29,22 @@ public class GameView
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(645, 520);
-        setVisible(true);
 
         Container contentPane = getContentPane();
 
         board = new Board();
-        board.setSize(440, 440);
+        board.setLocation(0, 0);
         contentPane.add(board);
 
         dice = new Dice();
         dice.setLocation(500, 400);
-        dice.setSize(45, 45);
         contentPane.add(dice);
 
+        SettingPanel settingPanel = new SettingPanel(this);
+        settingPanel.setLocation(450, 20);
+        contentPane.add(settingPanel);
+
+        setVisible(true);
 //        new Thread(this).start();
     }
 
@@ -93,6 +96,19 @@ public class GameView
         if (listener == null) {
             return;
         }
+
+        switch (e.getActionCommand()) {
+        case "Add Snake":
+            break;
+        case "Add Ladder":
+            break;
+        case "Start":
+            listener.onStartClick();
+            break;
+        default:
+            break;
+        }
+
     }
 
     public interface GameViewListener {

@@ -27,6 +27,7 @@ public class Dice
     private int lastNum = 1;
 
     public Dice() {
+        setSize(DICE_LENGTH, DICE_LENGTH);
         random = new Random();
         addMouseListener(this);
     }

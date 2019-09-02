@@ -14,6 +14,10 @@ public class Board
     private static final int X_MARGIN = 20;
     private static final int Y_MARGIN = 20;
 
+    public Board() {
+        setSize(440, 440);
+    }
+
     @Override
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
