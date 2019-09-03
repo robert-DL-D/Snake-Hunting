@@ -3,6 +3,7 @@ package com.snakehunter.view;
 import com.snakehunter.GameContract;
 import com.snakehunter.model.GameModel.GameModelListener;
 import com.snakehunter.model.Ladder;
+import com.snakehunter.model.Player;
 import com.snakehunter.model.Snake;
 import com.snakehunter.model.exception.NumberRangeException;
 
@@ -31,6 +32,7 @@ public class GameView
 
     private Board board;
     private Dice dice;
+    private SettingPanel settingPanel;
 
     public GameView() {
         super("Snakes n Ladders!");
@@ -48,7 +50,7 @@ public class GameView
         dice.setLocation(500, 400);
         contentPane.add(dice);
 
-        SettingPanel settingPanel = new SettingPanel(this);
+        settingPanel = new SettingPanel(this);
         settingPanel.setLocation(450, 20);
         contentPane.add(settingPanel);
 
@@ -116,6 +118,11 @@ public class GameView
     public void showErrorDialog(String message) {
         JOptionPane.showMessageDialog(this, message, "Alert", JOptionPane.ERROR_MESSAGE);
     }
+
+    @Override
+    public void hideSettingPanel() {
+        settingPanel.setVisible(false);
+    }
     //endregion
 
     //region GameModel interaction
@@ -138,6 +145,19 @@ public class GameView
     public void onPlayersAdded(int numOfPlayers) {
         // TODO: add pieces into board
     }
+
+    @Override
+    public void onNextTurn(Player player) {
+        dice.setEnabled(true);
+        String message = String.format("%1s's turn, roll the dice!", player.getName());
+        JOptionPane.showMessageDialog(this, message, "Message", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    @Override
+    public void onPlayerMoved(Player player, int destPosition) {
+        String message = String.format("%1s move to new position: %2d", player.getName(), destPosition);
+        JOptionPane.showMessageDialog(null, message, "Message", JOptionPane.INFORMATION_MESSAGE);
+    }
     //endregion
 
     @Override
@@ -152,6 +172,9 @@ public class GameView
             break;
         case "Add com.snakehunter.model.Ladder":
             listener.onAddLadderClick();
+            break;
+        case "Add Players":
+            listener.onAddPlayersClick();
             break;
         case "Start":
             listener.onStartClick();
@@ -172,6 +195,8 @@ public class GameView
         void onSnakeBuilt(int head, int tail);
 
         void onAddLadderClick();
+
+        void onAddPlayersClick();
 
         void onStartClick();
 

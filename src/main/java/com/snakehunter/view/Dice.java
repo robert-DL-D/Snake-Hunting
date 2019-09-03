@@ -85,29 +85,34 @@ public class Dice
         return lastNum;
     }
 
-    public void roll() {
-        new Thread(() -> {
-            int num;
+    public synchronized void roll() {
+        if (isEnabled()) {
+            setEnabled(false);
 
-            // fake dice animation
-            for (int i = 1; i <= 20; i++) {
-                do {
-                    num = getRandomNumber(1, 6);
-                } while (lastNum == num);
-                lastNum = num;
+            new Thread(() -> {
+                int num;
 
-                repaint();
-                // This creates the fake dice roll animation
-                try {
-                    Thread.sleep(100);
-                } catch (Exception e) {
-                    System.out.println("Dice roll exception " + e);
+                // fake dice animation
+                for (int i = 1; i <= 20; i++) {
+                    do {
+                        num = getRandomNumber(1, 6);
+                    } while (lastNum == num);
+                    lastNum = num;
+
+                    repaint();
+                    // This creates the fake dice roll animation
+                    try {
+                        Thread.sleep(100);
+                    } catch (Exception e) {
+                        System.out.println("Dice roll exception " + e);
+                    }
                 }
-            }
 
-            listener.onDiceRolled(lastNum);
-        }).start();
+                listener.onDiceRolled(lastNum);
+                setEnabled(true);
+            }).start();
 
+        }
     }
 
     private int getRandomNumber(int min, int max) {

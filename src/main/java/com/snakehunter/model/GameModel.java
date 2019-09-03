@@ -2,9 +2,10 @@ package com.snakehunter.model;
 
 import com.snakehunter.GameContract;
 import com.snakehunter.GameStage;
-import com.snakehunter.Player;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,13 +24,17 @@ public class GameModel
     private GameStage gameStage;
 
     private Map<Integer, Player> playerMap;
-    private Player currentPlayer;
+    private List<Snake> snakeList;
+    private List<Ladder> ladderList;
 
     private int numOfGuards = 0;
     private int numOfTurns = 0;
 
     public GameModel() {
         initSquare();
+        playerMap = new HashMap<>();
+        snakeList = new ArrayList<>();
+        ladderList = new ArrayList<>();
     }
 
     //region interaction
@@ -68,10 +73,58 @@ public class GameModel
 
     @Override
     public void addPlayers(int numOfPlayers) {
-        playerMap = initPlayers(numOfPlayers);
+        initPlayers(numOfPlayers);
 
         if (listener != null) {
             listener.onPlayersAdded(numOfPlayers);
+        }
+    }
+
+    @Override
+    public Player getCurrentPlayer() {
+        int index = numOfTurns % playerMap.size();
+        return playerMap.get(index);
+    }
+
+    @Override
+    public boolean isGameReady() {
+        return playerMap.size() != 0 && snakeList.size() != 0 && ladderList.size() != 0;
+    }
+
+    @Override
+    public void nextTurn() {
+        numOfTurns++;
+
+        if (listener != null) {
+            listener.onNextTurn(getCurrentPlayer());
+        }
+    }
+
+    @Override
+    public void movePlayer(int steps) {
+        Player currentPlayer = getCurrentPlayer();
+        int currentPosition = currentPlayer.getTopPos();
+        int destPosition = currentPosition + steps;
+        Square currentSquare = getSquare(currentPlayer.getTopPos());
+        Square destSquare = getSquare(destPosition);
+
+        // Check if the destSquare has snakes or ladders
+        Snake snake = destSquare.getSnake();
+        Ladder ladder = destSquare.getLadder();
+        if (snake != null) {
+            destPosition = snake.getTail();
+        } else if (ladder != null) {
+            destPosition = ladder.getTop();
+        }
+
+        currentSquare.removePlaceable(currentPlayer);
+
+        destSquare = getSquare(destPosition);
+        destSquare.addPlaceable(currentPlayer);
+        currentPlayer.setTopPos(destPosition);
+
+        if (listener != null) {
+            listener.onPlayerMoved(currentPlayer, destPosition);
         }
     }
     //endregion
@@ -95,6 +148,38 @@ public class GameModel
         }
     }
 
+    private Square getSquare(int squareNo) {
+        int x, y;
+
+        y = (int) Math.ceil(squareNo / 10f) - 1;
+
+        if (y % 2 == 0) {   // Odd row
+            x = squareNo % 10 - 1;
+            if (x == -1) {
+                x = 9;
+            }
+        } else {    // Oven row
+            x = 10 - squareNo % 10;
+            if (x == 10) {
+                x = 0;
+            }
+        }
+        return squares[x][y];
+    }
+
+    private void initPlayers(int numOfPlayers) {
+        playerMap.clear();
+        Square startPoint = squares[0][0];
+
+        for (int i = 1; i <= numOfPlayers; i++) {
+            Player player = new Player("Player " + i);
+            player.setTopPos(startPoint.getSquareNo());
+            playerMap.put(i % numOfPlayers, player);
+
+            startPoint.addPlaceable(player);
+        }
+    }
+
     private String validateSnakePosition(int head, int tail) {
         String errorMessage = null;
         if (head < 2 || tail < 1) {
@@ -110,35 +195,6 @@ public class GameModel
         }
         return errorMessage;
     }
-
-    private Square getSquare(int position) {
-        int x, y;
-
-        y = (int) Math.ceil(position / 10f) - 1;
-
-        if (y % 2 == 0) {   // Odd row
-            x = position % 10 - 1;
-            if (x == -1) {
-                x = 9;
-            }
-        } else {    // Oven row
-            x = 10 - position % 10;
-            if (x == 10) {
-                x = 0;
-            }
-        }
-        return squares[x][y];
-    }
-
-    private Map<Integer, Player> initPlayers(int numOfPlayers) {
-        Map<Integer, Player> players = new HashMap<>();
-
-        for (int i = 1; i <= numOfPlayers; i++) {
-            Player player = new Player("Player " + i);
-            players.put(i % numOfPlayers, player);
-        }
-        return players;
-    }
     //endregion
 
     //region getter/setter
@@ -148,11 +204,6 @@ public class GameModel
 
     public GameStage getGameStage() {
         return gameStage;
-    }
-
-    private Player getPlayer(int numOfTurns) {
-        int index = numOfTurns % playerMap.size();
-        return playerMap.get(index);
     }
 
     public void setListener(GameModelListener listener) {
@@ -168,5 +219,9 @@ public class GameModel
         void onAddFailed(String errorMessage);
 
         void onPlayersAdded(int numOfPlayers);
+
+        void onNextTurn(Player player);
+
+        void onPlayerMoved(Player player, int destPosition);
     }
 }

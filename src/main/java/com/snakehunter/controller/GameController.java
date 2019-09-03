@@ -7,8 +7,6 @@ import com.snakehunter.model.exception.NumberRangeException;
 import com.snakehunter.view.GameView;
 import com.snakehunter.view.GameView.GameViewListener;
 
-import javax.swing.JOptionPane;
-
 /**
  * @author WeiYi Yu
  * @date 2019-08-25
@@ -43,11 +41,21 @@ public class GameController
     }
 
     @Override
-    public void onStartClick() {
+    public void onAddPlayersClick() {
         try {
             gameView.showHowManyPlayers();
         } catch (NumberRangeException e) {
             gameView.showErrorDialog("Please enter a number between 2 ~ 4.");
+        }
+    }
+
+    @Override
+    public void onStartClick() {
+        if (true) {
+            gameModel.nextTurn();
+            gameView.hideSettingPanel();
+        } else {
+            gameView.showErrorDialog("Make sure you add snakes, ladders and players before start the game.");
         }
     }
 
@@ -58,7 +66,8 @@ public class GameController
 
     @Override
     public void onDiceRolled(int num) {
-        JOptionPane.showMessageDialog(gameView, "Num:" + num);
+        gameModel.movePlayer(num);
+        gameModel.nextTurn();
     }
 
     @Override

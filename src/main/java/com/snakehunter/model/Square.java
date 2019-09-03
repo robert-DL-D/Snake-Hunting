@@ -7,7 +7,7 @@ import java.util.List;
  * @author WeiYi Yu
  * @date 2019-08-26
  */
-class Square {
+public class Square {
 
     private int squareNo;
     private boolean isGuarded = false;
@@ -26,11 +26,35 @@ class Square {
         return currentPlaceables;
     }
 
+    public void removePlaceable(Placeable placeable) {
+        currentPlaceables.remove(placeable);
+    }
+
     public int getSquareNo() {
         return squareNo;
     }
 
     public boolean isGuarded() {
         return isGuarded;
+    }
+
+    public Snake getSnake() {
+        for (Placeable currentPlaceable : currentPlaceables) {
+            if (currentPlaceable instanceof Snake) {
+                return (Snake) currentPlaceable;
+            }
+        }
+
+        return null;
+    }
+
+    public Ladder getLadder() {
+        for (Placeable currentPlaceable : currentPlaceables) {
+            if (currentPlaceable instanceof Ladder) {
+                return (Ladder) currentPlaceable;
+            }
+        }
+
+        return null;
     }
 }

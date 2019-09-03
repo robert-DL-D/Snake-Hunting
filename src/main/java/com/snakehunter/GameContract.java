@@ -1,6 +1,7 @@
 package com.snakehunter;
 
 import com.snakehunter.model.Ladder;
+import com.snakehunter.model.Player;
 import com.snakehunter.model.Snake;
 import com.snakehunter.model.exception.NumberRangeException;
 
@@ -17,6 +18,8 @@ public class GameContract {
         void showHowManyPlayers() throws NumberRangeException;
 
         void showErrorDialog(String message);
+
+        void hideSettingPanel();
     }
 
     public interface GameModel {
@@ -27,6 +30,14 @@ public class GameContract {
         void addGuard(int position);
 
         void addPlayers(int numOfPlayers);
+
+        Player getCurrentPlayer();
+
+        boolean isGameReady();
+
+        void nextTurn();
+
+        void movePlayer(int steps);
     }
 
 }
