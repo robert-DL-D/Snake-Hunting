@@ -1,5 +1,6 @@
 package com.snakehunter.model;
 
+import com.snakehunter.GameContract;
 import com.snakehunter.GameStage;
 import com.snakehunter.Player;
 
@@ -10,7 +11,8 @@ import java.util.Map;
  * @author WeiYi Yu
  * @date 2019-09-02
  */
-public class GameModel {
+public class GameModel
+        implements GameContract.GameModel {
 
     private static final int MAX_GUARDS = 3;
 
@@ -30,11 +32,13 @@ public class GameModel {
         initSquare();
     }
 
+    //region interaction
+    @Override
     public void addSnake(Snake snake) {
         String errorMessage = validateSnakePosition(snake.getHead(), snake.getTail());
 
         if (errorMessage != null && listener != null) {
-            listener.onAddSnakeFailed(errorMessage);
+            listener.onAddFailed(errorMessage);
             return;
         }
 
@@ -45,6 +49,32 @@ public class GameModel {
             listener.onSnakeAdded(snake);
         }
     }
+
+    @Override
+    public void addLadder(Ladder ladder) {
+        // TODO: validate ladder position
+        Square square = getSquare(ladder.getBottom());
+        square.addPlaceable(ladder);
+
+        if (listener != null) {
+            listener.onLadderAdded(ladder);
+        }
+    }
+
+    @Override
+    public void addGuard(int position) {
+
+    }
+
+    @Override
+    public void addPlayers(int numOfPlayers) {
+        playerMap = initPlayers(numOfPlayers);
+
+        if (listener != null) {
+            listener.onPlayersAdded(numOfPlayers);
+        }
+    }
+    //endregion
 
     //region private method
     private void initSquare() {
@@ -125,10 +155,6 @@ public class GameModel {
         return playerMap.get(index);
     }
 
-    public void setPlayers(int numOfPlayers) {
-        playerMap = initPlayers(numOfPlayers);
-    }
-
     public void setListener(GameModelListener listener) {
         this.listener = listener;
     }
@@ -137,6 +163,10 @@ public class GameModel {
     public interface GameModelListener {
         void onSnakeAdded(Snake snake);
 
-        void onAddSnakeFailed(String errorMessage);
+        void onLadderAdded(Ladder ladder);
+
+        void onAddFailed(String errorMessage);
+
+        void onPlayersAdded(int numOfPlayers);
     }
 }

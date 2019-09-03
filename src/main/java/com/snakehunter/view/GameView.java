@@ -1,6 +1,8 @@
 package com.snakehunter.view;
 
+import com.snakehunter.GameContract;
 import com.snakehunter.model.GameModel.GameModelListener;
+import com.snakehunter.model.Ladder;
 import com.snakehunter.model.Snake;
 import com.snakehunter.model.exception.NumberRangeException;
 
@@ -21,7 +23,8 @@ import javax.swing.JTextField;
  */
 public class GameView
         extends JFrame
-        implements ActionListener,
+        implements GameContract.GameView,
+                   ActionListener,
                    GameModelListener {
 
     private GameViewListener listener;
@@ -52,10 +55,13 @@ public class GameView
         setVisible(true);
     }
 
+    //region interaction
+    @Override
     public void rollTheDice() {
         dice.roll();
     }
 
+    @Override
     public void showSnakeBuilder() {
         JPanel pane = new JPanel();
         pane.setLayout(new GridLayout(0, 2, 2, 2));
@@ -86,6 +92,7 @@ public class GameView
         }
     }
 
+    @Override
     public void showHowManyPlayers() throws NumberRangeException {
         int numOfPlayers;
 
@@ -105,14 +112,33 @@ public class GameView
         }
     }
 
+    @Override
     public void showErrorDialog(String message) {
         JOptionPane.showMessageDialog(this, message, "Alert", JOptionPane.ERROR_MESSAGE);
     }
+    //endregion
 
-    public void setListener(GameViewListener listener) {
-        this.listener = listener;
-        dice.setListener(listener);
+    //region GameModel interaction
+    @Override
+    public void onSnakeAdded(Snake snake) {
+        board.addSnake(snake);
     }
+
+    @Override
+    public void onLadderAdded(Ladder ladder) {
+        // TODO: add ladder into board
+    }
+
+    @Override
+    public void onAddFailed(String errorMessage) {
+        showErrorDialog(errorMessage);
+    }
+
+    @Override
+    public void onPlayersAdded(int numOfPlayers) {
+        // TODO: add pieces into board
+    }
+    //endregion
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -133,17 +159,11 @@ public class GameView
         default:
             break;
         }
-
     }
 
-    @Override
-    public void onSnakeAdded(Snake snake) {
-        board.addSnake(snake);
-    }
-
-    @Override
-    public void onAddSnakeFailed(String errorMessage) {
-        showErrorDialog(errorMessage);
+    public void setListener(GameViewListener listener) {
+        this.listener = listener;
+        dice.setListener(listener);
     }
 
     public interface GameViewListener {
