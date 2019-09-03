@@ -155,7 +155,19 @@ public class GameView
 
     @Override
     public void onPlayerMoved(Player player, int destPosition) {
-        String message = String.format("%1s move to new position: %2d", player.getName(), destPosition);
+        String message = String.format("%1s move to: %2d", player.getName(), destPosition);
+        JOptionPane.showMessageDialog(null, message, "Message", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    @Override
+    public void onPlayerClimbLadder(Player player, int destPosition) {
+        String message = String.format("%1s climb a ladder to: %2d", player.getName(), destPosition);
+        JOptionPane.showMessageDialog(null, message, "Message", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    @Override
+    public void onPlayerSwallowedBySnake(Player player, int destPosition) {
+        String message = String.format("%1s swallowed by a snake and back to: %2d", player.getName(), destPosition);
         JOptionPane.showMessageDialog(null, message, "Message", JOptionPane.INFORMATION_MESSAGE);
     }
     //endregion
