@@ -145,8 +145,18 @@ public class GameViewImpl
     }
 
     @Override
-    public void onAddFailed(String errorMessage) {
+    public void onAddSnakeFailed(String errorMessage) {
         showErrorDialog(errorMessage);
+    }
+
+    @Override
+    public void onGuardAdded(int position) {
+
+    }
+
+    @Override
+    public void onExceedMaxNumOfGuards() {
+
     }
 
     @Override
@@ -177,6 +187,11 @@ public class GameViewImpl
     public void onPlayerSwallowedBySnake(Player player, int destPosition) {
         String message = String.format("%1s swallowed by a snake and back to: %2d", player.getName(), destPosition);
         JOptionPane.showMessageDialog(null, message, "Message", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    @Override
+    public void onNumOfPlayersEnteredError() {
+        showErrorDialog("Please enter a number between 2 ~ 4.");
     }
     //endregion
 
@@ -226,7 +241,5 @@ public class GameViewImpl
         void onDiceRolled(int num);
 
         void onNumOfPlayersEntered(int numOfPlayers);
-
-        void onInputError();
     }
 }

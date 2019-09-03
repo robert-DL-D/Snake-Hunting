@@ -34,6 +34,10 @@ public class Square {
         return squareNo;
     }
 
+    public void setGuarded(boolean guarded) {
+        isGuarded = guarded;
+    }
+
     public boolean isGuarded() {
         return isGuarded;
     }

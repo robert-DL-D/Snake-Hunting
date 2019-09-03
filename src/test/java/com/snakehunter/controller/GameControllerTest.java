@@ -117,15 +117,6 @@ public class GameControllerTest {
         verify(gameModel).addPlayers(4);
     }
 
-    @Test
-    public void whenInputError_thenShowErrorDialog() {
-        // when
-        gameController.onInputError();
-
-        // then
-        verify(gameView).showErrorDialog(anyString());
-    }
-
     //    //region getNextPlayer
 ////    @Test
 ////    public void testGetNextPlayer() {

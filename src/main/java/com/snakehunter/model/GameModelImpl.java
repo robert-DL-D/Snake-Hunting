@@ -43,7 +43,7 @@ public class GameModelImpl
         String errorMessage = validateSnake(snake);
 
         if (errorMessage != null && listener != null) {
-            listener.onAddFailed(errorMessage);
+            listener.onAddSnakeFailed(errorMessage);
             return;
         }
 
@@ -68,11 +68,30 @@ public class GameModelImpl
 
     @Override
     public void addGuard(int position) {
+        if (numOfGuards == MAX_GUARDS) {
+            if (listener != null) {
+                listener.onExceedMaxNumOfGuards();
+            }
+            return;
+        }
 
+        Square square = getSquare(position);
+        square.setGuarded(true);
+
+        if (listener != null) {
+            listener.onGuardAdded(position);
+        }
     }
 
     @Override
     public void addPlayers(int numOfPlayers) {
+        if (numOfPlayers < 2 || numOfPlayers > 4) {
+            if (listener != null) {
+                listener.onNumOfPlayersEnteredError();
+            }
+            return;
+        }
+
         initPlayers(numOfPlayers);
 
         if (listener != null) {
@@ -150,7 +169,8 @@ public class GameModelImpl
         }
     }
 
-    private Square getSquare(int squareNo) {
+    @Override
+    public Square getSquare(int squareNo) {
         int x, y;
 
         y = (int) Math.ceil(squareNo / 10f) - 1;
@@ -217,6 +237,11 @@ public class GameModelImpl
     }
 
     @Override
+    public void setNumOfGuards(int num) {
+        numOfGuards = num;
+    }
+
+    @Override
     public void setListener(GameModelListener listener) {
         this.listener = listener;
     }
@@ -227,7 +252,11 @@ public class GameModelImpl
 
         void onLadderAdded(Ladder ladder);
 
-        void onAddFailed(String errorMessage);
+        void onAddSnakeFailed(String errorMessage);
+
+        void onGuardAdded(int position);
+
+        void onExceedMaxNumOfGuards();
 
         void onPlayersAdded(int numOfPlayers);
 
@@ -238,5 +267,7 @@ public class GameModelImpl
         void onPlayerClimbLadder(Player player, int destPosition);
 
         void onPlayerSwallowedBySnake(Player player, int destPosition);
+
+        void onNumOfPlayersEnteredError();
     }
 }

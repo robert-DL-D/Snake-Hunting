@@ -68,11 +68,6 @@ public class GameController
     public void onNumOfPlayersEntered(int numOfPlayers) {
         gameModel.addPlayers(numOfPlayers);
     }
-
-    @Override
-    public void onInputError() {
-        gameView.showErrorDialog("Input is not valid.");
-    }
     //endregion
 
 //    void nextTurn() {

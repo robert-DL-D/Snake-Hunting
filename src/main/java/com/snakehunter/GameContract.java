@@ -4,6 +4,7 @@ import com.snakehunter.model.GameModelImpl.GameModelListener;
 import com.snakehunter.model.Ladder;
 import com.snakehunter.model.Player;
 import com.snakehunter.model.Snake;
+import com.snakehunter.model.Square;
 import com.snakehunter.view.GameViewImpl.GameViewListener;
 
 /**
@@ -46,6 +47,10 @@ public class GameContract {
         void movePlayer(int steps);
 
         void setListener(GameModelListener listener);
+
+        Square getSquare(int squareNo);
+
+        void setNumOfGuards(int num);
     }
 
 }
