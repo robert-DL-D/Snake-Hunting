@@ -1,3 +1,5 @@
+package com.snakehunter.model;
+
 public class Ladder implements Placeable{
 
     private int ID;
@@ -6,7 +8,6 @@ public class Ladder implements Placeable{
 
     public Ladder(int ID, int b, int t) {
         this.ID = ID;
-        this.bottom = b;
         this.top = t;
     }
 

@@ -1,5 +1,7 @@
+package com.snakehunter.model;
 
-public class Snake implements Placeable{
+public class Snake
+        implements Placeable {
 
     private int head;
     private int tail;
@@ -63,7 +65,6 @@ public class Snake implements Placeable{
 
     @Override
     public void setMaxLength(int i) {
-
     }
 
     @Override

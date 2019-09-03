@@ -1,8 +1,12 @@
+import com.snakehunter.model.Ladder;
+import com.snakehunter.model.Piece;
+import com.snakehunter.model.Snake;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author David Manolitsas
@@ -21,10 +25,10 @@ public class SnakeLadderPieceTest {
     @Before
     public void setUp() throws Exception {
         piece = new Piece();
-        snake = new Snake(14,3);
+        snake = new Snake(14, 3);
         ladder = new Ladder(1, 4, 16);
         ladder2 = new Ladder(2, 22, 36);
-        ladder3 = new Ladder(3,67,88);
+        ladder3 = new Ladder(3, 67, 88);
 
         System.out.println("Before");
     }

@@ -2,6 +2,7 @@ package com.snakehunter.controller;
 
 import com.snakehunter.GameStage;
 import com.snakehunter.model.GameModel;
+import com.snakehunter.model.Snake;
 import com.snakehunter.model.exception.NumberRangeException;
 import com.snakehunter.view.GameView;
 import com.snakehunter.view.GameView.GameViewListener;
@@ -56,7 +57,7 @@ public class GameController
 
     @Override
     public void onSnakeBuilt(int head, int tail) {
-        gameView.addSnake(head, tail);
+        gameModel.addSnake(new Snake(head, tail));
     }
 
     @Override

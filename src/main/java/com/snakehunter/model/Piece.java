@@ -1,6 +1,8 @@
+package com.snakehunter.model;
+
 import java.util.HashMap;
 
-class Piece implements Placeable{
+public class Piece implements Placeable{
 
     //hello
     private int paralyzedTurns = 3;

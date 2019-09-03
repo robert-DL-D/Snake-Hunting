@@ -2,7 +2,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author WeiYi Yu
@@ -14,7 +14,7 @@ public class BoardTest {
     @Before
     public void setUp() throws Exception {
 
-        testBoard = new BoardNew(1, 2);
+//        testBoard = new BoardNew(1, 2);
     }
 
     @Test
@@ -24,7 +24,7 @@ public class BoardTest {
     }
 
     public void checkBoardHeightAndWidth() throws  Exception {
-        assertEquals(testBoard.getSquares(), new Square[1][2]);
+//        assertEquals(testBoard.getSquares(), new Square[1][2]);
     }
 
 

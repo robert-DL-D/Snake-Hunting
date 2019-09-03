@@ -14,10 +14,8 @@ public class Main {
         GameView gameView = new GameView();
         GameModel gameModel = new GameModel();
         GameController gameController = new GameController(gameView, gameModel);
-        gameView.setListener(gameController);
 
-        // TODO:
-        //  1. setup board (including any objects position)
-        //  2. add players
+        gameModel.setListener(gameView);
+        gameView.setListener(gameController);
     }
 }

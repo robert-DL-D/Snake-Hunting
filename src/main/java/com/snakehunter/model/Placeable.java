@@ -1,3 +1,4 @@
+package com.snakehunter.model;
 
 interface Placeable {
 

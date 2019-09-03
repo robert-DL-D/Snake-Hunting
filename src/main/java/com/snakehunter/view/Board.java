@@ -1,9 +1,11 @@
 package com.snakehunter.view;
 
+import com.snakehunter.model.Snake;
+
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -19,15 +21,18 @@ public class Board
 
     private double factor = 0.2;
 
-    private Map<Integer, Integer> snakes = new HashMap<>();
+    private List<Snake> snakeList;
 
     public Board() {
         setSize(440, 440);
+        snakeList = new ArrayList<>();
+
         new Thread(this).start();
     }
 
-    public void addSnake(int head, int tail) {
-        snakes.put(head, tail);
+    public void addSnake(Snake snake) {
+        // Runnable will repaint every 1 sec, no need to repaint here.
+        snakeList.add(snake);
     }
 
     @Override
@@ -50,25 +55,25 @@ public class Board
             graphics.drawString("" + (i + 1), getX(i + 1), getY(i + 1) + 20);
         }
 
-        for (Integer head : snakes.keySet()) {
-            drawSnake(graphics, head, snakes.get(head));
+        for (Snake snake : snakeList) {
+            drawSnake(graphics, snake);
         }
     }
 
-    public void drawSnake(Graphics g, int head, int tail) {
-        int x1 = getX(head);
-        int y1 = getY(head);
-        int x2 = getX(tail);
-        int y2 = getY(tail);
+    public void drawSnake(Graphics g, Snake snake) {
+        int headX = getX(snake.getHead());
+        int headY = getY(snake.getHead());
+        int tailX = getX(snake.getTail());
+        int tailY = getY(snake.getTail());
 
-        int steps = (int) Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1)) / 150 * 18 + 24;
+        int steps =
+                (int) Math.sqrt((tailY - headY) * (tailY - headY) + (tailX - headX) * (tailX - headX)) / 150 * 18 + 24;
 
-
-        double xstep = (double) (x2 - x1) / (steps + 1);
-        double ystep = (double) (y2 - y1) / (steps + 1);
+        double xstep = (double) (tailX - headX) / (steps + 1);
+        double ystep = (double) (tailY - headY) / (steps + 1);
 
         double inc;
-        double x = x1, y = y1;
+        double x = headX, y = headY;
 
         boolean odd = true;
         for (int i = 0; i < steps + 1; i++) {
@@ -106,7 +111,7 @@ public class Board
                 g.setColor(Color.GREEN);
                 odd = true;
             }
-            if (x2 > x1) {
+            if (tailX > headX) {
                 g.fillOval((int) (x + inc), (int) (y - inc), 20 - 10 * i / steps, 20 - 10 * i / steps);
             } else {
                 g.fillOval((int) (x - inc), (int) (y - inc), 20 - 10 * i / steps, 20 - 10 * i / steps);
@@ -136,7 +141,7 @@ public class Board
             } catch (Exception e) {
             }
             factor += inc;
-            ;
+
             if (factor > 0.5 || factor < -0.5) {
                 inc = -inc;
             }

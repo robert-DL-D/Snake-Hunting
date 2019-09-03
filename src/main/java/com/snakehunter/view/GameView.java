@@ -1,5 +1,7 @@
 package com.snakehunter.view;
 
+import com.snakehunter.model.GameModel.GameModelListener;
+import com.snakehunter.model.Snake;
 import com.snakehunter.model.exception.NumberRangeException;
 
 import java.awt.Container;
@@ -19,7 +21,8 @@ import javax.swing.JTextField;
  */
 public class GameView
         extends JFrame
-        implements ActionListener {
+        implements ActionListener,
+                   GameModelListener {
 
     private GameViewListener listener;
 
@@ -57,35 +60,30 @@ public class GameView
         JPanel pane = new JPanel();
         pane.setLayout(new GridLayout(0, 2, 2, 2));
 
-        JTextField daysField = new JTextField(5);
-        JTextField assignmentField = new JTextField(5);
+        JTextField headField = new LimitTextField();
+        JTextField tailField = new LimitTextField();
 
         pane.add(new JLabel("Head position"));
-        pane.add(daysField);
+        pane.add(headField);
 
         pane.add(new JLabel("Tail position"));
-        pane.add(assignmentField);
+        pane.add(tailField);
 
-        int option = JOptionPane.showConfirmDialog(this, pane, "Please fill all the fields", JOptionPane.YES_NO_OPTION,
+        int option = JOptionPane.showConfirmDialog(this, pane, "Add Snake", JOptionPane.OK_CANCEL_OPTION,
                                                    JOptionPane.INFORMATION_MESSAGE);
 
-        if (option == JOptionPane.YES_OPTION) {
-
-            String daysInput = daysField.getText();
-            String assignmentsInput = assignmentField.getText();
+        if (option == JOptionPane.OK_OPTION) {
+            String headInput = headField.getText();
+            String tailInput = tailField.getText();
 
             try {
-                int head = Integer.parseInt(daysInput);
-                int tail = Integer.parseInt(assignmentsInput);
+                int head = Integer.parseInt(headInput);
+                int tail = Integer.parseInt(tailInput);
                 listener.onSnakeBuilt(head, tail);
             } catch (NumberFormatException nfe) {
-                nfe.printStackTrace();
+                listener.onSnakeBuilt(-1, -1);
             }
         }
-    }
-
-    public void addSnake(int head, int tail){
-        board.addSnake(head, tail);
     }
 
     public void showHowManyPlayers() throws NumberRangeException {
@@ -126,7 +124,7 @@ public class GameView
         case "Add Snake":
             listener.onAddSnakeClick();
             break;
-        case "Add Ladder":
+        case "Add com.snakehunter.model.Ladder":
             listener.onAddLadderClick();
             break;
         case "Start":
@@ -136,6 +134,16 @@ public class GameView
             break;
         }
 
+    }
+
+    @Override
+    public void onSnakeAdded(Snake snake) {
+        board.addSnake(snake);
+    }
+
+    @Override
+    public void onAddSnakeFailed(String errorMessage) {
+        showErrorDialog(errorMessage);
     }
 
     public interface GameViewListener {
