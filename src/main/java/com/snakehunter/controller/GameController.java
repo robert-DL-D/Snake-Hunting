@@ -1,11 +1,10 @@
 package com.snakehunter.controller;
 
-import com.snakehunter.GameStage;
-import com.snakehunter.model.GameModel;
+import com.snakehunter.GameContract.GameModel;
+import com.snakehunter.GameContract.GameView;
 import com.snakehunter.model.Snake;
 import com.snakehunter.model.exception.NumberRangeException;
-import com.snakehunter.view.GameView;
-import com.snakehunter.view.GameView.GameViewListener;
+import com.snakehunter.view.GameViewImpl.GameViewListener;
 
 /**
  * @author WeiYi Yu
@@ -21,7 +20,7 @@ public class GameController
         this.gameView = gameView;
         this.gameModel = gameModel;
 
-        gameModel.setGameStage(GameStage.INITIAL);
+//        gameModel.setGameStage(GameStage.INITIAL);
     }
 
     //region interaction

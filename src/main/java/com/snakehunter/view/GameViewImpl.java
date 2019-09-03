@@ -1,7 +1,6 @@
 package com.snakehunter.view;
 
 import com.snakehunter.GameContract;
-import com.snakehunter.model.GameModel.GameModelListener;
 import com.snakehunter.model.Ladder;
 import com.snakehunter.model.Player;
 import com.snakehunter.model.Snake;
@@ -22,11 +21,10 @@ import javax.swing.JTextField;
  * @author WeiYi Yu
  * @date 2019-09-02
  */
-public class GameView
+public class GameViewImpl
         extends JFrame
         implements GameContract.GameView,
-                   ActionListener,
-                   GameModelListener {
+                   ActionListener {
 
     private GameViewListener listener;
 
@@ -34,7 +32,7 @@ public class GameView
     private Dice dice;
     private SettingPanel settingPanel;
 
-    public GameView() {
+    public GameViewImpl() {
         super("Snakes n Ladders!");
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -196,6 +194,7 @@ public class GameView
         }
     }
 
+    @Override
     public void setListener(GameViewListener listener) {
         this.listener = listener;
         dice.setListener(listener);

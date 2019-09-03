@@ -12,7 +12,7 @@ import java.util.Map;
  * @author WeiYi Yu
  * @date 2019-09-02
  */
-public class GameModel
+public class GameModelImpl
         implements GameContract.GameModel {
 
     private static final int MAX_GUARDS = 3;
@@ -30,7 +30,7 @@ public class GameModel
     private int numOfGuards = 0;
     private int numOfTurns = 0;
 
-    public GameModel() {
+    public GameModelImpl() {
         initSquare();
         playerMap = new HashMap<>();
         snakeList = new ArrayList<>();
@@ -208,6 +208,7 @@ public class GameModel
         return gameStage;
     }
 
+    @Override
     public void setListener(GameModelListener listener) {
         this.listener = listener;
     }

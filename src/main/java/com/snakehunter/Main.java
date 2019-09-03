@@ -1,8 +1,10 @@
 package com.snakehunter;
 
+import com.snakehunter.GameContract.GameModel;
+import com.snakehunter.GameContract.GameView;
 import com.snakehunter.controller.GameController;
-import com.snakehunter.model.GameModel;
-import com.snakehunter.view.GameView;
+import com.snakehunter.model.GameModelImpl;
+import com.snakehunter.view.GameViewImpl;
 
 /**
  * @author WeiYi Yu
@@ -11,8 +13,8 @@ import com.snakehunter.view.GameView;
 public class Main {
 
     public static void main(String[] args) {
-        GameView gameView = new GameView();
-        GameModel gameModel = new GameModel();
+        GameView gameView = new GameViewImpl();
+        GameModel gameModel = new GameModelImpl();
         GameController gameController = new GameController(gameView, gameModel);
 
         gameModel.setListener(gameView);

@@ -1,6 +1,11 @@
 package com.snakehunter.controller;
 
+import com.snakehunter.GameContract.GameModel;
+import com.snakehunter.GameContract.GameView;
+
+import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 /**
@@ -14,11 +19,17 @@ public class GameControllerTest {
 
     private GameController gameController;
 
-//    @Before
-//    public void setUp() throws Exception {
-//        gameController = new GameController(new GameView(), new GameModel());
-//    }
-//
+    @Mock
+    private GameView view;
+
+    @Mock
+    private GameModel gameModel;
+
+    @Before
+    public void setUp() throws Exception {
+        gameController = new GameController(view, gameModel);
+    }
+
 //    //region getNextPlayer
 ////    @Test
 ////    public void testGetNextPlayer() {
