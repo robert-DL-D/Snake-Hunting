@@ -40,7 +40,7 @@ public class GameModelImpl
     //region interaction
     @Override
     public void addSnake(Snake snake) {
-        String errorMessage = validateSnakePosition(snake.getHead(), snake.getTail());
+        String errorMessage = validateSnake(snake);
 
         if (errorMessage != null && listener != null) {
             listener.onAddFailed(errorMessage);
@@ -182,19 +182,27 @@ public class GameModelImpl
         }
     }
 
-    private String validateSnakePosition(int head, int tail) {
+    private String validateSnake(Snake snake) {
         String errorMessage = null;
-        if (head < 2 || tail < 1) {
+
+        if (snake == null) {
             errorMessage = "Please enter valid positions.";
-        } else if (tail > head) {
-            errorMessage = "Head's position need to greater than tail's.";
-        } else if (head == 100) {
-            errorMessage = "Cannot put a snake at position 100.";
-        } else if (head == tail) {
-            errorMessage = "Cannot put the head and tail in the same position.";
-        } else if (head - tail > 30) {
-            errorMessage = "Snake's length cannot greater than 30.";
+        } else {
+            int head = snake.getHead();
+            int tail = snake.getTail();
+            if (head < 2 || tail < 1) {
+                errorMessage = "Please enter valid positions.";
+            } else if (tail > head) {
+                errorMessage = "Head's position need to greater than tail's.";
+            } else if (head == 100) {
+                errorMessage = "Cannot put a snake at position 100.";
+            } else if (head == tail) {
+                errorMessage = "Cannot put the head and tail in the same position.";
+            } else if (head - tail > 30) {
+                errorMessage = "Snake's length cannot greater than 30.";
+            }
         }
+
         return errorMessage;
     }
     //endregion

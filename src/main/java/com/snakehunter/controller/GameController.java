@@ -3,7 +3,6 @@ package com.snakehunter.controller;
 import com.snakehunter.GameContract.GameModel;
 import com.snakehunter.GameContract.GameView;
 import com.snakehunter.model.Snake;
-import com.snakehunter.model.exception.NumberRangeException;
 import com.snakehunter.view.GameViewImpl.GameViewListener;
 
 /**
@@ -30,29 +29,25 @@ public class GameController
     }
 
     @Override
-    public void onSnakeBuilt(int head, int tail) {
-        gameModel.addSnake(new Snake(head, tail));
+    public void onSnakeBuilt(Snake snake) {
+        gameModel.addSnake(snake);
     }
 
     @Override
     public void onAddLadderClick() {
-
+        gameView.showLadderBuilder();
     }
 
     @Override
     public void onAddPlayersClick() {
-        try {
-            gameView.showHowManyPlayers();
-        } catch (NumberRangeException e) {
-            gameView.showErrorDialog("Please enter a number between 2 ~ 4.");
-        }
+        gameView.showHowManyPlayers();
     }
 
     @Override
     public void onStartClick() {
-        if (true) {
-            gameModel.nextTurn();
+        if (gameModel.isGameReady()) {
             gameView.hideSettingPanel();
+            gameModel.nextTurn();
         } else {
             gameView.showErrorDialog("Make sure you add snakes, ladders and players before start the game.");
         }
@@ -72,6 +67,11 @@ public class GameController
     @Override
     public void onNumOfPlayersEntered(int numOfPlayers) {
         gameModel.addPlayers(numOfPlayers);
+    }
+
+    @Override
+    public void onInputError() {
+        gameView.showErrorDialog("Input is not valid.");
     }
     //endregion
 

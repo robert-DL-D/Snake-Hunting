@@ -4,7 +4,6 @@ import com.snakehunter.model.GameModelImpl.GameModelListener;
 import com.snakehunter.model.Ladder;
 import com.snakehunter.model.Player;
 import com.snakehunter.model.Snake;
-import com.snakehunter.model.exception.NumberRangeException;
 import com.snakehunter.view.GameViewImpl.GameViewListener;
 
 /**
@@ -18,7 +17,9 @@ public class GameContract {
 
         void showSnakeBuilder();
 
-        void showHowManyPlayers() throws NumberRangeException;
+        void showLadderBuilder();
+
+        void showHowManyPlayers();
 
         void showErrorDialog(String message);
 

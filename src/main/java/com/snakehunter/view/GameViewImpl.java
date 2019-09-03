@@ -4,7 +4,6 @@ import com.snakehunter.GameContract;
 import com.snakehunter.model.Ladder;
 import com.snakehunter.model.Player;
 import com.snakehunter.model.Snake;
-import com.snakehunter.model.exception.NumberRangeException;
 
 import java.awt.Container;
 import java.awt.GridLayout;
@@ -85,30 +84,41 @@ public class GameViewImpl
             try {
                 int head = Integer.parseInt(headInput);
                 int tail = Integer.parseInt(tailInput);
-                listener.onSnakeBuilt(head, tail);
+                listener.onSnakeBuilt(new Snake(head, tail));
             } catch (NumberFormatException nfe) {
-                listener.onSnakeBuilt(-1, -1);
+                listener.onSnakeBuilt(null);
             }
         }
     }
 
     @Override
-    public void showHowManyPlayers() throws NumberRangeException {
+    public void showLadderBuilder() {
+
+    }
+
+    @Override
+    public void showHowManyPlayers() {
         int numOfPlayers;
 
         try {
             numOfPlayers = Integer.parseInt(JOptionPane.showInputDialog("How many players? (2 ~ 4)"));
         } catch (NumberFormatException e) {
-            throw new NumberRangeException();
+            if (listener != null) {
+                listener.onNumOfPlayersEntered(2);
+            }
+            return;
         }
 
         if (numOfPlayers < 2 || numOfPlayers > 4) {
-            throw new NumberRangeException();
+            if (listener != null) {
+                listener.onNumOfPlayersEntered(2);
+            }
+            return;
         }
 
         numOfPlayers = 2; // FIXME: fixed num of players for now.
         if (listener != null) {
-            listener.onNumOfPlayersEntered(2);
+            listener.onNumOfPlayersEntered(numOfPlayers);
         }
     }
 
@@ -203,7 +213,7 @@ public class GameViewImpl
     public interface GameViewListener {
         void onAddSnakeClick();
 
-        void onSnakeBuilt(int head, int tail);
+        void onSnakeBuilt(Snake snake);
 
         void onAddLadderClick();
 
@@ -216,5 +226,7 @@ public class GameViewImpl
         void onDiceRolled(int num);
 
         void onNumOfPlayersEntered(int numOfPlayers);
+
+        void onInputError();
     }
 }
