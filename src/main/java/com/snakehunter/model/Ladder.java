@@ -3,19 +3,19 @@ package com.snakehunter.model;
 public class Ladder implements Placeable{
 
     private int ID;
-    private int bottom;
-    private int top;
+    private Square bottom;
+    private Square top;
 
-    public Ladder(int ID, int b, int t) {
+    public Ladder(int ID, Square b, Square t) {
         this.ID = ID;
         this.top = t;
     }
 
-    public int getBottom() {
+    public Square getBottom() {
         return bottom;
     }
 
-    public int getTop() {
+    public Square getTop() {
         return top;
     }
 
@@ -24,23 +24,23 @@ public class Ladder implements Placeable{
     }
 
     @Override
-    public int getTopPos() {
-        return 0;
+    public Square getTopPos() {
+        return top;
     }
 
     @Override
-    public int getBottomPos() {
-        return 0;
+    public Square getBottomPos() {
+        return bottom;
     }
 
     @Override
-    public void setTopPos(int i) {
-
+    public void setTopPos(Square top) {
+        this.top = top;
     }
 
     @Override
-    public void setBottomPos(int i) {
-
+    public void setBottomPos(Square bottom) {
+        this.bottom = bottom;
     }
 
     @Override
@@ -69,7 +69,7 @@ public class Ladder implements Placeable{
     }
 
     @Override
-    public void move(int i) {
-
+    public Square move(int i) {
+        return null;
     }
 }

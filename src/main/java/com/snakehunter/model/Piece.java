@@ -4,12 +4,38 @@ import java.util.HashMap;
 
 public class Piece implements Placeable{
 
-    //hello
-    private int paralyzedTurns = 3;
+    private Square topPos;
+    private Square bottomPos;
+    private int paralyzedTurns;
     private HashMap <Integer, Ladder> laddersClimbed;
 
-    public Piece(){
+    Square start = new Square(1);
+
+    public Piece(Square topPos, Square bottomPos, int paralyzedTurns){
+        this.topPos = start;
+        this.bottomPos = start;
+        this.paralyzedTurns = 0;
         laddersClimbed = new HashMap<Integer, Ladder>();
+    }
+
+    @Override
+    public Square getTopPos(){
+        return topPos;
+    }
+
+    @Override
+    public Square getBottomPos(){
+        return bottomPos;
+    }
+
+    @Override
+    public void setTopPos(Square topPos){
+        this.topPos = topPos;
+    }
+
+    @Override
+    public void setBottomPos(Square bottomPos){
+        this.bottomPos = bottomPos;
     }
 
     public int getParalyzedTurns(){
@@ -17,12 +43,12 @@ public class Piece implements Placeable{
     }
 
     public void setParalyzedTurns(){
-        this.paralyzedTurns = 3;
+        paralyzedTurns = 3;
     }
 
     public void decreaseParalyzedTurns(){
-        if (this.paralyzedTurns > 0) {
-            this.paralyzedTurns -= 1;
+        if (paralyzedTurns > 0) {
+            paralyzedTurns--;
         }
     }
 
@@ -32,26 +58,7 @@ public class Piece implements Placeable{
     }
 
     public void addLadderClimbed(Ladder ladder){
-        if (laddersClimbed.containsKey(ladder.getID())){
-            //do nothing
-        } else {
             laddersClimbed.put(ladder.getID(), ladder);
-        }
-    }
-
-    @Override
-    public int getBottomPos() {
-        return 0;
-    }
-
-    @Override
-    public void setTopPos(int i) {
-
-    }
-
-    @Override
-    public void setBottomPos(int i) {
-
     }
 
     @Override
@@ -79,12 +86,27 @@ public class Piece implements Placeable{
 
     }
 
+    //move from a dice roll
     @Override
-    public void move(int i) {
+    public Square move(int diceRoll){
 
+        if (paralyzedTurns < 1){
+        int newPosition = topPos.getSquareNo();
+
+            newPosition += diceRoll;
+            Square newSquare = new Square(newPosition);
+
+            setTopPos(newSquare);
+            setBottomPos(newSquare);
+
+            return newSquare;
+        }
+        else {
+         //piece unable to move
+            return topPos;
+        }
     }
 
-    public int getTopPos(){
-        return 0;
-    }
+
+    //TODO move like a knight piece
 }

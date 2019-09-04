@@ -1,51 +1,52 @@
 package com.snakehunter.model;
 
-public class Snake
-        implements Placeable {
+public class Snake implements Placeable {
 
-    private int head;
-    private int tail;
+    private Square head;
+    private Square tail;
+    private boolean isGuarded;
 
-    public Snake(int h, int t) {
+    public Snake(Square h, Square t) {
         head = h;
         tail = t;
+        isGuarded = false;
     }
 
-    public int getHead() {
+    public Square getHead() {
         return head;
     }
 
-    public int getTail() {
+    public Square getTail() {
         return tail;
     }
 
-    public void setHead(int head) {
+    public void setHead(Square head) {
         this.head = head;
     }
 
-    public void setTail(int tail) {
+    public void setTail(Square tail) {
         this.tail = tail;
     }
 
 
     @Override
-    public int getTopPos() {
-        return 0;
+    public Square getTopPos() {
+        return head;
     }
 
     @Override
-    public int getBottomPos() {
-        return 0;
+    public Square getBottomPos() {
+        return tail;
     }
 
     @Override
-    public void setTopPos(int i) {
-
+    public void setTopPos(Square head) {
+        this.head = head;
     }
 
     @Override
-    public void setBottomPos(int i) {
-
+    public void setBottomPos(Square tail) {
+        this.tail = tail;
     }
 
     @Override
@@ -73,7 +74,48 @@ public class Snake
     }
 
     @Override
-    public void move(int i) {
+    public Square move(int i) {
+        if (isGuarded = false){
 
+        }
+
+        //TODO snake movement using square instead of int
+//      //can move up, down, left or right one position
+//
+//
+//        int candidateMove; //need to be square?
+//
+//
+//            for(int currentCandidate : potentialMoves) {
+//               // candidateMove = this.topPos + currentCandidate;
+//
+//                if (true) {
+//                    /*
+//                     *if candidateMove is a valid tile
+//                     * i.e. within the constraints of the board
+//                     * Square candidateSquare = getSquare(candidateMove);
+//                     *
+//                     */
+//                    if(true){
+//                        /*
+//                         * if candidateSquare.isOccupied = false;
+//                         * add it as a legal move
+//                         */
+//                    }
+//                    else {
+//                        /*
+//                         * else if candidateSquare.isOccupied = true;
+//                         * check to see if it is a snake head or tail or another piece
+//                         * if it is a snake head or snake tail, it is not a valid move
+//                         * if it is a piece, it is a legal move
+//                         * piece either gets eaten or is moved to the tail position
+//                         */
+//                    }
+//                }
+//            }
+//            //update tail position
+//        }
+//    }
+        return null;
     }
 }
