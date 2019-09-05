@@ -23,6 +23,7 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 public class LoginView {
+    private static final JFrame JFRAME = new JFrame("Login");
     private JTextField usernameTxtF;
     private JPasswordField passwordTxtF;
     private JLabel usernameLabel;
@@ -40,21 +41,21 @@ public class LoginView {
 
     private HashMap<String, char[]> usernamePassword = new HashMap<>();
 
-    public LoginView(JFrame frame) {
+    public LoginView() {
 
         usernamePassword.put(TEST_USERNAME_1, TEST_PASSWORD_1);
         usernamePassword.put(TEST_USERNAME_2, TEST_PASSWORD_2);
 
         loginButton.addActionListener(e ->
 
-                validateLoginDetails(frame));
+                validateLoginDetails());
 
         passwordTxtF.addActionListener(e ->
 
-                validateLoginDetails(frame));
+                validateLoginDetails());
     }
 
-    private void validateLoginDetails(JFrame frame) {
+    private void validateLoginDetails() {
         username = usernameTxtF.getText();
         char[] password = passwordTxtF.getPassword();
 
@@ -62,7 +63,7 @@ public class LoginView {
             Map.Entry<String, char[]> entry = iterator.next();
             if (entry.getKey().equals(username) && Arrays.equals(entry.getValue(), password)) {
                 System.out.println("Login successfully");
-                frame.setVisible(false);
+                JFRAME.setVisible(false);
                 break;
             } else if (!iterator.hasNext()) {
                 System.out.println("Invalid username or password");
@@ -72,12 +73,11 @@ public class LoginView {
     }
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Login");
-        frame.setContentPane(new LoginView(frame).jPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+        JFRAME.setContentPane(new LoginView().jPanel);
+        JFRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JFRAME.pack();
+        JFRAME.setLocationRelativeTo(null);
+        JFRAME.setVisible(true);
     }
 
     {
