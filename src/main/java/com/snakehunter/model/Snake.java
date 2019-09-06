@@ -1,51 +1,57 @@
 package com.snakehunter.model;
 
+/**
+ * @author David Manolitsas
+ * @project SnakeHunting
+ * @date 2019-08-26
+ */
+
 public class Snake implements Placeable {
 
-    private Square head;
-    private Square tail;
+    private int head;
+    private int tail;
     private boolean isGuarded;
 
-    public Snake(Square h, Square t) {
+    public Snake(int h, int t) {
         head = h;
         tail = t;
         isGuarded = false;
     }
 
-    public Square getHead() {
+    public int getHead() {
         return head;
     }
 
-    public Square getTail() {
+    public int getTail() {
         return tail;
     }
 
-    public void setHead(Square head) {
+    public void setHead(int head) {
         this.head = head;
     }
 
-    public void setTail(Square tail) {
+    public void setTail(int tail) {
         this.tail = tail;
     }
 
 
     @Override
-    public Square getTopPos() {
+    public int getTopPos() {
         return head;
     }
 
     @Override
-    public Square getBottomPos() {
+    public int getBottomPos() {
         return tail;
     }
 
     @Override
-    public void setTopPos(Square head) {
+    public void setTopPos(int head) {
         this.head = head;
     }
 
     @Override
-    public void setBottomPos(Square tail) {
+    public void setBottomPos(int tail) {
         this.tail = tail;
     }
 
@@ -75,9 +81,14 @@ public class Snake implements Placeable {
 
     @Override
     public Square move(int i) {
-        if (isGuarded = false){
+        if(isGuarded = false){
+
 
         }
+        else {
+         return getHead();
+        }
+    }
 
         //TODO snake movement using square instead of int
 //      //can move up, down, left or right one position
@@ -116,6 +127,5 @@ public class Snake implements Placeable {
 //            //update tail position
 //        }
 //    }
-        return null;
-    }
+
 }

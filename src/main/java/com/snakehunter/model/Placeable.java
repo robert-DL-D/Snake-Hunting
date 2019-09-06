@@ -2,17 +2,17 @@ package com.snakehunter.model;
 
 interface Placeable {
 
-    Square topPos = null;
-    Square bottomPos = null;
+    int topPos = 0;
+    int bottomPos = 0;
     int length = 0;
     int maxLength = 0;
     int minLength = 0;
 
-    Square getTopPos();
-    Square getBottomPos();
+    int getTopPos();
+    int getBottomPos();
 
-    void setTopPos(Square i);
-    void setBottomPos(Square i);
+    void setTopPos(int i);
+    void setBottomPos(int i);
 
     int getLength();
     int getMaxLength();

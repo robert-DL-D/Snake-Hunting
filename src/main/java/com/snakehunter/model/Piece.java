@@ -2,39 +2,44 @@ package com.snakehunter.model;
 
 import java.util.HashMap;
 
+/**
+ * @author David Manolitsas
+ * @project SnakeHunting
+ * @date 2019-08-26
+ */
+
 public class Piece implements Placeable{
 
-    private Square topPos;
-    private Square bottomPos;
+    private int topPos;
+    private int bottomPos;
     private int paralyzedTurns;
     private HashMap <Integer, Ladder> laddersClimbed;
 
-    Square start = new Square(1);
 
-    public Piece(Square topPos, Square bottomPos, int paralyzedTurns){
-        this.topPos = start;
-        this.bottomPos = start;
+    public Piece(int topPos, int bottomPos, int paralyzedTurns){
+        this.topPos = 1;
+        this.bottomPos = 1;
         this.paralyzedTurns = 0;
         laddersClimbed = new HashMap<Integer, Ladder>();
     }
 
     @Override
-    public Square getTopPos(){
+    public int getTopPos(){
         return topPos;
     }
 
     @Override
-    public Square getBottomPos(){
+    public int getBottomPos(){
         return bottomPos;
     }
 
     @Override
-    public void setTopPos(Square topPos){
+    public void setTopPos(int topPos){
         this.topPos = topPos;
     }
 
     @Override
-    public void setBottomPos(Square bottomPos){
+    public void setBottomPos(int bottomPos){
         this.bottomPos = bottomPos;
     }
 

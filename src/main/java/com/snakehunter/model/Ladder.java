@@ -1,21 +1,28 @@
 package com.snakehunter.model;
 
+/**
+ * @author David Manolitsas
+ * @project SnakeHunting
+ * @date 2019-08-26
+ */
+
 public class Ladder implements Placeable{
 
     private int ID;
-    private Square bottom;
-    private Square top;
+    private int bottom;
+    private int top;
 
-    public Ladder(int ID, Square b, Square t) {
+    public Ladder(int ID, int b, int t) {
         this.ID = ID;
         this.top = t;
+        this.bottom = b;
     }
 
-    public Square getBottom() {
+    public int getBottom() {
         return bottom;
     }
 
-    public Square getTop() {
+    public int getTop() {
         return top;
     }
 
@@ -24,22 +31,22 @@ public class Ladder implements Placeable{
     }
 
     @Override
-    public Square getTopPos() {
+    public int getTopPos() {
         return top;
     }
 
     @Override
-    public Square getBottomPos() {
+    public int getBottomPos() {
         return bottom;
     }
 
     @Override
-    public void setTopPos(Square top) {
+    public void setTopPos(int top) {
         this.top = top;
     }
 
     @Override
-    public void setBottomPos(Square bottom) {
+    public void setBottomPos(int bottom) {
         this.bottom = bottom;
     }
 
