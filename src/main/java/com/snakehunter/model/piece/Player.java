@@ -59,6 +59,22 @@ public class Player
 
     @Override
     public int move(int steps) {
+        // TODO: Need to change
+//        if (paralyzedTurns < 1){
+//            int newPosition = topPos.getSquareNo();
+//
+//            newPosition += diceRoll;
+//            Square newSquare = new Square(newPosition);
+//
+//            setTopPos(newSquare);
+//            setBottomPos(newSquare);
+//
+//            return newSquare;
+//        }
+//        else {
+//            //piece unable to move
+//            return topPos;
+//        }
         return 0;
     }
 }
