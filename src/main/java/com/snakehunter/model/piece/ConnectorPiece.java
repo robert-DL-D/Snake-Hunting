@@ -4,7 +4,7 @@ package com.snakehunter.model.piece;
  * @author WeiYi Yu
  * @date 2019-09-06
  */
-public class ConnectorPiece
+public abstract class ConnectorPiece
         extends Piece {
 
     private int connectedPosition;
