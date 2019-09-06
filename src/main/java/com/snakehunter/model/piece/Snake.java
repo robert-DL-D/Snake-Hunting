@@ -21,7 +21,7 @@ public class Snake
 //            return getHead();
 //        }
 
-    //TODO snake movement using square instead of int
+        //TODO snake movement using square instead of int
 //      //can move up, down, left or right one position
 //
 //
