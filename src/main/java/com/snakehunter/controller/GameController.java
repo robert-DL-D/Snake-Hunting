@@ -2,7 +2,7 @@ package com.snakehunter.controller;
 
 import com.snakehunter.GameContract.GameModel;
 import com.snakehunter.GameContract.GameView;
-import com.snakehunter.model.Snake;
+import com.snakehunter.model.piece.Snake;
 import com.snakehunter.view.GameViewImpl.GameViewListener;
 
 /**

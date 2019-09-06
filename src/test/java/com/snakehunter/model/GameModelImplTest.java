@@ -2,6 +2,10 @@ package com.snakehunter.model;
 
 import com.snakehunter.GameContract.GameModel;
 import com.snakehunter.model.GameModelImpl.GameModelListener;
+import com.snakehunter.model.piece.Player;
+import com.snakehunter.model.piece.Ladder;
+import com.snakehunter.model.piece.Piece;
+import com.snakehunter.model.piece.Snake;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -98,9 +102,9 @@ public class GameModelImplTest {
         // FIXME: Ladder class need to change
 
         // given
-        Ladder ladder = new Ladder(0, 2, 20);
-        Ladder ladder2 = new Ladder(1, 31, 40);
-        Ladder ladder3 = new Ladder(2, 69, 80);
+        Ladder ladder = new Ladder(2, 20);
+        Ladder ladder2 = new Ladder(31, 40);
+        Ladder ladder3 = new Ladder(69, 80);
 
         // when
         gameModel.addLadder(ladder);
@@ -113,8 +117,8 @@ public class GameModelImplTest {
         verify(listener).onLadderAdded(ladder3);
 
         Assert.assertEquals(ladder, gameModel.getSquare(2).getLadder());
-        Assert.assertEquals(ladder2, gameModel.getSquare(31).getSnake());
-        Assert.assertEquals(ladder3, gameModel.getSquare(69).getSnake());
+        Assert.assertEquals(ladder2, gameModel.getSquare(31).getLadder());
+        Assert.assertEquals(ladder3, gameModel.getSquare(69).getLadder());
     }
 
     @Test
@@ -151,11 +155,11 @@ public class GameModelImplTest {
         // then
         verify(listener).onPlayersAdded(2);
 
-        assertEquals(2, gameModel.getSquare(1).getCurrentPlaceables().size());
+        assertEquals(2, gameModel.getSquare(1).getPieceList().size());
 
-        for (Placeable placeable : gameModel.getSquare(1).getCurrentPlaceables()) {
-            assertTrue(placeable instanceof Player);
-            assertEquals(1, placeable.getTopPos());
+        for (Piece piece : gameModel.getSquare(1).getPieceList()) {
+            assertTrue(piece instanceof Player);
+            assertEquals(1, piece.getPosition());
         }
     }
 

@@ -1,10 +1,10 @@
 package com.snakehunter;
 
 import com.snakehunter.model.GameModelImpl.GameModelListener;
-import com.snakehunter.model.Ladder;
-import com.snakehunter.model.Player;
-import com.snakehunter.model.Snake;
 import com.snakehunter.model.Square;
+import com.snakehunter.model.piece.Player;
+import com.snakehunter.model.piece.Ladder;
+import com.snakehunter.model.piece.Snake;
 import com.snakehunter.view.GameViewImpl.GameViewListener;
 
 /**

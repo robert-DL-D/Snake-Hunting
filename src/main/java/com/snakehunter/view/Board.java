@@ -1,6 +1,6 @@
 package com.snakehunter.view;
 
-import com.snakehunter.model.Snake;
+import com.snakehunter.model.piece.Snake;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -61,10 +61,10 @@ public class Board
     }
 
     public void drawSnake(Graphics g, Snake snake) {
-        int headX = getX(snake.getHead());
-        int headY = getY(snake.getHead());
-        int tailX = getX(snake.getTail());
-        int tailY = getY(snake.getTail());
+        int headX = getX(snake.getPosition());
+        int headY = getY(snake.getPosition());
+        int tailX = getX(snake.getConnectedPosition());
+        int tailY = getY(snake.getConnectedPosition());
 
         int steps =
                 (int) Math.sqrt((tailY - headY) * (tailY - headY) + (tailX - headX) * (tailX - headX)) / 150 * 18 + 24;

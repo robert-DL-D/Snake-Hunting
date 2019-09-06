@@ -1,5 +1,9 @@
 package com.snakehunter.model;
 
+import com.snakehunter.model.piece.Ladder;
+import com.snakehunter.model.piece.Piece;
+import com.snakehunter.model.piece.Snake;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,23 +15,23 @@ public class Square {
 
     private int squareNo;
     private boolean isGuarded = false;
-    public List<Placeable> currentPlaceables;
+    private List<Piece> pieceList;
 
     public Square(int squareNo) {
         this.squareNo = squareNo;
-        currentPlaceables = new ArrayList<>();
+        pieceList = new ArrayList<>();
     }
 
-    public void addPlaceable(Placeable placeable) {
-        currentPlaceables.add(placeable);
+    public void addPiece(Piece piece) {
+        pieceList.add(piece);
     }
 
-    public List<Placeable> getCurrentPlaceables() {
-        return currentPlaceables;
+    public List<Piece> getPieceList() {
+        return pieceList;
     }
 
-    public void removePlaceable(Placeable placeable) {
-        currentPlaceables.remove(placeable);
+    public void removePiece(Piece piece) {
+        pieceList.remove(piece);
     }
 
     public int getSquareNo() {
@@ -43,9 +47,9 @@ public class Square {
     }
 
     public Snake getSnake() {
-        for (Placeable currentPlaceable : currentPlaceables) {
-            if (currentPlaceable instanceof Snake) {
-                return (Snake) currentPlaceable;
+        for (Piece piece : pieceList) {
+            if (piece instanceof Snake) {
+                return (Snake) piece;
             }
         }
 
@@ -53,12 +57,11 @@ public class Square {
     }
 
     public Ladder getLadder() {
-        for (Placeable currentPlaceable : currentPlaceables) {
-            if (currentPlaceable instanceof Ladder) {
-                return (Ladder) currentPlaceable;
+        for (Piece piece : pieceList) {
+            if (piece instanceof Ladder) {
+                return (Ladder) piece;
             }
         }
-
         return null;
     }
 }

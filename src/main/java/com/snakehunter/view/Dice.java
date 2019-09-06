@@ -95,7 +95,7 @@ public class Dice
                 // fake dice animation
                 for (int i = 1; i <= 20; i++) {
                     do {
-                        num = getRandomNumber(1, 6);
+                        num = getRandomNumber(DICE_NUM_MIN, DICE_NUM_MAX);
                     } while (lastNum == num);
                     lastNum = num;
 

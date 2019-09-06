@@ -1,16 +1,17 @@
 package com.snakehunter.model;
 
-class HumanPlayer
-        extends Player {
+import com.snakehunter.model.piece.Piece;
+
+class HumanPlayer {
 
     private static final int MAX_Piece = 4;
 
     private int numGuards = 3;
 
-    private Placeable[] Piece = new Placeable[MAX_Piece];
+    private Piece[] Piece = new Piece[MAX_Piece];
 
     public HumanPlayer(String name) {
-        super(name);
+
     }
 
     public int getNumGuards() {

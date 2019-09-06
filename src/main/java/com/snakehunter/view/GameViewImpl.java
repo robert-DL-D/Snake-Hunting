@@ -1,9 +1,9 @@
 package com.snakehunter.view;
 
 import com.snakehunter.GameContract;
-import com.snakehunter.model.Ladder;
-import com.snakehunter.model.Player;
-import com.snakehunter.model.Snake;
+import com.snakehunter.model.piece.Player;
+import com.snakehunter.model.piece.Ladder;
+import com.snakehunter.model.piece.Snake;
 
 import java.awt.Container;
 import java.awt.GridLayout;

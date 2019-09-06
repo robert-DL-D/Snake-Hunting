@@ -2,6 +2,9 @@ package com.snakehunter.model;
 
 import com.snakehunter.GameContract;
 import com.snakehunter.GameStage;
+import com.snakehunter.model.piece.Player;
+import com.snakehunter.model.piece.Ladder;
+import com.snakehunter.model.piece.Snake;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,8 +50,8 @@ public class GameModelImpl
             return;
         }
 
-        Square square = getSquare(snake.getHead());
-        square.addPlaceable(snake);
+        Square square = getSquare(snake.getPosition());
+        square.addPiece(snake);
 
         if (listener != null) {
             listener.onSnakeAdded(snake);
@@ -58,8 +61,8 @@ public class GameModelImpl
     @Override
     public void addLadder(Ladder ladder) {
         // TODO: validate ladder position
-        Square square = getSquare(ladder.getBottom());
-        square.addPlaceable(ladder);
+        Square square = getSquare(ladder.getPosition());
+        square.addPiece(ladder);
 
         if (listener != null) {
             listener.onLadderAdded(ladder);
@@ -122,12 +125,12 @@ public class GameModelImpl
     @Override
     public void movePlayer(int steps) {
         Player currentPlayer = getCurrentPlayer();
-        int currentPosition = currentPlayer.getTopPos();
+        int currentPosition = currentPlayer.getPosition();
         int destPosition = currentPosition + steps;
-        Square currentSquare = getSquare(currentPlayer.getTopPos());
+        Square currentSquare = getSquare(currentPlayer.getPosition());
         Square destSquare = getSquare(destPosition);
-        currentSquare.removePlaceable(currentPlayer);
-        currentPlayer.setTopPos(destPosition);
+        currentSquare.removePiece(currentPlayer);
+        currentPlayer.setPosition(destPosition);
 
         if (listener != null) {
             listener.onPlayerMoved(currentPlayer, destPosition);
@@ -137,16 +140,16 @@ public class GameModelImpl
         Snake snake = destSquare.getSnake();
         Ladder ladder = destSquare.getLadder();
         if (snake != null && listener != null) {
-            destPosition = snake.getTail();
+            destPosition = snake.getConnectedPosition();
             listener.onPlayerSwallowedBySnake(currentPlayer, destPosition);
         } else if (ladder != null && listener != null) {
-            destPosition = ladder.getTop();
+            destPosition = ladder.getConnectedPosition();
             listener.onPlayerClimbLadder(currentPlayer, destPosition);
         }
 
         destSquare = getSquare(destPosition);
-        destSquare.addPlaceable(currentPlayer);
-        currentPlayer.setTopPos(destPosition);
+        destSquare.addPiece(currentPlayer);
+        currentPlayer.setPosition(destPosition);
     }
     //endregion
 
@@ -194,11 +197,11 @@ public class GameModelImpl
         Square startPoint = squares[0][0];
 
         for (int i = 1; i <= numOfPlayers; i++) {
-            Player player = new Player("Player " + i);
-            player.setTopPos(startPoint.getSquareNo());
+            Player player = new Player(1, "Player " + i);
+            player.setPosition(startPoint.getSquareNo());
             playerMap.put(i % numOfPlayers, player);
 
-            startPoint.addPlaceable(player);
+            startPoint.addPiece(player);
         }
     }
 
@@ -208,8 +211,8 @@ public class GameModelImpl
         if (snake == null) {
             errorMessage = "Please enter valid positions.";
         } else {
-            int head = snake.getHead();
-            int tail = snake.getTail();
+            int head = snake.getPosition();
+            int tail = snake.getConnectedPosition();
             if (head < 2 || tail < 1) {
                 errorMessage = "Please enter valid positions.";
             } else if (tail > head) {
