@@ -25,10 +25,16 @@ public class Board
     private List<Snake> snakeList;
     private List<Ladder> ladderList;
 
+    /* FIXME drawPlayers requires Players in an Array
+    private List<Ladder> playerList;
+    private int numOfPlayers;
+     */
+
     public Board() {
         setSize(440, 440);
         snakeList = new ArrayList<>();
         ladderList = new ArrayList<>();
+        //playerList = new ArrayList<>();
 
         new Thread(this).start();
     }
@@ -39,8 +45,11 @@ public class Board
     }
 
     public void addLadder(Ladder ladder) {
-        // Runnable will repaint every 1 sec, no need to repaint here.
         ladderList.add(ladder);
+    }
+
+    public void addPlayer(int numOfPlayers) {
+        //this.numOfPlayers = numOfPlayers;
     }
 
     @Override
@@ -70,6 +79,8 @@ public class Board
         for (Ladder ladder : ladderList) {
             drawLadder(graphics, ladder);
         }
+
+        //drawPieces(graphics);
     }
 
     public void drawSnake(Graphics g, Snake snake) {
@@ -169,6 +180,34 @@ public class Board
         }
 
     }
+
+    // FIXME drawPlayers needs x and y coords
+   /* public void drawPlayers(Graphics g) {
+        if (pieces.length > 0) {
+            g.setColor(Color.WHITE);
+            g.fillOval((int) getX(pieces[0]) - 10, getY(pieces[0]) - 10, 20, 20);
+            g.setColor(Color.BLACK);
+            g.drawString("1", (int) getX(pieces[0]) - 5, getY(pieces[0]) + 5);
+        }
+        if (pieces.length > 1) {
+            g.setColor(Color.RED);
+            g.fillOval((int) getX(pieces[1]) + 10, getY(pieces[1]) - 10, 20, 20);
+            g.setColor(Color.BLACK);
+            g.drawString("2", (int) getX(pieces[1]) + 15, getY(pieces[1]) + 5);
+        }
+        if (pieces.length > 2) {
+            g.setColor(Color.GRAY);
+            g.fillOval((int) getX(pieces[2]) - 10, getY(pieces[2]) + 10, 20, 20);
+            g.setColor(Color.BLACK);
+            g.drawString("3", (int) getX(pieces[2]) - 5, getY(pieces[2]) + 25);
+        }
+        if (pieces.length > 3) {
+            g.setColor(Color.CYAN);
+            g.fillOval((int) getX(pieces[3]) + 10, getY(pieces[3]) + 10, 20, 20);
+            g.setColor(Color.BLACK);
+            g.drawString("4", (int) getX(pieces[3]) + 15, getY(pieces[3]) + 25);
+        }
+    }*/
 
     private int getX(int pos) {
         pos--;

@@ -194,6 +194,7 @@ public class GameViewImpl
     @Override
     public void onPlayersAdded(int numOfPlayers) {
         // TODO: add pieces into board
+        board.addPlayer(numOfPlayers);
     }
 
     @Override
