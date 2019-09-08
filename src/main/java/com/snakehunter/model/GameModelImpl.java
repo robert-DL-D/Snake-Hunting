@@ -2,8 +2,8 @@ package com.snakehunter.model;
 
 import com.snakehunter.GameContract;
 import com.snakehunter.GameStage;
-import com.snakehunter.model.piece.Player;
 import com.snakehunter.model.piece.Ladder;
+import com.snakehunter.model.piece.Player;
 import com.snakehunter.model.piece.Snake;
 
 import java.util.ArrayList;
@@ -27,11 +27,13 @@ public class GameModelImpl
     private GameStage gameStage;
 
     private Map<Integer, Player> playerMap;
-    private List<Snake> snakeList;
-    private List<Ladder> ladderList;
+    private List<Snake> snakeList; // FIXME Nothing is added to this list
+    private List<Ladder> ladderList;// FIXME Nothing is added to this list
 
     private int numOfGuards = 0;
     private int numOfTurns = 0;
+
+    private String errorMessageTest;
 
     public GameModelImpl() {
         initSquare();
@@ -61,6 +63,13 @@ public class GameModelImpl
     @Override
     public void addLadder(Ladder ladder) {
         // TODO: validate ladder position
+        String errorMessage = validateLadder(ladder);
+
+        if (errorMessage != null && listener != null) {
+            listener.onAddLadderFailed(errorMessage);
+            return;
+        }
+
         Square square = getSquare(ladder.getPosition());
         square.addPiece(ladder);
 
@@ -110,6 +119,7 @@ public class GameModelImpl
 
     @Override
     public boolean isGameReady() {
+        // FIXME Lists are always zero, game can never start
         return playerMap.size() != 0 && snakeList.size() != 0 && ladderList.size() != 0;
     }
 
@@ -228,6 +238,50 @@ public class GameModelImpl
 
         return errorMessage;
     }
+
+    private String validateLadder(Ladder ladder) {
+        String errorMessage = null;
+
+        if (ladder == null) {
+            errorMessage = "Please enter valid positions.";
+        } else {
+            int top = ladder.getPosition();
+            int base = ladder.getConnectedPosition();
+            if (base == 1) {
+                errorMessage = "Please enter valid positions.";
+            } else if (base > top) {
+                errorMessage = "Top's position need to greater than base.";
+            } else if (top == 100) {
+                errorMessage = "Cannot put a ladder at position 100.";
+            } else if (top == base) {
+                errorMessage = "Cannot put the top and base in the same position.";
+            } else if (top - base > 30) {
+                errorMessage = "Ladder's length cannot be greater than 30.";
+            }
+            // This probably doesn't work
+            else if (snakeList.size() > 0) {
+                for (Snake snake : snakeList) {
+                    if (top == snake.getPosition() || base == snake.getPosition()) {
+                        errorMessage = "Ladder's top or base is same as another snake's head position";
+                        break;
+                    }
+                }
+            }
+            // This probably doesn't work
+            else if (ladderList.size() > 1) {
+                for (Ladder ladderInList : ladderList) {
+                    if (ladder != ladderInList && base == ladderInList.getPosition()) {
+                        errorMessage = "Ladder's base position is same as another ladder's top";
+                        break;
+                    }
+
+                }
+            }
+        }
+        this.errorMessageTest = errorMessage; // For testing only
+        return errorMessage;
+    }
+
     //endregion
 
     //region getter/setter
@@ -250,12 +304,19 @@ public class GameModelImpl
     }
     //endregion
 
+    // Testing method
+    public String getErrorMessageTest() {
+        return errorMessageTest;
+    }
+
     public interface GameModelListener {
         void onSnakeAdded(Snake snake);
 
         void onLadderAdded(Ladder ladder);
 
         void onAddSnakeFailed(String errorMessage);
+
+        void onAddLadderFailed(String errorMessage);
 
         void onGuardAdded(int position);
 

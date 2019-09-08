@@ -97,20 +97,20 @@ public class GameViewImpl
         pane.setLayout(new GridLayout(0, 2, 2, 2));
 
         JTextField topField = new LimitTextField();
-        JTextField bottomField = new LimitTextField();
+        JTextField baseField = new LimitTextField();
 
         pane.add(new JLabel("Top position"));
         pane.add(topField);
 
-        pane.add(new JLabel("Bottom position"));
-        pane.add(bottomField);
+        pane.add(new JLabel("Base position"));
+        pane.add(baseField);
 
         int option = JOptionPane.showConfirmDialog(this, pane, "Add Ladder", JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.INFORMATION_MESSAGE);
 
         if (option == JOptionPane.OK_OPTION) {
             String topInput = topField.getText();
-            String bottomInput = bottomField.getText();
+            String bottomInput = baseField.getText();
 
             try {
                 int top = Integer.parseInt(topInput);
@@ -173,6 +173,11 @@ public class GameViewImpl
 
     @Override
     public void onAddSnakeFailed(String errorMessage) {
+        showErrorDialog(errorMessage);
+    }
+
+    @Override
+    public void onAddLadderFailed(String errorMessage) {
         showErrorDialog(errorMessage);
     }
 

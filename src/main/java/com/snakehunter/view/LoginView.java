@@ -39,15 +39,15 @@ public class LoginView {
     private static JFrame JFRAME = new JFrame("Login");
     private static final String DELIMITER = "_";
 
-    private JTextField usernameTxtF;
-    private JPasswordField passwordTxtF;
+    private JPanel jPanel;
     private JLabel usernameLabel;
     private JLabel passwordLabel;
-    private JPanel jPanel;
+    private JTextField usernameTxtF;
+    private JPasswordField passwordTxtF;
     private JButton loginButton;
-    private JButton newAccountButton;
-    private JPasswordField newPasswordTxtF;
     private JTextField newUsernameTxtF;
+    private JPasswordField newPasswordTxtF;
+    private JButton newAccountButton;
     private JLabel humanPlayerLabel;
     private JLabel snakePlayerLabel;
 
@@ -56,6 +56,8 @@ public class LoginView {
 
     //TODO Add login for both human and snake player
     private String[] playersUsername = new String[2];
+
+    private boolean loginSuccess = false;
 
     //TODO Connect Login with the main game class
     public static void main(String[] args) {
@@ -68,7 +70,7 @@ public class LoginView {
         System.out.println(instruction());
     }
 
-    public static String instruction() {
+    private static String instruction() {
         return "Accounts for testing:\n"
                 + "Human | password\n"
                 + "Snake | Hunter2\n"
@@ -80,13 +82,13 @@ public class LoginView {
 
         importUsernamePassword();
 
-        loginButton.addActionListener(e -> validateLoginDetails());
+        loginButton.addActionListener(e -> validateLogin());
 
-        passwordTxtF.addActionListener(e -> validateLoginDetails());
+        passwordTxtF.addActionListener(e -> validateLogin());
 
-        newPasswordTxtF.addActionListener(e -> createNewLoginDetails());
+        newPasswordTxtF.addActionListener(e -> createNewAccount());
 
-        newAccountButton.addActionListener(e -> createNewLoginDetails());
+        newAccountButton.addActionListener(e -> createNewAccount());
 
         // This is to allow tabbing to go from Username to Password
         JFRAME.setFocusTraversalPolicy(new MyOwnFocusTraversalPolicy(getTextFieldsVector()));
@@ -131,7 +133,8 @@ public class LoginView {
         }
     }
 
-    private void createNewLoginDetails() {
+    public void createNewAccount() {
+
         if (newUsernameTxtF.getText().length() != 0 || newPasswordTxtF.getPassword().length != 0) {
 
             String newUsername = newUsernameTxtF.getText();
@@ -140,6 +143,7 @@ public class LoginView {
             if (usernamePassword.size() == 0) {
                 writeToFile();
                 setPlayerUsername(newUsername);
+                loginSuccess = true;
             }
 
             for (Iterator<Map.Entry<String, String>> iterator = usernamePassword.entrySet().iterator(); iterator.hasNext(); ) {
@@ -147,16 +151,19 @@ public class LoginView {
                 Map.Entry<String, String> entry = iterator.next();
                 if (entry.getKey().equals(newUsername)) {
                     System.out.println("Username already exists");
+                    loginSuccess = false;
                     break;
                 } else if (!iterator.hasNext()) {
                     writeToFile();
                     setPlayerUsername(newUsername);
+                    loginSuccess = true;
+
                 }
             }
         } else {
             System.out.println("Please fill in username or password");
+            loginSuccess = false;
         }
-
     }
 
     private void writeToFile() {
@@ -180,7 +187,7 @@ public class LoginView {
         //JFRAME.setVisible(false);
     }
 
-    public void setPlayerUsername(String username) {
+    private void setPlayerUsername(String username) {
         if (playersUsername[0] == null) {
             playersUsername[0] = username;
             humanPlayerLabel.setText("Human Player: " + username);
@@ -195,7 +202,7 @@ public class LoginView {
         newPasswordTxtF.setText("");
     }
 
-    private void validateLoginDetails() {
+    public void validateLogin() {
         String username = usernameTxtF.getText();
         String hashedPassword = hashPassword(passwordTxtF.getPassword());
 
@@ -205,30 +212,14 @@ public class LoginView {
                 System.out.println("Logged in successfully");
                 setPlayerUsername(username);
                 //JFRAME.setVisible(false);
+                loginSuccess = true;
                 break;
             } else if (!iterator.hasNext()) {
                 System.out.println("Invalid username or password");
+                loginSuccess = false;
             }
         }
 
-    }
-
-    public boolean testValidateLoginDetails(String username, String password) {
-
-        boolean b = false;
-        String hashedPassword = hashPassword(password.toCharArray());
-
-        for (Iterator<Map.Entry<String, String>> iterator = usernamePassword.entrySet().iterator(); iterator.hasNext(); ) {
-            Map.Entry<String, String> entry = iterator.next();
-            if (entry.getKey().equals(username) && entry.getValue().equals(hashedPassword)) {
-
-                b = true;
-                break;
-            } else if (!iterator.hasNext()) {
-                return b;
-            }
-        }
-        return b;
     }
 
     private String hashPassword(char[] password) {
@@ -257,6 +248,26 @@ public class LoginView {
 
         //Get complete hashed password in hex format
         return sb.toString();
+    }
+
+    public void setUsernameTxtF(String username) {
+        usernameTxtF.setText(username);
+    }
+
+    public void setPasswordTxtF(String password) {
+        passwordTxtF.setText(password);
+    }
+
+    public void setNewUsernameTxtF(String newUsername) {
+        newUsernameTxtF.setText(newUsername);
+    }
+
+    public void setNewPasswordTxtF(String newPassword) {
+        newPasswordTxtF.setText(newPassword);
+    }
+
+    public boolean isLoginSuccess() {
+        return loginSuccess;
     }
 
     {
