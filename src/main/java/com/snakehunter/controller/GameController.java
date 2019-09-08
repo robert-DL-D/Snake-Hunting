@@ -2,6 +2,7 @@ package com.snakehunter.controller;
 
 import com.snakehunter.GameContract.GameModel;
 import com.snakehunter.GameContract.GameView;
+import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Snake;
 import com.snakehunter.view.GameViewImpl.GameViewListener;
 
@@ -31,6 +32,11 @@ public class GameController
     @Override
     public void onSnakeBuilt(Snake snake) {
         gameModel.addSnake(snake);
+    }
+
+    @Override
+    public void onLadderBuilt(Ladder ladder) {
+        gameModel.addLadder(ladder);
     }
 
     @Override

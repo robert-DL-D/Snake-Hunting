@@ -1,8 +1,8 @@
 package com.snakehunter.view;
 
 import com.snakehunter.GameContract;
-import com.snakehunter.model.piece.Player;
 import com.snakehunter.model.piece.Ladder;
+import com.snakehunter.model.piece.Player;
 import com.snakehunter.model.piece.Snake;
 
 import java.awt.Container;
@@ -93,7 +93,33 @@ public class GameViewImpl
 
     @Override
     public void showLadderBuilder() {
+        JPanel pane = new JPanel();
+        pane.setLayout(new GridLayout(0, 2, 2, 2));
 
+        JTextField topField = new LimitTextField();
+        JTextField bottomField = new LimitTextField();
+
+        pane.add(new JLabel("Top position"));
+        pane.add(topField);
+
+        pane.add(new JLabel("Bottom position"));
+        pane.add(bottomField);
+
+        int option = JOptionPane.showConfirmDialog(this, pane, "Add Ladder", JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.INFORMATION_MESSAGE);
+
+        if (option == JOptionPane.OK_OPTION) {
+            String topInput = topField.getText();
+            String bottomInput = bottomField.getText();
+
+            try {
+                int top = Integer.parseInt(topInput);
+                int bottom = Integer.parseInt(bottomInput);
+                listener.onLadderBuilt(new Ladder(top, bottom));
+            } catch (NumberFormatException nfe) {
+                listener.onLadderBuilt(null);
+            }
+        }
     }
 
     @Override
@@ -142,6 +168,7 @@ public class GameViewImpl
     @Override
     public void onLadderAdded(Ladder ladder) {
         // TODO: add ladder into board
+        board.addLadder(ladder);
     }
 
     @Override
@@ -205,7 +232,7 @@ public class GameViewImpl
         case "Add Snake":
             listener.onAddSnakeClick();
             break;
-        case "Add com.snakehunter.model.Ladder":
+            case "Add Ladder":
             listener.onAddLadderClick();
             break;
         case "Add Players":
@@ -231,6 +258,8 @@ public class GameViewImpl
         void onSnakeBuilt(Snake snake);
 
         void onAddLadderClick();
+
+        void onLadderBuilt(Ladder ladder);
 
         void onAddPlayersClick();
 

@@ -1,5 +1,6 @@
 package com.snakehunter.view;
 
+import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Snake;
 
 import java.awt.Color;
@@ -22,10 +23,12 @@ public class Board
     private double factor = 0.2;
 
     private List<Snake> snakeList;
+    private List<Ladder> ladderList;
 
     public Board() {
         setSize(440, 440);
         snakeList = new ArrayList<>();
+        ladderList = new ArrayList<>();
 
         new Thread(this).start();
     }
@@ -33,6 +36,11 @@ public class Board
     public void addSnake(Snake snake) {
         // Runnable will repaint every 1 sec, no need to repaint here.
         snakeList.add(snake);
+    }
+
+    public void addLadder(Ladder ladder) {
+        // Runnable will repaint every 1 sec, no need to repaint here.
+        ladderList.add(ladder);
     }
 
     @Override
@@ -58,9 +66,14 @@ public class Board
         for (Snake snake : snakeList) {
             drawSnake(graphics, snake);
         }
+
+        for (Ladder ladder : ladderList) {
+            drawLadder(graphics, ladder);
+        }
     }
 
     public void drawSnake(Graphics g, Snake snake) {
+
         int headX = getX(snake.getPosition());
         int headY = getY(snake.getPosition());
         int tailX = getX(snake.getConnectedPosition());
@@ -117,6 +130,44 @@ public class Board
                 g.fillOval((int) (x - inc), (int) (y - inc), 20 - 10 * i / steps, 20 - 10 * i / steps);
             }
         }
+    }
+
+    public void drawLadder(Graphics g, Ladder ladder) {
+
+        int bottomX = getX(ladder.getPosition());
+        int buttomY = getY(ladder.getPosition());
+        int topX = getX(ladder.getConnectedPosition());
+        int topY = getY(ladder.getConnectedPosition());
+
+        int steps = (int) Math.sqrt((buttomY - topY) * (buttomY - topY) + (bottomX - topX) * (bottomX - topX)) / 25 + 1;
+
+        int xinc = 5;
+        if (topX > bottomX) {
+            xinc = -xinc;
+        }
+        int yinc = 5;
+        if (topY > buttomY) {
+            yinc = -yinc;
+        }
+
+        g.drawLine((topX - xinc), (topY + yinc), (bottomX - xinc), (buttomY + yinc));
+        g.drawLine((topX - xinc) - 1, (topY + yinc), (bottomX - xinc) - 1, (buttomY + yinc));
+        g.drawLine((topX - xinc), (topY + yinc) - 1, (bottomX - xinc), (buttomY + yinc) - 1);
+
+        g.drawLine((topX + xinc), (topY - yinc), (bottomX + xinc), (buttomY - yinc));
+        g.drawLine((topX + xinc) - 1, (topY - yinc), (bottomX + xinc) - 1, (buttomY - yinc));
+        g.drawLine((topX + xinc), (topY - yinc) - 1, (bottomX + xinc), (buttomY - yinc) - 1);
+
+        double xstep = (bottomX - topX) / (steps + 1);
+        double ystep = (buttomY - topY) / (steps + 1);
+        for (int i = 0; i < steps; i++) {
+            topX += xstep;
+            topY += ystep;
+            g.drawLine((topX + xinc), (topY - yinc), (topX - xinc), (topY + yinc));
+            g.drawLine((topX + xinc) - 1, (topY - yinc), (topX - xinc) - 1, (topY + yinc));
+            g.drawLine((topX + xinc), (topY - yinc) - 1, (topX - xinc), (topY + yinc) - 1);
+        }
+
     }
 
     private int getX(int pos) {
