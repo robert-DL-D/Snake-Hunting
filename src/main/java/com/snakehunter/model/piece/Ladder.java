@@ -1,8 +1,8 @@
 package com.snakehunter.model.piece;
 
 /**
- * @author WeiYi Yu
- * @date 2019-09-06
+ * @author David Manolitsas
+ * @date 2019-09-08
  */
 public class Ladder
         extends ConnectorPiece {
