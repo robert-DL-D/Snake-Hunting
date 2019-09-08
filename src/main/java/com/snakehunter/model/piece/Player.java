@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author WeiYi Yu
- * @date 2019-09-06
+ * @author David Manolitsas
+ * @date 2019-09-08
  */
 public class Player
         extends Piece
@@ -59,22 +59,14 @@ public class Player
 
     @Override
     public int move(int steps) {
-        // TODO: Need to change
-//        if (paralyzedTurns < 1){
-//            int newPosition = topPos.getSquareNo();
-//
-//            newPosition += diceRoll;
-//            Square newSquare = new Square(newPosition);
-//
-//            setTopPos(newSquare);
-//            setBottomPos(newSquare);
-//
-//            return newSquare;
-//        }
-//        else {
-//            //piece unable to move
-//            return topPos;
-//        }
-        return 0;
+        if (isParalyzed()){
+            //if paralyzed return current position
+            return getPosition();
+        }
+        else {
+            int newPosition = getPosition() + steps;
+            setPosition(newPosition);
+            return newPosition;
+        }
     }
 }
