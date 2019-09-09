@@ -119,7 +119,7 @@ public class GameModelImpl
         initPlayers(numOfPlayers);
 
         if (listener != null) {
-            listener.onPlayersAdded(numOfPlayers);
+            listener.onPlayersAdded(playerMap);
         }
     }
 
@@ -256,9 +256,8 @@ public class GameModelImpl
         if (ladder == null) {
             errorMessage = "Please enter valid positions.";
         } else {
-            // FIXME: ConnectedPosition would be the top of the ladder.
-            int top = ladder.getPosition();
-            int base = ladder.getConnectedPosition();
+            int top = ladder.getConnectedPosition();
+            int base = ladder.getPosition();
             if (base == 1) {
                 errorMessage = "Please enter valid positions.";
             } else if (base > top) {
@@ -334,7 +333,7 @@ public class GameModelImpl
 
         void onExceedMaxNumOfGuards();
 
-        void onPlayersAdded(int numOfPlayers);
+        void onPlayersAdded(Map<Integer, Player> playerMap);
 
         void onNextTurn(Player player);
 

@@ -2,9 +2,9 @@ package com.snakehunter.model;
 
 import com.snakehunter.GameContract.GameModel;
 import com.snakehunter.model.GameModelImpl.GameModelListener;
-import com.snakehunter.model.piece.Player;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Piece;
+import com.snakehunter.model.piece.Player;
 import com.snakehunter.model.piece.Snake;
 
 import org.junit.Assert;
@@ -17,6 +17,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -153,7 +154,7 @@ public class GameModelImplTest {
         gameModel.addPlayers(2);
 
         // then
-        verify(listener).onPlayersAdded(2);
+        verify(listener).onPlayersAdded(any());
 
         assertEquals(2, gameModel.getSquare(1).getPieceList().size());
 

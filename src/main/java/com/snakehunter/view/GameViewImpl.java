@@ -9,6 +9,7 @@ import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -106,7 +107,7 @@ public class GameViewImpl
         pane.add(baseField);
 
         int option = JOptionPane.showConfirmDialog(this, pane, "Add Ladder", JOptionPane.OK_CANCEL_OPTION,
-                JOptionPane.INFORMATION_MESSAGE);
+                                                   JOptionPane.INFORMATION_MESSAGE);
 
         if (option == JOptionPane.OK_OPTION) {
             String topInput = topField.getText();
@@ -115,8 +116,7 @@ public class GameViewImpl
             try {
                 int top = Integer.parseInt(topInput);
                 int bottom = Integer.parseInt(bottomInput);
-                // FIXME: ConnectedPosition would be the top of the ladder.
-                listener.onLadderBuilt(new Ladder(top, bottom));
+                listener.onLadderBuilt(new Ladder(bottom, top));
             } catch (NumberFormatException nfe) {
                 listener.onLadderBuilt(null);
             }
@@ -131,14 +131,7 @@ public class GameViewImpl
             numOfPlayers = Integer.parseInt(JOptionPane.showInputDialog("How many players? (2 ~ 4)"));
         } catch (NumberFormatException e) {
             if (listener != null) {
-                listener.onNumOfPlayersEntered(2);
-            }
-            return;
-        }
-
-        if (numOfPlayers < 2 || numOfPlayers > 4) {
-            if (listener != null) {
-                listener.onNumOfPlayersEntered(2);
+                listener.onNumOfPlayersEntered(-1);
             }
             return;
         }
@@ -191,9 +184,8 @@ public class GameViewImpl
     }
 
     @Override
-    public void onPlayersAdded(int numOfPlayers) {
-        // TODO: add pieces into board
-        board.addPlayer(numOfPlayers);
+    public void onPlayersAdded(Map<Integer, Player> playerMap) {
+        board.addPlayer(playerMap);
     }
 
     @Override
@@ -237,7 +229,7 @@ public class GameViewImpl
         case "Add Snake":
             listener.onAddSnakeClick();
             break;
-            case "Add Ladder":
+        case "Add Ladder":
             listener.onAddLadderClick();
             break;
         case "Add Players":
