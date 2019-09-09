@@ -54,6 +54,7 @@ public class GameContract {
 
         Square getSquare(int squareNo);
 
+        // Test only
         void setNumOfGuards(int num);
     }
 

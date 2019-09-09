@@ -82,7 +82,7 @@ public class Board
         }
     }
 
-    public void drawSnake(Graphics g, Snake snake) {
+    private void drawSnake(Graphics g, Snake snake) {
 
         int headX = getX(snake.getPosition());
         int headY = getY(snake.getPosition());
@@ -142,7 +142,7 @@ public class Board
         }
     }
 
-    public void drawLadder(Graphics g, Ladder ladder) {
+    private void drawLadder(Graphics g, Ladder ladder) {
 
         int bottomX = getX(ladder.getPosition());
         int buttomY = getY(ladder.getPosition());
@@ -180,7 +180,7 @@ public class Board
 
     }
 
-    public void drawPlayers(Graphics g) {
+    private void drawPlayers(Graphics g) {
         Color[] color = new Color[] {Color.WHITE, Color.RED, Color.GREEN, Color.CYAN};
         int numOfPlayers = playerMap.size();
 
