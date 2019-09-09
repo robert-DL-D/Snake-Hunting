@@ -1,6 +1,7 @@
 package com.snakehunter.view;
 
 import com.snakehunter.GameContract;
+import com.snakehunter.Main;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Player;
 import com.snakehunter.model.piece.Snake;
@@ -58,7 +59,23 @@ public class GameViewImpl
     //region interaction
     @Override
     public void rollTheDice() {
-        dice.roll();
+        if (Main.isDebugMode()) {
+            int num = 0;
+            try {
+                num = Integer.parseInt(JOptionPane.showInputDialog("Enter 0 to throw dice. Enter 1 - 6 for Testing."));
+            } catch (NumberFormatException e) {
+                showErrorDialog("PLease enters a valid number!");
+                return;
+            }
+
+            if (num == 0) {
+                dice.roll();
+            } else {
+                listener.onDiceRolled(num);
+            }
+        } else {
+            dice.roll();
+        }
     }
 
     @Override

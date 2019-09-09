@@ -108,7 +108,7 @@ public class Dice
                     }
                 }
 
-                listener.onDiceRolled(19);
+                listener.onDiceRolled(lastNum);
                 setEnabled(true);
             }).start();
 

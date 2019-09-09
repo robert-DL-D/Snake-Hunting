@@ -12,6 +12,8 @@ import com.snakehunter.view.GameViewImpl;
  */
 public class Main {
 
+    private static boolean Debug = true;
+
     public static void main(String[] args) {
         GameView gameView = new GameViewImpl();
         GameModel gameModel = new GameModelImpl();
@@ -19,5 +21,9 @@ public class Main {
 
         gameModel.setListener(gameView);
         gameView.setListener(gameController);
+    }
+
+    public static boolean isDebugMode() {
+        return isDebugMode();
     }
 }
