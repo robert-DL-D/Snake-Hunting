@@ -27,8 +27,8 @@ public class GameModelImpl
     private GameStage gameStage;
 
     private Map<Integer, Player> playerMap;
-    private List<Snake> snakeList; // FIXME Nothing is added to this list
-    private List<Ladder> ladderList;// FIXME Nothing is added to this list
+    private List<Snake> snakeList;
+    private List<Ladder> ladderList;
 
     private int numOfGuards = 0;
     private int numOfTurns = 0;
@@ -53,6 +53,13 @@ public class GameModelImpl
         }
 
         Square square = getSquare(snake.getPosition());
+
+        if (square.getSnake() != null) {
+            listener.onAddSnakeFailed("Cannot place two snake in the same position.");
+            return;
+        }
+
+        snakeList.add(snake);
         square.addPiece(snake);
 
         if (listener != null) {
@@ -62,7 +69,6 @@ public class GameModelImpl
 
     @Override
     public void addLadder(Ladder ladder) {
-        // TODO: validate ladder position
         String errorMessage = validateLadder(ladder);
 
         if (errorMessage != null && listener != null) {
@@ -71,6 +77,12 @@ public class GameModelImpl
         }
 
         Square square = getSquare(ladder.getPosition());
+        if (square.getLadder() != null) {
+            listener.onAddLadderFailed("Cannot place two ladder in the same position.");
+            return;
+        }
+
+        ladderList.add(ladder);
         square.addPiece(ladder);
 
         if (listener != null) {
@@ -119,8 +131,7 @@ public class GameModelImpl
 
     @Override
     public boolean isGameReady() {
-        // FIXME Lists are always zero, game can never start
-        return playerMap.size() != 0 && snakeList.size() != 0 && ladderList.size() != 0;
+        return !playerMap.isEmpty() && !snakeList.isEmpty() && !ladderList.isEmpty();
     }
 
     @Override
@@ -259,7 +270,7 @@ public class GameModelImpl
                 errorMessage = "Ladder's length cannot be greater than 30.";
             }
             // This probably doesn't work
-            else if (snakeList.size() > 0) {
+            else if (!snakeList.isEmpty()) {
                 for (Snake snake : snakeList) {
                     if (top == snake.getPosition() || base == snake.getPosition()) {
                         errorMessage = "Ladder's top or base is same as another snake's head position";
