@@ -115,6 +115,7 @@ public class GameViewImpl
             try {
                 int top = Integer.parseInt(topInput);
                 int bottom = Integer.parseInt(bottomInput);
+                // FIXME: ConnectedPosition would be the top of the ladder.
                 listener.onLadderBuilt(new Ladder(top, bottom));
             } catch (NumberFormatException nfe) {
                 listener.onLadderBuilt(null);

@@ -256,6 +256,7 @@ public class GameModelImpl
         if (ladder == null) {
             errorMessage = "Please enter valid positions.";
         } else {
+            // FIXME: ConnectedPosition would be the top of the ladder.
             int top = ladder.getPosition();
             int base = ladder.getConnectedPosition();
             if (base == 1) {
