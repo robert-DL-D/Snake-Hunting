@@ -168,7 +168,6 @@ public class GameViewImpl
 
     @Override
     public void onLadderAdded(Ladder ladder) {
-        // TODO: add ladder into board
         board.addLadder(ladder);
     }
 
@@ -184,12 +183,11 @@ public class GameViewImpl
 
     @Override
     public void onGuardAdded(int position) {
-
     }
 
     @Override
     public void onExceedMaxNumOfGuards() {
-
+        showErrorDialog("Cannot place more than 3 guards.");
     }
 
     @Override
