@@ -30,6 +30,10 @@ public class GameContract {
     }
 
     public interface GameModel {
+        void setGameStage(GameStage gameStage);
+
+        GameStage getGameStage();
+
         void addSnake(Snake snake);
 
         void addLadder(Ladder ladder);

@@ -2,6 +2,7 @@ package com.snakehunter.controller;
 
 import com.snakehunter.GameContract.GameModel;
 import com.snakehunter.GameContract.GameView;
+import com.snakehunter.GameStage;
 import com.snakehunter.model.piece.Snake;
 
 import org.junit.Before;
@@ -12,6 +13,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 /**
@@ -74,6 +76,7 @@ public class GameControllerTest {
 
         // then
         verify(gameView).hideSettingPanel();
+        verify(gameModel).setGameStage(GameStage.SECOND);
         verify(gameModel).nextTurn();
     }
 
@@ -90,12 +93,27 @@ public class GameControllerTest {
     }
 
     @Test
-    public void whenDiceClick_thenCallRollTheDice() {
+    public void givenGameStageIsSecond_whenDiceClick_thenCallRollTheDice() {
+        // given
+        when(gameModel.getGameStage()).thenReturn(GameStage.SECOND);
+
         // when
         gameController.onDiceClick();
 
         // then
         verify(gameView).rollTheDice();
+    }
+
+    @Test
+    public void givenGameStageIsInitial_whenDiceClick_thenDoNothing() {
+        // given
+        when(gameModel.getGameStage()).thenReturn(GameStage.INITIAL);
+
+        // when
+        gameController.onDiceClick();
+
+        // then
+        verifyZeroInteractions(gameView);
     }
 
     @Test

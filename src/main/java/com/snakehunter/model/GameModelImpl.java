@@ -40,6 +40,8 @@ public class GameModelImpl
         playerMap = new HashMap<>();
         snakeList = new ArrayList<>();
         ladderList = new ArrayList<>();
+
+        setGameStage(GameStage.INITIAL);
     }
 
     //region interaction
@@ -193,26 +195,6 @@ public class GameModelImpl
         }
     }
 
-    @Override
-    public Square getSquare(int squareNo) {
-        int x, y;
-
-        y = (int) Math.ceil(squareNo / 10f) - 1;
-
-        if (y % 2 == 0) {   // Odd row
-            x = squareNo % 10 - 1;
-            if (x == -1) {
-                x = 9;
-            }
-        } else {    // Oven row
-            x = 10 - squareNo % 10;
-            if (x == 10) {
-                x = 0;
-            }
-        }
-        return squares[x][y];
-    }
-
     private void initPlayers(int numOfPlayers) {
         playerMap.clear();
         Square startPoint = squares[0][0];
@@ -292,14 +274,35 @@ public class GameModelImpl
         this.errorMessageTest = errorMessage; // For testing only
         return errorMessage;
     }
-
     //endregion
 
     //region getter/setter
+    @Override
+    public Square getSquare(int squareNo) {
+        int x, y;
+
+        y = (int) Math.ceil(squareNo / 10f) - 1;
+
+        if (y % 2 == 0) {   // Odd row
+            x = squareNo % 10 - 1;
+            if (x == -1) {
+                x = 9;
+            }
+        } else {    // Oven row
+            x = 10 - squareNo % 10;
+            if (x == 10) {
+                x = 0;
+            }
+        }
+        return squares[x][y];
+    }
+
+    @Override
     public void setGameStage(GameStage gameStage) {
         this.gameStage = gameStage;
     }
 
+    @Override
     public GameStage getGameStage() {
         return gameStage;
     }

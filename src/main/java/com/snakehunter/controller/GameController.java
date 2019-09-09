@@ -2,6 +2,7 @@ package com.snakehunter.controller;
 
 import com.snakehunter.GameContract.GameModel;
 import com.snakehunter.GameContract.GameView;
+import com.snakehunter.GameStage;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Snake;
 import com.snakehunter.view.GameViewImpl.GameViewListener;
@@ -53,6 +54,7 @@ public class GameController
     public void onStartClick() {
         if (gameModel.isGameReady()) {
             gameView.hideSettingPanel();
+            gameModel.setGameStage(GameStage.SECOND);
             gameModel.nextTurn();
         } else {
             gameView.showErrorDialog("Make sure you add snakes, ladders and players before start the game.");
@@ -61,6 +63,10 @@ public class GameController
 
     @Override
     public void onDiceClick() {
+        if (gameModel.getGameStage().equals(GameStage.INITIAL)) {
+            return;
+        }
+
         gameView.rollTheDice();
     }
 
