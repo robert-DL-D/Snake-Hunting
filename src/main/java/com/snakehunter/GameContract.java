@@ -1,11 +1,11 @@
 package com.snakehunter;
 
-import com.snakehunter.model.GameModelImpl.DataChangedListener;
 import com.snakehunter.model.Square;
-import com.snakehunter.model.piece.Player;
 import com.snakehunter.model.piece.Ladder;
+import com.snakehunter.model.piece.Player;
 import com.snakehunter.model.piece.Snake;
-import com.snakehunter.view.GameViewImpl.ViewEventListener;
+
+import java.util.Map;
 
 /**
  * @author WeiYi Yu
@@ -27,6 +27,26 @@ public class GameContract {
         void hideSettingPanel();
 
         void setOnViewEventListener(ViewEventListener listener);
+    }
+
+    public interface ViewEventListener {
+        void onAddSnakeClick();
+
+        void onSnakeBuilt(Snake snake);
+
+        void onAddLadderClick();
+
+        void onLadderBuilt(Ladder ladder);
+
+        void onAddPlayersClick();
+
+        void onStartClick();
+
+        void onDiceClick();
+
+        void onDiceRolled(int num);
+
+        void onNumOfPlayersEntered(int numOfPlayers);
     }
 
     public interface GameModel {
@@ -58,4 +78,29 @@ public class GameContract {
         void setNumOfGuards(int num);
     }
 
+    public interface DataChangedListener {
+        void onSnakeAdded(Snake snake);
+
+        void onLadderAdded(Ladder ladder);
+
+        void onAddSnakeFailed(String errorMessage);
+
+        void onAddLadderFailed(String errorMessage);
+
+        void onGuardAdded(int position);
+
+        void onExceedMaxNumOfGuards();
+
+        void onPlayersAdded(Map<Integer, Player> playerMap);
+
+        void onNextTurn(Player player);
+
+        void onPlayerMoved(Player player, int destPosition);
+
+        void onPlayerClimbLadder(Player player, int destPosition);
+
+        void onPlayerSwallowedBySnake(Player player, int destPosition);
+
+        void onNumOfPlayersEnteredError();
+    }
 }

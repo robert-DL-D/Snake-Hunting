@@ -1,6 +1,7 @@
 package com.snakehunter.view;
 
 import com.snakehunter.GameContract;
+import com.snakehunter.GameContract.ViewEventListener;
 import com.snakehunter.Main;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Player;
@@ -266,23 +267,4 @@ public class GameViewImpl
         dice.setOnViewEventListener(listener);
     }
 
-    public interface ViewEventListener {
-        void onAddSnakeClick();
-
-        void onSnakeBuilt(Snake snake);
-
-        void onAddLadderClick();
-
-        void onLadderBuilt(Ladder ladder);
-
-        void onAddPlayersClick();
-
-        void onStartClick();
-
-        void onDiceClick();
-
-        void onDiceRolled(int num);
-
-        void onNumOfPlayersEntered(int numOfPlayers);
-    }
 }

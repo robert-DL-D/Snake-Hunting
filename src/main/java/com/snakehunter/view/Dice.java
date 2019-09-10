@@ -1,6 +1,6 @@
 package com.snakehunter.view;
 
-import com.snakehunter.view.GameViewImpl.ViewEventListener;
+import com.snakehunter.GameContract.ViewEventListener;
 
 import java.awt.Color;
 import java.awt.Graphics;

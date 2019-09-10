@@ -1,6 +1,7 @@
 package com.snakehunter.model;
 
 import com.snakehunter.GameContract;
+import com.snakehunter.GameContract.DataChangedListener;
 import com.snakehunter.GameStage;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Player;
@@ -40,8 +41,6 @@ public class GameModelImpl
         playerMap = new HashMap<>();
         snakeList = new ArrayList<>();
         ladderList = new ArrayList<>();
-
-        setGameStage(GameStage.INITIAL);
     }
 
     //region interaction
@@ -323,29 +322,4 @@ public class GameModelImpl
         return errorMessageTest;
     }
 
-    public interface DataChangedListener {
-        void onSnakeAdded(Snake snake);
-
-        void onLadderAdded(Ladder ladder);
-
-        void onAddSnakeFailed(String errorMessage);
-
-        void onAddLadderFailed(String errorMessage);
-
-        void onGuardAdded(int position);
-
-        void onExceedMaxNumOfGuards();
-
-        void onPlayersAdded(Map<Integer, Player> playerMap);
-
-        void onNextTurn(Player player);
-
-        void onPlayerMoved(Player player, int destPosition);
-
-        void onPlayerClimbLadder(Player player, int destPosition);
-
-        void onPlayerSwallowedBySnake(Player player, int destPosition);
-
-        void onNumOfPlayersEnteredError();
-    }
 }

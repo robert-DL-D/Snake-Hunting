@@ -2,10 +2,10 @@ package com.snakehunter.controller;
 
 import com.snakehunter.GameContract.GameModel;
 import com.snakehunter.GameContract.GameView;
+import com.snakehunter.GameContract.ViewEventListener;
 import com.snakehunter.GameStage;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Snake;
-import com.snakehunter.view.GameViewImpl.ViewEventListener;
 
 /**
  * @author WeiYi Yu
@@ -20,8 +20,7 @@ public class GameController
     public GameController(GameView gameView, GameModel gameModel) {
         this.gameView = gameView;
         this.gameModel = gameModel;
-
-//        gameModel.setGameStage(GameStage.INITIAL);
+        this.gameModel.setGameStage(GameStage.INITIAL);
     }
 
     //region interaction
@@ -81,21 +80,4 @@ public class GameController
         gameModel.addPlayers(numOfPlayers);
     }
     //endregion
-
-//    void nextTurn() {
-//        numOfTurns++;
-//        currentPlayer = getPlayer(numOfTurns);
-//    }
-//
-//    boolean addGuards(int position) {
-//        if (numOfGuards == MAX_GUARDS) {
-//            return false;
-//        }
-//
-//        // TODO:
-//        //  1. check if position available
-//        //  2. put the guard into the corresponding position
-//        numOfGuards++;
-//        return true;
-//    }
 }
