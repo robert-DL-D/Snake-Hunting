@@ -1,7 +1,6 @@
 package com.snakehunter.model.piece;
 
-import com.snakehunter.view.Dice;
-import com.sun.xml.internal.bind.v2.runtime.output.StAXExStreamWriterOutput;
+import com.snakehunter.view.DiceView;
 
 import org.junit.After;
 import org.junit.Before;
@@ -17,12 +16,12 @@ import static org.junit.Assert.*;
 public class PlayerTest {
 
     Player player;
-    Dice dice;
+    DiceView diceView;
 
     @Before
     public void setUp() throws Exception {
         player = new Player(1, "John");
-        dice = new Dice();
+        diceView = new DiceView();
     }
 
     //test player movement
@@ -48,8 +47,8 @@ public class PlayerTest {
     public void test3(){
         player.paralyze();
 
-        dice.roll();
-        player.move(dice.getLastNum());
+        diceView.roll();
+        player.move(diceView.getLastNum());
 
         assertEquals(1, player.getPosition());
     }
@@ -69,8 +68,8 @@ public class PlayerTest {
     //test player movement from dice roll
     @Test
     public void test5(){
-        dice.roll();
-        int num = dice.getLastNum();
+        diceView.roll();
+        int num = diceView.getLastNum();
         int expected = num + player.getPosition();
 
         player.move(num);
@@ -85,10 +84,10 @@ public class PlayerTest {
         int total = 1;
 
         for (int i = 0; i < 10; i++){
-            dice.roll();
-            player.move(dice.getLastNum());
+            diceView.roll();
+            player.move(diceView.getLastNum());
 
-            total += dice.getLastNum();
+            total += diceView.getLastNum();
         }
 
         assertEquals(total, player.getPosition());

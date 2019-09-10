@@ -16,7 +16,7 @@ import javax.swing.JPanel;
  * @author WeiYi Yu
  * @date 2019-09-02
  */
-public class Board
+public class BoardView
         extends JPanel
         implements Runnable {
     private static final int X_MARGIN = 20;
@@ -28,7 +28,7 @@ public class Board
     private List<Ladder> ladderList;
     private Map<Integer, Player> playerMap;
 
-    public Board() {
+    public BoardView() {
         setSize(440, 440);
         snakeList = new ArrayList<>();
         ladderList = new ArrayList<>();

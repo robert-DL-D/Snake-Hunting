@@ -12,7 +12,7 @@ import java.util.Random;
  * @author WeiYi Yu
  * @date 2019-08-24
  */
-public class Dice
+public class DiceView
         extends ClickablePanel {
 
     private static final int DICE_LENGTH = 45;
@@ -26,7 +26,7 @@ public class Dice
     private Random random;
     private int lastNum = 1;
 
-    public Dice() {
+    public DiceView() {
         setSize(DICE_LENGTH, DICE_LENGTH);
         random = new Random();
         addMouseListener(this);

@@ -30,8 +30,8 @@ public class GameViewImpl
 
     private ViewEventListener listener;
 
-    private Board board;
-    private Dice dice;
+    private BoardView boardView;
+    private DiceView diceView;
     private SettingPanel settingPanel;
 
     public GameViewImpl() {
@@ -42,13 +42,13 @@ public class GameViewImpl
 
         Container contentPane = getContentPane();
 
-        board = new Board();
-        board.setLocation(0, 0);
-        contentPane.add(board);
+        boardView = new BoardView();
+        boardView.setLocation(0, 0);
+        contentPane.add(boardView);
 
-        dice = new Dice();
-        dice.setLocation(500, 400);
-        contentPane.add(dice);
+        diceView = new DiceView();
+        diceView.setLocation(500, 400);
+        contentPane.add(diceView);
 
         settingPanel = new SettingPanel(this);
         settingPanel.setLocation(450, 20);
@@ -70,12 +70,12 @@ public class GameViewImpl
             }
 
             if (num == 0) {
-                dice.roll();
+                diceView.roll();
             } else {
                 listener.onDiceRolled(num);
             }
         } else {
-            dice.roll();
+            diceView.roll();
         }
     }
 
@@ -174,12 +174,12 @@ public class GameViewImpl
     //region GameModel interaction
     @Override
     public void onSnakeAdded(Snake snake) {
-        board.addSnake(snake);
+        boardView.addSnake(snake);
     }
 
     @Override
     public void onLadderAdded(Ladder ladder) {
-        board.addLadder(ladder);
+        boardView.addLadder(ladder);
     }
 
     @Override
@@ -203,12 +203,12 @@ public class GameViewImpl
 
     @Override
     public void onPlayersAdded(Map<Integer, Player> playerMap) {
-        board.addPlayer(playerMap);
+        boardView.addPlayer(playerMap);
     }
 
     @Override
     public void onNextTurn(Player player) {
-        dice.setEnabled(true);
+        diceView.setEnabled(true);
         String message = String.format("%1s's turn, roll the dice!", player.getName());
         JOptionPane.showMessageDialog(this, message, "Message", JOptionPane.INFORMATION_MESSAGE);
     }
@@ -264,7 +264,7 @@ public class GameViewImpl
     @Override
     public void setOnViewEventListener(ViewEventListener listener) {
         this.listener = listener;
-        dice.setOnViewEventListener(listener);
+        diceView.setOnViewEventListener(listener);
     }
 
 }
