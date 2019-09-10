@@ -1,6 +1,6 @@
 package com.snakehunter.view;
 
-import com.snakehunter.view.GameViewImpl.GameViewListener;
+import com.snakehunter.view.GameViewImpl.ViewEventListener;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -21,7 +21,7 @@ public class Dice
     public static final int DICE_NUM_MIN = 1;
     public static final int DICE_NUM_MAX = 6;
 
-    private GameViewListener listener;
+    private ViewEventListener listener;
 
     private Random random;
     private int lastNum = 1;
@@ -32,7 +32,7 @@ public class Dice
         addMouseListener(this);
     }
 
-    public void setListener(GameViewListener listener) {
+    public void setOnViewEventListener(ViewEventListener listener) {
         this.listener = listener;
     }
 

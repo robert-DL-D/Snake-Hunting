@@ -1,7 +1,7 @@
 package com.snakehunter.model;
 
 import com.snakehunter.GameContract.GameModel;
-import com.snakehunter.model.GameModelImpl.GameModelListener;
+import com.snakehunter.model.GameModelImpl.DataChangedListener;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Piece;
 import com.snakehunter.model.piece.Player;
@@ -32,12 +32,12 @@ public class GameModelImplTest {
     private GameModel gameModel;
 
     @Mock
-    private GameModelListener listener;
+    private DataChangedListener listener;
 
     @Before
     public void setUp() throws Exception {
         gameModel = new GameModelImpl();
-        gameModel.setListener(listener);
+        gameModel.setOnDataChangedListener(listener);
     }
 
     @Test

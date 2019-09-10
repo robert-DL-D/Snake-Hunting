@@ -5,14 +5,14 @@ import com.snakehunter.GameContract.GameView;
 import com.snakehunter.GameStage;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Snake;
-import com.snakehunter.view.GameViewImpl.GameViewListener;
+import com.snakehunter.view.GameViewImpl.ViewEventListener;
 
 /**
  * @author WeiYi Yu
  * @date 2019-08-25
  */
 public class GameController
-        implements GameViewListener {
+        implements ViewEventListener {
 
     private GameView gameView;
     private GameModel gameModel;

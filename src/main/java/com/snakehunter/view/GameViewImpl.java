@@ -27,7 +27,7 @@ public class GameViewImpl
         implements GameContract.GameView,
                    ActionListener {
 
-    private GameViewListener listener;
+    private ViewEventListener listener;
 
     private Board board;
     private Dice dice;
@@ -261,12 +261,12 @@ public class GameViewImpl
     }
 
     @Override
-    public void setListener(GameViewListener listener) {
+    public void setOnViewEventListener(ViewEventListener listener) {
         this.listener = listener;
-        dice.setListener(listener);
+        dice.setOnViewEventListener(listener);
     }
 
-    public interface GameViewListener {
+    public interface ViewEventListener {
         void onAddSnakeClick();
 
         void onSnakeBuilt(Snake snake);

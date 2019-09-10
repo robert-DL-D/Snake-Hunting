@@ -22,7 +22,7 @@ public class GameModelImpl
 
     private Square[][] squares = new Square[10][10];
 
-    private GameModelListener listener;
+    private DataChangedListener listener;
 
     private GameStage gameStage;
 
@@ -313,7 +313,7 @@ public class GameModelImpl
     }
 
     @Override
-    public void setListener(GameModelListener listener) {
+    public void setOnDataChangedListener(DataChangedListener listener) {
         this.listener = listener;
     }
     //endregion
@@ -323,7 +323,7 @@ public class GameModelImpl
         return errorMessageTest;
     }
 
-    public interface GameModelListener {
+    public interface DataChangedListener {
         void onSnakeAdded(Snake snake);
 
         void onLadderAdded(Ladder ladder);

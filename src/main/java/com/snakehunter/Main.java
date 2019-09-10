@@ -19,8 +19,8 @@ public class Main {
         GameModel gameModel = new GameModelImpl();
         GameController gameController = new GameController(gameView, gameModel);
 
-        gameModel.setListener(gameView);
-        gameView.setListener(gameController);
+        gameModel.setOnDataChangedListener(gameView);
+        gameView.setOnViewEventListener(gameController);
     }
 
     public static boolean isDebugMode() {

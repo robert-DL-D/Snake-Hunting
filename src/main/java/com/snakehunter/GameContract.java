@@ -1,11 +1,11 @@
 package com.snakehunter;
 
-import com.snakehunter.model.GameModelImpl.GameModelListener;
+import com.snakehunter.model.GameModelImpl.DataChangedListener;
 import com.snakehunter.model.Square;
 import com.snakehunter.model.piece.Player;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Snake;
-import com.snakehunter.view.GameViewImpl.GameViewListener;
+import com.snakehunter.view.GameViewImpl.ViewEventListener;
 
 /**
  * @author WeiYi Yu
@@ -13,7 +13,7 @@ import com.snakehunter.view.GameViewImpl.GameViewListener;
  */
 public class GameContract {
     public interface GameView
-            extends GameModelListener {
+            extends DataChangedListener {
         void rollTheDice();
 
         void showSnakeBuilder();
@@ -26,7 +26,7 @@ public class GameContract {
 
         void hideSettingPanel();
 
-        void setListener(GameViewListener listener);
+        void setOnViewEventListener(ViewEventListener listener);
     }
 
     public interface GameModel {
@@ -50,7 +50,7 @@ public class GameContract {
 
         void movePlayer(int steps);
 
-        void setListener(GameModelListener listener);
+        void setOnDataChangedListener(DataChangedListener listener);
 
         Square getSquare(int squareNo);
 
