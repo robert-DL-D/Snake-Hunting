@@ -32,7 +32,7 @@ public abstract class Piece {
             if (column == -1) {
                 column = 9;
             }
-        } else {    // Oven row
+        } else {    // Even row
             column = 10 - squareNo % 10;
             if (column == 10) {
                 column = 0;
@@ -40,4 +40,5 @@ public abstract class Piece {
         }
         return squares[column][row];
     }
+
 }

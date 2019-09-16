@@ -156,7 +156,7 @@ public class GameModelImpl
     //endregion
 
     //region private method
-    private void initSquare() {
+    public void initSquare() {
         squares = new Square[10][10];
 
         int x = 0; //col
@@ -274,6 +274,10 @@ public class GameModelImpl
             }
         }
         return squares[x][y];
+    }
+
+    public Square getSquares(int row, int col){
+        return squares[row][col];
     }
 
     @Override

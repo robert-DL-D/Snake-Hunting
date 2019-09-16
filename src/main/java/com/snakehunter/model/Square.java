@@ -50,6 +50,13 @@ public class Square {
         return isGuarded;
     }
 
+    public int getColumn() {
+        return column;
+    }
+
+    public int getRow() {
+        return row;
+    }
     public Snake getSnake() {
         for (Piece piece : pieceList) {
             if (piece instanceof Snake) {
