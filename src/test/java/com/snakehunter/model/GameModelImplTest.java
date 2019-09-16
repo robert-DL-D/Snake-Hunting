@@ -4,7 +4,7 @@ import com.snakehunter.GameContract.DataChangedListener;
 import com.snakehunter.GameContract.GameModel;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Piece;
-import com.snakehunter.model.piece.Player;
+import com.snakehunter.model.piece.Human;
 import com.snakehunter.model.piece.Snake;
 
 import org.junit.Assert;
@@ -149,29 +149,29 @@ public class GameModelImplTest {
     }
 
     @Test
-    public void givenValidNumOfPlayers_whenAddPlayers_thenAddCorrectly() {
+    public void givenValidNumOfHumans_whenAddHumans_thenAddedCorrectly() {
         // when
-        gameModel.addPlayers(2);
+        gameModel.addHumans(2);
 
         // then
-        verify(listener).onPlayersAdded(any());
+        verify(listener).onHumansAdded(any());
 
         assertEquals(2, gameModel.getSquare(1).getPieceList().size());
 
         for (Piece piece : gameModel.getSquare(1).getPieceList()) {
-            assertTrue(piece instanceof Player);
+            assertTrue(piece instanceof Human);
             assertEquals(1, piece.getPosition());
         }
     }
 
     @Test
-    public void givenInvalidNumOfPlayers_whenAddPlayers_thenCallNumOfPlayersEnteredError() {
+    public void givenInvalidNumOfHumans_whenAddHumans_thenCallNumOfHumansEnteredError() {
         // when
-        gameModel.addPlayers(1);
-        gameModel.addPlayers(5);
+        gameModel.addHumans(1);
+        gameModel.addHumans(5);
 
         // then
-        verify(listener, times(2)).onNumOfPlayersEnteredError();
+        verify(listener, times(2)).onNumOfHumansEnteredError();
     }
 
     // TODO: test for movePlayer

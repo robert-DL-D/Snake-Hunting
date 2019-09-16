@@ -3,8 +3,8 @@ package com.snakehunter.view;
 import com.snakehunter.GameContract;
 import com.snakehunter.GameContract.ViewEventListener;
 import com.snakehunter.Main;
+import com.snakehunter.model.piece.Human;
 import com.snakehunter.model.piece.Ladder;
-import com.snakehunter.model.piece.Player;
 import com.snakehunter.model.piece.Snake;
 
 import java.awt.Container;
@@ -142,21 +142,20 @@ public class GameViewImpl
     }
 
     @Override
-    public void showHowManyPlayers() {
-        int numOfPlayers;
+    public void showHumanBuilder() {
+        int numOfHumans;
 
         try {
-            numOfPlayers = Integer.parseInt(JOptionPane.showInputDialog("How many players? (2 ~ 4)"));
+            numOfHumans = Integer.parseInt(JOptionPane.showInputDialog("How many players? (2 ~ 4)"));
         } catch (NumberFormatException e) {
             if (listener != null) {
-                listener.onNumOfPlayersEntered(-1);
+                listener.onNumOfHumansEntered(-1);
             }
             return;
         }
 
-        numOfPlayers = 2; // FIXME: fixed num of players for now.
         if (listener != null) {
-            listener.onNumOfPlayersEntered(numOfPlayers);
+            listener.onNumOfHumansEntered(numOfHumans);
         }
     }
 
@@ -202,37 +201,37 @@ public class GameViewImpl
     }
 
     @Override
-    public void onPlayersAdded(Map<Integer, Player> playerMap) {
-        boardView.addPlayer(playerMap);
+    public void onHumansAdded(Map<Integer, Human> humanMap) {
+        boardView.addHumans(humanMap);
     }
 
     @Override
-    public void onNextTurn(Player player) {
+    public void onNextTurn(Human human) {
         diceView.setEnabled(true);
-        String message = String.format("%1s's turn, roll the dice!", player.getName());
+        String message = String.format("%1s's turn, roll the dice!", human.getName());
         JOptionPane.showMessageDialog(this, message, "Message", JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override
-    public void onPlayerMoved(Player player, int destPosition) {
-        String message = String.format("%1s move to: %2d", player.getName(), destPosition);
+    public void onPlayerMoved(Human human, int destPosition) {
+        String message = String.format("%1s move to: %2d", human.getName(), destPosition);
         JOptionPane.showMessageDialog(null, message, "Message", JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override
-    public void onPlayerClimbLadder(Player player, int destPosition) {
-        String message = String.format("%1s climb a ladder to: %2d", player.getName(), destPosition);
+    public void onPlayerClimbLadder(Human human, int destPosition) {
+        String message = String.format("%1s climb a ladder to: %2d", human.getName(), destPosition);
         JOptionPane.showMessageDialog(null, message, "Message", JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override
-    public void onPlayerSwallowedBySnake(Player player, int destPosition) {
-        String message = String.format("%1s swallowed by a snake and back to: %2d", player.getName(), destPosition);
+    public void onPlayerSwallowedBySnake(Human human, int destPosition) {
+        String message = String.format("%1s swallowed by a snake and back to: %2d", human.getName(), destPosition);
         JOptionPane.showMessageDialog(null, message, "Message", JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override
-    public void onNumOfPlayersEnteredError() {
+    public void onNumOfHumansEnteredError() {
         showErrorDialog("Please enter a number between 2 ~ 4.");
     }
     //endregion
@@ -250,8 +249,8 @@ public class GameViewImpl
         case "Add Ladder":
             listener.onAddLadderClick();
             break;
-        case "Add Players":
-            listener.onAddPlayersClick();
+        case "Add Humans":
+            listener.onAddHumansClick();
             break;
         case "Start":
             listener.onStartClick();

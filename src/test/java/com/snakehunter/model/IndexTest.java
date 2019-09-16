@@ -1,7 +1,6 @@
 package com.snakehunter.model;
 
-import com.snakehunter.GameContract.GameModel;
-import com.snakehunter.model.piece.Player;
+import com.snakehunter.model.piece.Human;
 import com.snakehunter.model.piece.Snake;
 
 import org.junit.After;
@@ -18,13 +17,13 @@ import static org.junit.Assert.*;
 public class IndexTest {
 
     Snake snake;
-    Player player;
+    Human human;
     GameModelImpl gameModel;
     Square[][] squares;
 
     @Before
     public void setUp() throws Exception {
-        player = new Player(23,"John");
+        human = new Human(23, "John");
         snake = new Snake (65, 46);
         gameModel = new GameModelImpl();
          initSquare();

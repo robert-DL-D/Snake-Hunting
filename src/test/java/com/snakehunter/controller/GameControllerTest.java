@@ -58,12 +58,12 @@ public class GameControllerTest {
     }
 
     @Test
-    public void whenAddPlayersClick_thenCallShowHowManyPlayers() {
+    public void whenAddHumansClick_thenCallShowHumanBuilder() {
         // when
-        gameController.onAddPlayersClick();
+        gameController.onAddHumansClick();
 
         // then
-        verify(gameView).showHowManyPlayers();
+        verify(gameView).showHumanBuilder();
     }
 
     @Test
@@ -127,11 +127,11 @@ public class GameControllerTest {
     }
 
     @Test
-    public void whenNumOfPlayersEntered_thenAddPlayers() {
+    public void whenonNumOfHumansEntered_thenAddHumans() {
         // when
-        gameController.onNumOfPlayersEntered(4);
+        gameController.onNumOfHumansEntered(4);
 
         // then
-        verify(gameModel).addPlayers(4);
+        verify(gameModel).addHumans(4);
     }
 }

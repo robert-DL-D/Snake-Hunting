@@ -1,7 +1,7 @@
 package com.snakehunter.view;
 
+import com.snakehunter.model.piece.Human;
 import com.snakehunter.model.piece.Ladder;
-import com.snakehunter.model.piece.Player;
 import com.snakehunter.model.piece.Snake;
 
 import java.awt.Color;
@@ -26,7 +26,7 @@ public class BoardView
 
     private List<Snake> snakeList;
     private List<Ladder> ladderList;
-    private Map<Integer, Player> playerMap;
+    private Map<Integer, Human> humanMap;
 
     public BoardView() {
         setSize(440, 440);
@@ -45,8 +45,8 @@ public class BoardView
         ladderList.add(ladder);
     }
 
-    public void addPlayer(Map<Integer, Player> playerMap) {
-        this.playerMap = playerMap;
+    public void addHumans(Map<Integer, Human> humanMap) {
+        this.humanMap = humanMap;
     }
 
     @Override
@@ -77,8 +77,8 @@ public class BoardView
             drawLadder(graphics, ladder);
         }
 
-        if (playerMap != null) {
-            drawPlayers(graphics);
+        if (humanMap != null) {
+            drawHumans(graphics);
         }
     }
 
@@ -180,13 +180,13 @@ public class BoardView
 
     }
 
-    private void drawPlayers(Graphics g) {
+    private void drawHumans(Graphics g) {
         Color[] color = new Color[] {Color.WHITE, Color.RED, Color.GREEN, Color.CYAN};
-        int numOfPlayers = playerMap.size();
+        int numOfHumans = humanMap.size();
 
-        for (int i = 1; i <= numOfPlayers; i++) {
+        for (int i = 1; i <= numOfHumans; i++) {
             g.setColor(color[i - 1]);
-            int playerPosition = playerMap.get(i % numOfPlayers).getPosition();
+            int humanPosition = humanMap.get(i % numOfHumans).getPosition();
             int xOffset = 10;
             int yOffset = 10;
 
@@ -198,11 +198,11 @@ public class BoardView
                 yOffset = -yOffset;
             }
 
-            g.fillOval(getX(playerPosition) - xOffset, getY(playerPosition) - yOffset, 20, 20);
+            g.fillOval(getX(humanPosition) - xOffset, getY(humanPosition) - yOffset, 20, 20);
 
             g.setColor(Color.BLACK);
-            g.drawString(String.valueOf(i), getX(playerPosition) - (xOffset - 5),
-                         getY(playerPosition) + (-yOffset + 15));
+            g.drawString(String.valueOf(i), getX(humanPosition) - (xOffset - 5),
+                         getY(humanPosition) + (-yOffset + 15));
         }
     }
 

@@ -45,8 +45,8 @@ public class GameController
     }
 
     @Override
-    public void onAddPlayersClick() {
-        gameView.showHowManyPlayers();
+    public void onAddHumansClick() {
+        gameView.showHumanBuilder();
     }
 
     @Override
@@ -56,7 +56,7 @@ public class GameController
             gameModel.setGameStage(GameStage.SECOND);
             gameModel.nextTurn();
         } else {
-            gameView.showErrorDialog("Make sure you add snakes, ladders and players before start the game.");
+            gameView.showErrorDialog("Make sure you add snakes, ladders and humans before start the game.");
         }
     }
 
@@ -76,8 +76,8 @@ public class GameController
     }
 
     @Override
-    public void onNumOfPlayersEntered(int numOfPlayers) {
-        gameModel.addPlayers(numOfPlayers);
+    public void onNumOfHumansEntered(int numOfHumans) {
+        gameModel.addHumans(numOfHumans);
     }
     //endregion
 }

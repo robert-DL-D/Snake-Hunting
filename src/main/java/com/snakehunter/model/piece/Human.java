@@ -9,7 +9,7 @@ import java.util.List;
  * @author David Manolitsas
  * @date 2019-09-08
  */
-public class Player
+public class Human
         extends Piece
         implements Movable {
 
@@ -19,7 +19,7 @@ public class Player
     private int paralyzedTurns = 0;
     private List<Ladder> ladderClimbedList;
 
-    public Player(int position, String name) {
+    public Human(int position, String name) {
         super(position);
         this.name = name;
 

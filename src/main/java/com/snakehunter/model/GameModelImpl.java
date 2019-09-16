@@ -3,8 +3,8 @@ package com.snakehunter.model;
 import com.snakehunter.GameContract;
 import com.snakehunter.GameContract.DataChangedListener;
 import com.snakehunter.GameStage;
+import com.snakehunter.model.piece.Human;
 import com.snakehunter.model.piece.Ladder;
-import com.snakehunter.model.piece.Player;
 import com.snakehunter.model.piece.Snake;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class GameModelImpl
 
     private GameStage gameStage;
 
-    private Map<Integer, Player> playerMap;
+    private Map<Integer, Human> humanMap;
     private List<Snake> snakeList;
     private List<Ladder> ladderList;
 
@@ -38,7 +38,7 @@ public class GameModelImpl
 
     public GameModelImpl() {
         initSquare();
-        playerMap = new HashMap<>();
+        humanMap = new HashMap<>();
         snakeList = new ArrayList<>();
         ladderList = new ArrayList<>();
     }
@@ -109,30 +109,30 @@ public class GameModelImpl
     }
 
     @Override
-    public void addPlayers(int numOfPlayers) {
-        if (numOfPlayers < 2 || numOfPlayers > 4) {
+    public void addHumans(int numOfHumans) {
+        if (numOfHumans < 2 || numOfHumans > 4) {
             if (listener != null) {
-                listener.onNumOfPlayersEnteredError();
+                listener.onNumOfHumansEnteredError();
             }
             return;
         }
 
-        initPlayers(numOfPlayers);
+        initHumans(numOfHumans);
 
         if (listener != null) {
-            listener.onPlayersAdded(playerMap);
+            listener.onHumansAdded(humanMap);
         }
     }
 
     @Override
-    public Player getCurrentPlayer() {
-        int index = numOfTurns % playerMap.size();
-        return playerMap.get(index);
+    public Human getCurrentPlayer() {
+        int index = numOfTurns % humanMap.size();
+        return humanMap.get(index);
     }
 
     @Override
     public boolean isGameReady() {
-        return !playerMap.isEmpty() && !snakeList.isEmpty() && !ladderList.isEmpty();
+        return !humanMap.isEmpty() && !snakeList.isEmpty() && !ladderList.isEmpty();
     }
 
     @Override
@@ -146,10 +146,10 @@ public class GameModelImpl
 
     @Override
     public void movePlayer(int steps) {
-        Player currentPlayer = getCurrentPlayer();
-        int newPosition = currentPlayer.move(squares, steps);
+        Human currentHuman = getCurrentPlayer();
+        int newPosition = currentHuman.move(squares, steps);
         if (listener != null) {
-            listener.onPlayerMoved(currentPlayer, newPosition);
+            listener.onPlayerMoved(currentHuman, newPosition);
         }
 
     }
@@ -174,16 +174,16 @@ public class GameModelImpl
         }
     }
 
-    private void initPlayers(int numOfPlayers) {
-        playerMap.clear();
+    private void initHumans(int numOfHumans) {
+        humanMap.clear();
         Square startPoint = squares[0][0];
 
-        for (int i = 1; i <= numOfPlayers; i++) {
-            Player player = new Player(1, "Player " + i);
-            player.setPosition(startPoint.getSquareNo());
-            playerMap.put(i % numOfPlayers, player);
+        for (int i = 1; i <= numOfHumans; i++) {
+            Human human = new Human(1, "Human " + i);
+            human.setPosition(startPoint.getSquareNo());
+            humanMap.put(i % numOfHumans, human);
 
-            startPoint.addPiece(player);
+            startPoint.addPiece(human);
         }
     }
 

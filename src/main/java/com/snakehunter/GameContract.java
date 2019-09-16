@@ -1,8 +1,8 @@
 package com.snakehunter;
 
 import com.snakehunter.model.Square;
+import com.snakehunter.model.piece.Human;
 import com.snakehunter.model.piece.Ladder;
-import com.snakehunter.model.piece.Player;
 import com.snakehunter.model.piece.Snake;
 
 import java.util.Map;
@@ -20,7 +20,7 @@ public class GameContract {
 
         void showLadderBuilder();
 
-        void showHowManyPlayers();
+        void showHumanBuilder();
 
         void showErrorDialog(String message);
 
@@ -38,7 +38,7 @@ public class GameContract {
 
         void onLadderBuilt(Ladder ladder);
 
-        void onAddPlayersClick();
+        void onAddHumansClick();
 
         void onStartClick();
 
@@ -46,7 +46,7 @@ public class GameContract {
 
         void onDiceRolled(int num);
 
-        void onNumOfPlayersEntered(int numOfPlayers);
+        void onNumOfHumansEntered(int numOfHumans);
     }
 
     public interface GameModel {
@@ -60,9 +60,9 @@ public class GameContract {
 
         void addGuard(int position);
 
-        void addPlayers(int numOfPlayers);
+        void addHumans(int numOfHumans);
 
-        Player getCurrentPlayer();
+        Human getCurrentPlayer();
 
         boolean isGameReady();
 
@@ -91,16 +91,16 @@ public class GameContract {
 
         void onExceedMaxNumOfGuards();
 
-        void onPlayersAdded(Map<Integer, Player> playerMap);
+        void onHumansAdded(Map<Integer, Human> humanMap);
 
-        void onNextTurn(Player player);
+        void onNextTurn(Human human);
 
-        void onPlayerMoved(Player player, int destPosition);
+        void onPlayerMoved(Human human, int destPosition);
 
-        void onPlayerClimbLadder(Player player, int destPosition);
+        void onPlayerClimbLadder(Human human, int destPosition);
 
-        void onPlayerSwallowedBySnake(Player player, int destPosition);
+        void onPlayerSwallowedBySnake(Human human, int destPosition);
 
-        void onNumOfPlayersEnteredError();
+        void onNumOfHumansEnteredError();
     }
 }
