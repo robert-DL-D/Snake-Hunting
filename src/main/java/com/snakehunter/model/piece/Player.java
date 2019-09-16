@@ -65,6 +65,9 @@ public class Player
         }
         else {
             int newPosition = getPosition() + steps;
+            if (newPosition > 100){
+                newPosition = 100;
+            }
             setPosition(newPosition);
             return newPosition;
         }

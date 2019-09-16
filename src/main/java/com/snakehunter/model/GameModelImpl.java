@@ -147,31 +147,30 @@ public class GameModelImpl
     @Override
     public void movePlayer(int steps) {
         Player currentPlayer = getCurrentPlayer();
-        int currentPosition = currentPlayer.getPosition();
-        int destPosition = currentPosition + steps;
+        int newPosition = currentPlayer.move(steps);
         Square currentSquare = getSquare(currentPlayer.getPosition());
-        Square destSquare = getSquare(destPosition);
+        Square destSquare = getSquare(newPosition);
         currentSquare.removePiece(currentPlayer);
-        currentPlayer.setPosition(destPosition);
+        currentPlayer.setPosition(newPosition);
 
         if (listener != null) {
-            listener.onPlayerMoved(currentPlayer, destPosition);
+            listener.onPlayerMoved(currentPlayer, newPosition);
         }
 
         // Check if the destSquare has snakes or ladders
         Snake snake = destSquare.getSnake();
         Ladder ladder = destSquare.getLadder();
         if (snake != null && listener != null) {
-            destPosition = snake.getConnectedPosition();
-            listener.onPlayerSwallowedBySnake(currentPlayer, destPosition);
+            newPosition = snake.getConnectedPosition();
+            listener.onPlayerSwallowedBySnake(currentPlayer, newPosition);
         } else if (ladder != null && listener != null) {
-            destPosition = ladder.getConnectedPosition();
-            listener.onPlayerClimbLadder(currentPlayer, destPosition);
+            newPosition = ladder.getConnectedPosition();
+            listener.onPlayerClimbLadder(currentPlayer, newPosition);
         }
 
-        destSquare = getSquare(destPosition);
+        destSquare = getSquare(newPosition);
         destSquare.addPiece(currentPlayer);
-        currentPlayer.setPosition(destPosition);
+        currentPlayer.setPosition(newPosition);
     }
     //endregion
 
