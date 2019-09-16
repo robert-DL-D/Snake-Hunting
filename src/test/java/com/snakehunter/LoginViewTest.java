@@ -1,4 +1,4 @@
-package java.com.snakehunter;
+package com.snakehunter;
 
 import com.snakehunter.view.LoginView;
 

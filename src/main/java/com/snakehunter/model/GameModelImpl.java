@@ -147,30 +147,11 @@ public class GameModelImpl
     @Override
     public void movePlayer(int steps) {
         Player currentPlayer = getCurrentPlayer();
-        int newPosition = currentPlayer.move(steps);
-        Square currentSquare = getSquare(currentPlayer.getPosition());
-        Square destSquare = getSquare(newPosition);
-        currentSquare.removePiece(currentPlayer);
-        currentPlayer.setPosition(newPosition);
-
+        int newPosition = currentPlayer.move(squares, steps);
         if (listener != null) {
             listener.onPlayerMoved(currentPlayer, newPosition);
         }
 
-        // Check if the destSquare has snakes or ladders
-        Snake snake = destSquare.getSnake();
-        Ladder ladder = destSquare.getLadder();
-        if (snake != null && listener != null) {
-            newPosition = snake.getConnectedPosition();
-            listener.onPlayerSwallowedBySnake(currentPlayer, newPosition);
-        } else if (ladder != null && listener != null) {
-            newPosition = ladder.getConnectedPosition();
-            listener.onPlayerClimbLadder(currentPlayer, newPosition);
-        }
-
-        destSquare = getSquare(newPosition);
-        destSquare.addPiece(currentPlayer);
-        currentPlayer.setPosition(newPosition);
     }
     //endregion
 

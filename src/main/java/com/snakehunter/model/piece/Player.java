@@ -1,5 +1,7 @@
 package com.snakehunter.model.piece;
 
+import com.snakehunter.model.Square;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,16 +60,32 @@ public class Player
     }
 
     @Override
-    public int move(int steps) {
-        if (isParalyzed()){
+    public int move(Square[][] squares, int steps) {
+        if (isParalyzed()) {
             //if paralyzed return current position
             return getPosition();
-        }
-        else {
+        } else {
             int newPosition = getPosition() + steps;
-            if (newPosition > 100){
+            if (newPosition > 100) {
                 newPosition = 100;
             }
+
+            Square currentSquare = getSquare(squares, getPosition());
+            Square destSquare = getSquare(squares, newPosition);
+            currentSquare.removePiece(this);
+
+            // Check if the destSquare has snakes or ladders
+            Snake snake = destSquare.getSnake();
+            Ladder ladder = destSquare.getLadder();
+            if (snake != null) {
+                newPosition = snake.getConnectedPosition();
+            } else if (ladder != null) {
+                newPosition = ladder.getConnectedPosition();
+            }
+
+            destSquare = getSquare(squares, newPosition);
+            destSquare.addPiece(this);
+            setPosition(newPosition);
             setPosition(newPosition);
             return newPosition;
         }

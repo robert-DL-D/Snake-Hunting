@@ -1,5 +1,7 @@
 package com.snakehunter.model.piece;
 
+import com.snakehunter.model.Square;
+
 /**
  * @author David Manolitsas
  * @date 2019-09-08
@@ -11,11 +13,8 @@ public class Snake
         super(position, connectedPosition);
     }
 
-
-    //TODO snake movement, up, down , left or right 1 position
     @Override
-    public int move(int steps) {
+    public int move(Square[][] squares, int steps) {
         return 0;
-
     }
 }

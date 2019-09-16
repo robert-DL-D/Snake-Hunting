@@ -1,5 +1,7 @@
 package com.snakehunter.model.piece;
 
+import com.snakehunter.model.Square;
+
 /**
  * @author WeiYi Yu
  * @date 2019-09-06
@@ -17,5 +19,25 @@ public abstract class Piece {
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    protected Square getSquare(Square[][] squares, int squareNo) {
+        int column;
+        int row;
+
+        row = (int) Math.ceil(squareNo / 10f) - 1;
+
+        if (row % 2 == 0) {   // Odd row
+            column = squareNo % 10 - 1;
+            if (column == -1) {
+                column = 9;
+            }
+        } else {    // Oven row
+            column = 10 - squareNo % 10;
+            if (column == 10) {
+                column = 0;
+            }
+        }
+        return squares[column][row];
     }
 }
