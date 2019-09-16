@@ -21,7 +21,7 @@ public class GameModelImpl
 
     private static final int MAX_GUARDS = 3;
 
-    public Square[][] squares = new Square[10][10];
+    private Square[][] squares = new Square[10][10];
 
     private DataChangedListener listener;
 
@@ -156,7 +156,7 @@ public class GameModelImpl
     //endregion
 
     //region private method
-    public void initSquare() {
+    private void initSquare() {
         squares = new Square[10][10];
 
         int x = 0; //col
@@ -274,10 +274,6 @@ public class GameModelImpl
             }
         }
         return squares[x][y];
-    }
-
-    public Square getSquares(int row, int col){
-        return squares[row][col];
     }
 
     @Override
