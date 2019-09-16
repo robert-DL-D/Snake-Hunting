@@ -21,7 +21,7 @@ public class GameModelImpl
 
     private static final int MAX_GUARDS = 3;
 
-    private Square[][] squares = new Square[10][10];
+    public Square[][] squares = new Square[10][10];
 
     private DataChangedListener listener;
 
@@ -159,12 +159,12 @@ public class GameModelImpl
     private void initSquare() {
         squares = new Square[10][10];
 
-        int x = 0;
-        int y = 0;
+        int x = 0; //col
+        int y = 0; //row
         int increment = 1;
 
         for (int i = 1; i <= 100; i++) {
-            squares[x][y] = new Square(i);
+            squares[x][y] = new Square(i, x, y);
             if (i % 10 == 0) {
                 increment = -increment;
                 y++;
@@ -267,7 +267,7 @@ public class GameModelImpl
             if (x == -1) {
                 x = 9;
             }
-        } else {    // Oven row
+        } else {    // Even row
             x = 10 - squareNo % 10;
             if (x == 10) {
                 x = 0;

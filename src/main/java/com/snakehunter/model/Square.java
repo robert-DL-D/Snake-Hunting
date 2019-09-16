@@ -12,13 +12,17 @@ import java.util.List;
  * @date 2019-08-26
  */
 public class Square {
-
+    
     private int squareNo;
+    private int column;
+    private int row;
     private boolean isGuarded = false;
     private List<Piece> pieceList;
 
-    public Square(int squareNo) {
+    public Square(int squareNo, int column, int row) {
         this.squareNo = squareNo;
+        this.row = row;
+        this.column = column;
         pieceList = new ArrayList<>();
     }
 
