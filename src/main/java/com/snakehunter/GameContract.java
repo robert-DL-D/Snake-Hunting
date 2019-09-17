@@ -3,9 +3,10 @@ package com.snakehunter;
 import com.snakehunter.model.Square;
 import com.snakehunter.model.piece.Human;
 import com.snakehunter.model.piece.Ladder;
+import com.snakehunter.model.piece.Player;
 import com.snakehunter.model.piece.Snake;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * @author WeiYi Yu
@@ -62,7 +63,7 @@ public class GameContract {
 
         void addHumans(int numOfHumans);
 
-        Human getCurrentPlayer();
+        Player getCurrentPlayer();
 
         boolean isGameReady();
 
@@ -91,15 +92,11 @@ public class GameContract {
 
         void onExceedMaxNumOfGuards();
 
-        void onHumansAdded(Map<Integer, Human> humanMap);
+        void onHumansAdded(List<Human> humanList);
 
-        void onNextTurn(Human human);
+        void onNextTurn(Player player);
 
-        void onPlayerMoved(Human human, int destPosition);
-
-        void onPlayerClimbLadder(Human human, int destPosition);
-
-        void onPlayerSwallowedBySnake(Human human, int destPosition);
+        void onPlayerMoved(Player player, int destPosition);
 
         void onNumOfHumansEnteredError();
     }

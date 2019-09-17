@@ -5,12 +5,11 @@ import com.snakehunter.GameContract.DataChangedListener;
 import com.snakehunter.GameStage;
 import com.snakehunter.model.piece.Human;
 import com.snakehunter.model.piece.Ladder;
+import com.snakehunter.model.piece.Player;
 import com.snakehunter.model.piece.Snake;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author WeiYi Yu
@@ -27,8 +26,8 @@ public class GameModelImpl
 
     private GameStage gameStage;
 
-    private Map<Integer, Human> humanMap;
-    private List<Snake> snakeList;
+    private Player<Human> humanPlayer;
+    private Player<Snake> snakePlayer;
     private List<Ladder> ladderList;
 
     private int numOfGuards = 0;
@@ -38,8 +37,7 @@ public class GameModelImpl
 
     public GameModelImpl() {
         initSquare();
-        humanMap = new HashMap<>();
-        snakeList = new ArrayList<>();
+        initPlayers();
         ladderList = new ArrayList<>();
     }
 
@@ -60,7 +58,7 @@ public class GameModelImpl
             return;
         }
 
-        snakeList.add(snake);
+        snakePlayer.addPiece(snake);
         square.addPiece(snake);
 
         if (listener != null) {
@@ -120,19 +118,22 @@ public class GameModelImpl
         initHumans(numOfHumans);
 
         if (listener != null) {
-            listener.onHumansAdded(humanMap);
+            listener.onHumansAdded(humanPlayer.getPieceList());
         }
     }
 
     @Override
-    public Human getCurrentPlayer() {
-        int index = numOfTurns % humanMap.size();
-        return humanMap.get(index);
+    public Player getCurrentPlayer() {
+        if (numOfTurns % 2 == 0){
+            return snakePlayer;
+        } else {
+            return humanPlayer;
+        }
     }
 
     @Override
     public boolean isGameReady() {
-        return !humanMap.isEmpty() && !snakeList.isEmpty() && !ladderList.isEmpty();
+        return !humanPlayer.getPieceList().isEmpty() && !snakePlayer.getPieceList().isEmpty() && !ladderList.isEmpty();
     }
 
     @Override
@@ -146,12 +147,11 @@ public class GameModelImpl
 
     @Override
     public void movePlayer(int steps) {
-        Human currentHuman = getCurrentPlayer();
-        int newPosition = currentHuman.move(squares, steps);
-        if (listener != null) {
-            listener.onPlayerMoved(currentHuman, newPosition);
-        }
-
+//        Human currentHuman = getCurrentPlayer();
+//        int newPosition = currentHuman.move(squares, steps);
+//        if (listener != null) {
+//            listener.onPlayerMoved(currentHuman, newPosition);
+//        }
     }
     //endregion
 
@@ -174,16 +174,19 @@ public class GameModelImpl
         }
     }
 
+    private void initPlayers() {
+        humanPlayer = new Player<>("Human Player");
+        snakePlayer = new Player<>("Snake Player");
+    }
+
     private void initHumans(int numOfHumans) {
-        humanMap.clear();
-        Square startPoint = squares[0][0];
+        humanPlayer.getPieceList().clear();
 
-        for (int i = 1; i <= numOfHumans; i++) {
-            Human human = new Human(1, "Human " + i);
-            human.setPosition(startPoint.getSquareNo());
-            humanMap.put(i % numOfHumans, human);
-
-            startPoint.addPiece(human);
+        Square startSquare = squares[0][0];
+        for (int i = 0; i < numOfHumans; i++) {
+            Human human = new Human(1);
+            humanPlayer.addPiece(human);
+            startSquare.addPiece(human);
         }
     }
 
@@ -231,8 +234,8 @@ public class GameModelImpl
                 errorMessage = "Ladder's length cannot be greater than 30.";
             }
             // This probably doesn't work
-            else if (!snakeList.isEmpty()) {
-                for (Snake snake : snakeList) {
+            else if (!snakePlayer.getPieceList().isEmpty()) {
+                for (Snake snake : snakePlayer.getPieceList()) {
                     if (top == snake.getPosition() || base == snake.getPosition()) {
                         errorMessage = "Ladder's top or base is same as another snake's head position";
                         break;

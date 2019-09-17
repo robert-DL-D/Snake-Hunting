@@ -5,13 +5,14 @@ import com.snakehunter.GameContract.ViewEventListener;
 import com.snakehunter.Main;
 import com.snakehunter.model.piece.Human;
 import com.snakehunter.model.piece.Ladder;
+import com.snakehunter.model.piece.Player;
 import com.snakehunter.model.piece.Snake;
 
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Map;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -201,33 +202,17 @@ public class GameViewImpl
     }
 
     @Override
-    public void onHumansAdded(Map<Integer, Human> humanMap) {
-        boardView.addHumans(humanMap);
+    public void onHumansAdded(List<Human> humanList) {
+        boardView.addHumans(humanList);
     }
 
     @Override
-    public void onNextTurn(Human human) {
+    public void onNextTurn(Player player) {
         diceView.setEnabled(true);
-        String message = String.format("%1s's turn, roll the dice!", human.getName());
-        JOptionPane.showMessageDialog(this, message, "Message", JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override
-    public void onPlayerMoved(Human human, int destPosition) {
-        String message = String.format("%1s move to: %2d", human.getName(), destPosition);
-        JOptionPane.showMessageDialog(null, message, "Message", JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    @Override
-    public void onPlayerClimbLadder(Human human, int destPosition) {
-        String message = String.format("%1s climb a ladder to: %2d", human.getName(), destPosition);
-        JOptionPane.showMessageDialog(null, message, "Message", JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    @Override
-    public void onPlayerSwallowedBySnake(Human human, int destPosition) {
-        String message = String.format("%1s swallowed by a snake and back to: %2d", human.getName(), destPosition);
-        JOptionPane.showMessageDialog(null, message, "Message", JOptionPane.INFORMATION_MESSAGE);
+    public void onPlayerMoved(Player player, int destPosition) {
     }
 
     @Override

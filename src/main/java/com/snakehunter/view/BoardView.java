@@ -8,7 +8,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JPanel;
 
@@ -26,12 +25,13 @@ public class BoardView
 
     private List<Snake> snakeList;
     private List<Ladder> ladderList;
-    private Map<Integer, Human> humanMap;
+    private List<Human> humanList;
 
     public BoardView() {
         setSize(440, 440);
         snakeList = new ArrayList<>();
         ladderList = new ArrayList<>();
+        humanList = new ArrayList<>();
 
         new Thread(this).start();
     }
@@ -45,8 +45,8 @@ public class BoardView
         ladderList.add(ladder);
     }
 
-    public void addHumans(Map<Integer, Human> humanMap) {
-        this.humanMap = humanMap;
+    public void addHumans(List<Human> humanList) {
+        this.humanList = humanList;
     }
 
     @Override
@@ -77,9 +77,10 @@ public class BoardView
             drawLadder(graphics, ladder);
         }
 
-        if (humanMap != null) {
+        if (!humanList.isEmpty()) {
             drawHumans(graphics);
         }
+
     }
 
     private void drawSnake(Graphics g, Snake snake) {
@@ -182,11 +183,10 @@ public class BoardView
 
     private void drawHumans(Graphics g) {
         Color[] color = new Color[] {Color.WHITE, Color.RED, Color.GREEN, Color.CYAN};
-        int numOfHumans = humanMap.size();
 
-        for (int i = 1; i <= numOfHumans; i++) {
+        for (int i = 1; i <= humanList.size(); i++) {
             g.setColor(color[i - 1]);
-            int humanPosition = humanMap.get(i % numOfHumans).getPosition();
+            int humanPosition = humanList.get(i - 1).getPosition();
             int xOffset = 10;
             int yOffset = 10;
 

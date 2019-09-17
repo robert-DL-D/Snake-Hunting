@@ -23,7 +23,7 @@ public class IndexTest {
 
     @Before
     public void setUp() throws Exception {
-        human = new Human(23, "John");
+        human = new Human(23);
         snake = new Snake (65, 46);
         gameModel = new GameModelImpl();
          initSquare();

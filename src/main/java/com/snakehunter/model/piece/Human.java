@@ -15,23 +15,13 @@ public class Human
 
     private static final int PARALYZE_TURNS = 3;
 
-    private String name;
     private int paralyzedTurns = 0;
     private List<Ladder> ladderClimbedList;
 
-    public Human(int position, String name) {
+    public Human(int position) {
         super(position);
-        this.name = name;
 
         ladderClimbedList = new ArrayList<>();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public void addLadderClimbed(Ladder ladder) {
