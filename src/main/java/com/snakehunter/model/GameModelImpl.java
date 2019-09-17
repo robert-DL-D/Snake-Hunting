@@ -147,11 +147,6 @@ public class GameModelImpl
 
     @Override
     public void movePlayer(int steps) {
-//        Human currentHuman = getCurrentPlayer();
-//        int newPosition = currentHuman.move(squares, steps);
-//        if (listener != null) {
-//            listener.onPlayerMoved(currentHuman, newPosition);
-//        }
     }
     //endregion
 

@@ -14,8 +14,8 @@ public class Snake
     }
 
     @Override
-    public int move(Square[][] squares, int steps) {
-        return 0;
+    public String move(Square[][] squares, int steps) {
+        return null;
     }
 
     public int moveUp(Square[][] squares, Square currSquare) {

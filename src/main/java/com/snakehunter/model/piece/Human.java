@@ -50,10 +50,9 @@ public class Human
     }
 
     @Override
-    public int move(Square[][] squares, int steps) {
+    public String move(Square[][] squares, int steps) {
         if (isParalyzed()) {
-            //if paralyzed return current position
-            return getPosition();
+            return null;
         } else {
             int newPosition = getPosition() + steps;
             if (newPosition > 100) {
@@ -76,8 +75,7 @@ public class Human
             destSquare = getSquare(squares, newPosition);
             destSquare.addPiece(this);
             setPosition(newPosition);
-            setPosition(newPosition);
-            return newPosition;
+            return null;
         }
     }
 }

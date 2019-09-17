@@ -7,6 +7,6 @@ import com.snakehunter.model.Square;
  * @date 2019-09-06
  */
 public interface Movable {
-    // return the new position
-    int move(Square[][] squares, int steps);
+    // return a message describes the movement
+    String move(Square[][] squares, int steps);
 }
