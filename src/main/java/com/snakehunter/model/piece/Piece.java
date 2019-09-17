@@ -21,7 +21,7 @@ public abstract class Piece {
         this.position = position;
     }
 
-    protected Square getSquare(Square[][] squares, int squareNo) {
+    public Square getSquare(Square[][] squares, int squareNo) {
         int column;
         int row;
 

@@ -1,6 +1,6 @@
 package com.snakehunter.model;
 
-import com.snakehunter.model.piece.Human;
+import com.snakehunter.GameContract.GameModel;
 import com.snakehunter.model.piece.Snake;
 
 import org.junit.After;
@@ -16,104 +16,36 @@ import static org.junit.Assert.*;
  */
 public class IndexTest {
 
-    Snake snake;
-    Human human;
+    Snake snake, snake1;
     GameModelImpl gameModel;
     Square[][] squares;
 
     @Before
     public void setUp() throws Exception {
-        human = new Human(23);
         snake = new Snake (65, 46);
+        snake1 = new Snake (97, 75 );
         gameModel = new GameModelImpl();
-         initSquare();
+        initSquare();
     }
 
     //[col][row]
 
-    //snake test up
+    //snake move up test
     @Test
-    public void snakeUpHeadTest(){
-       Square square = squares[4][6];
-
-        int testPos = snake.moveUp(squares, square);
-
-        assertEquals(76, testPos);
-    }
-
-    @Test
-    public void snakeUpTailTest(){
+    public void snakeMoveUp(){
+        //Actions
         Square square = squares[4][6];
-
         snake.moveUp(squares, square);
-        int testPos = snake.getConnectedPosition();
 
-        assertEquals(55, testPos);
+        //actual results
+        int testHead = snake.getPosition();
+        int testTail = snake.getConnectedPosition();
+
+        //assertion
+        assertEquals(76, testHead);
+        assertEquals(55, testTail);
     }
 
-
-    //Snake test Left
-    @Test
-    public void snakeLeftHeadTest(){
-        Square square = squares[4][6];
-
-        System.out.println("before: " + snake.getPosition());
-        int testPos = snake.moveLeft(squares, square);
-
-        System.out.println("After: " + snake.getPosition());
-        assertEquals(64, testPos);
-    }
-
-    @Test
-    public void snakeLeftTailTest(){
-        Square square = squares[4][6];
-
-        snake.moveLeft(squares, square);
-        int testPos = snake.getConnectedPosition();
-
-        assertEquals(45, testPos);
-    }
-
-    //snake test right
-    @Test
-    public void snakeRightHeadTest(){
-        Square square = squares[4][6];
-
-        int testPos = snake.moveRight(squares, square);
-
-        assertEquals(66, testPos);
-    }
-
-    @Test
-    public void snakeRightTailTest(){
-        Square square = squares[4][6];
-
-        snake.moveRight(squares, square);
-        int testPos = snake.getConnectedPosition();
-
-        assertEquals(47, testPos);
-    }
-
-
-    //snake test down
-    @Test
-    public void snakeDownHeadTest(){
-        Square square = squares[4][6];
-
-        int testPos = snake.moveDown(squares, square);
-
-        assertEquals(56, testPos);
-    }
-
-    @Test
-    public void snakeDownTailTest(){
-        Square square = squares[4][6];
-
-        snake.moveDown(squares, square);
-        int testPos = snake.getConnectedPosition();
-
-        assertEquals(35, testPos);
-    }
 
     @After
     public void tearDown() throws Exception {

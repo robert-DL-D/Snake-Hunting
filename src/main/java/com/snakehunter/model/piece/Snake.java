@@ -13,12 +13,47 @@ public class Snake
         super(position, connectedPosition);
     }
 
+    private static final int UP = 0;
+    private static final int DOWN = 1;
+    private static final int LEFT = 2;
+    private static final int RIGHT = 3;
+
+
+    //TODO add final ints for up down left right
+
     @Override
     public String move(Square[][] squares, int steps) {
-        return null;
+        String message;
+        Square currSquare = getSquare(squares, getPosition());
+
+        if (steps == UP){
+            moveUp(squares, currSquare);
+            message = "Snake moved up to  position " + getPosition();
+            return message;
+        }
+        else if (steps == DOWN){
+            moveDown(squares, currSquare);
+            message = "Snake moved down to  position " + getPosition();
+            return message;
+        }
+        else if (steps == LEFT){
+            moveLeft(squares, currSquare);
+            message = "Snake moved left to  position " + getPosition();
+            return message;
+        }
+        else if(steps == RIGHT){
+            moveRight(squares, currSquare);
+            message = "Snake moved right to  position " + getPosition();
+            return message;
+        } else {
+            message = "Invalid Input";
+            return message;
+        }
+
     }
 
-    public int moveUp(Square[][] squares, Square currSquare) {
+    //TODO move method return string and
+    public int moveUp(Square[][] squares, Square currSquare) throws ArrayIndexOutOfBoundsException {
         int headRow = currSquare.getRow();
         int headCol = currSquare.getColumn();
         Square tail = getSquare(squares, getConnectedPosition());
@@ -38,7 +73,9 @@ public class Snake
         setConnectedPosition(newTailPosition);
 
         return newHeadPosition;
+
     }
+
 
 
     public int moveDown(Square[][] squares, Square currSquare) {
