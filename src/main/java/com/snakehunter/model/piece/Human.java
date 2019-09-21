@@ -1,6 +1,9 @@
 package com.snakehunter.model.piece;
 
 import com.snakehunter.model.Square;
+import com.snakehunter.model.exceptions.InvalidParamsException;
+import com.snakehunter.model.exceptions.LadderClimbedException;
+import com.snakehunter.model.exceptions.MaxClimbNumExceedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,59 +36,81 @@ public class Human
         }
     }
 
+    /**
+     * First: Move human piece by the number rolled from dice.
+     * Second: Move this human piece to connected position if the human land on a Snake or Ladder
+     * Third: Paralyze this human piece if it swallowed by Snakes
+     *
+     * @param squares
+     *         board array
+     * @param steps
+     *         number rolled from dice
+     *
+     * @return Message about this movement
+     */
     @Override
-    public String move(Square[][] squares, int steps) {
+    public String move(Square[][] squares, int steps) throws InvalidParamsException {
+        if (squares == null || steps < 0 || steps > 6) {
+            throw new InvalidParamsException();
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
 
-        // First: Move by the dice number
-        int newPosition = getPosition() + steps;
+        // Remove piece from current square
         Square currentSquare = getSquare(squares, getPosition());
         currentSquare.removePiece(this);
-        stringBuilder.append(String.format("Move to new position: %1s", newPosition));
 
-        // Second: Check if the destSquare has snakes or ladders
+        // Calculate new position
+        int newPosition = getPosition() + steps;
+        stringBuilder.append(String.format("Move to position %1s", newPosition));
+
+        // Check if the destSquare has snakes or ladders
         Square destSquare = getSquare(squares, newPosition);
-        Snake snake = destSquare.getSnake();
-        Ladder ladder = destSquare.getLadder();
-        if (snake != null) {    // Square has a snake
-            newPosition = snake.getConnectedPosition();
-            destSquare = getSquare(squares, newPosition);
-            stringBuilder.append(String.format("%nSwallowed by a snake and back to: %1s", newPosition));
+        ConnectorPiece connectorPiece = destSquare.getSnake() == null ? destSquare.getLadder() : destSquare.getSnake();
 
-            // Make human paralyze as it got swallowed by a snake
+        if (connectorPiece == null) {
+            setPosition(newPosition);
+            destSquare.addPiece(this);
+            return stringBuilder.toString();
+        }
+
+        String message = "";
+        if (connectorPiece instanceof Snake) {
             paralyze();
-        } else if (ladder != null) {    // Square has a ladder
-            if (!canClimbsLadder()) {
-                stringBuilder.append("\nExceed the maximum number of ladders you can climb with");
-            } else if (hasLadderClimbed(ladder)) {
-                stringBuilder.append("\nAlready climbed the same ladder before");
-            } else {
-                newPosition = ladder.getConnectedPosition();
-                destSquare = getSquare(squares, newPosition);
-                addLadderClimbed(ladder);
-                stringBuilder.append(String.format("%nClimbed a ladder to: %1s", newPosition));
+            message = String.format(" then swallowed by a snake and back to position %1s",
+                                    connectorPiece.getConnectedPosition());
+        } else { // connector piece is a Ladder
+            try {
+                addLadderClimbed((Ladder) connectorPiece);
+                message = String.format(" then climb a ladder to position %1s", connectorPiece.getConnectedPosition());
+            } catch (LadderClimbedException | MaxClimbNumExceedException e) {
+                destSquare.addPiece(this);
+
+                message = e.getMessage();
+                stringBuilder.append("\n").append(message);
+                return stringBuilder.toString();
             }
         }
 
+        newPosition = connectorPiece.getConnectedPosition();
+        destSquare = getSquare(squares, newPosition);
         destSquare.addPiece(this);
-        setPosition(newPosition);
-        return stringBuilder.toString();
+
+        return stringBuilder.append(message).toString();
     }
 
     //region private methods
-    private void paralyze() {
+    void paralyze() {
         paralyzedTurns = PARALYZE_TURNS;
     }
 
-    private boolean canClimbsLadder() {
-        return ladderClimbedList.size() < 3;
-    }
+    void addLadderClimbed(Ladder ladder) throws LadderClimbedException, MaxClimbNumExceedException {
+        if (ladderClimbedList.contains(ladder)) {
+            throw new LadderClimbedException();
+        } else if (ladderClimbedList.size() == 3) {
+            throw new MaxClimbNumExceedException();
+        }
 
-    private boolean hasLadderClimbed(Ladder ladder) {
-        return ladderClimbedList.contains(ladder);
-    }
-
-    private void addLadderClimbed(Ladder ladder) {
         ladderClimbedList.add(ladder);
     }
     //endregion
