@@ -8,6 +8,7 @@ import com.snakehunter.model.Square;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -187,46 +188,83 @@ public class BoardView
 
     private void drawLadder(Graphics g, Ladder ladder) {
 
-        int bottomX = getX(ladder.getPosition());
-        int buttomY = getY(ladder.getPosition());
-        int topX = getX(ladder.getConnectedPosition());
-        int topY = getY(ladder.getConnectedPosition());
+        int bottomX = getX(ladder.getPosition()) + 10;
+        int bottomY = getY(ladder.getPosition()) + 10;
+        int topX = getX(ladder.getConnectedPosition()) + 10;
+        int topY = getY(ladder.getConnectedPosition()) + 10;
 
-        int steps = (int) Math.sqrt((buttomY - topY) * (buttomY - topY) + (bottomX - topX) * (bottomX - topX)) / 25 + 1;
-
-        int xinc = 5;
-        if (topX > bottomX) {
-            xinc = -xinc;
-        }
-        int yinc = 5;
-        if (topY > buttomY) {
-            yinc = -yinc;
-        }
+//        g.setColor(Color.red);
+//        g.drawLine(bottomX, bottomY, topX, topY);
 
         g.setColor(ladderColor);
-        g.drawLine((topX - xinc), (topY + yinc), (bottomX - xinc), (buttomY + yinc));
-        g.drawLine((topX - xinc) - 1, (topY + yinc), (bottomX - xinc) - 1, (buttomY + yinc));
-        g.drawLine((topX - xinc), (topY + yinc) - 1, (bottomX - xinc), (buttomY + yinc) - 1);
 
-        g.drawLine((topX + xinc), (topY - yinc), (bottomX + xinc), (buttomY - yinc));
-        g.drawLine((topX + xinc) - 1, (topY - yinc), (bottomX + xinc) - 1, (buttomY - yinc));
-        g.drawLine((topX + xinc), (topY - yinc) - 1, (bottomX + xinc), (buttomY - yinc) - 1);
+        double dx = topX - bottomX;
+        double dy = topY - bottomY;
 
-       // g.setColor(Color.yellow);
-        int[] x = {(topX), (bottomX),(bottomX) - 10, (topX) - 10};
-        int[] y = {(topY), (buttomY), (buttomY) - 10, (topY) - 10};
-       // g.drawPolygon(x, y, 4);
+        double rawdX = dx;
+        double rawdY = dy;
 
-        double xstep = (bottomX - topX) / (steps + 1);
-        double ystep = (buttomY - topY) / (steps + 1);
-        for (int i = 0; i < steps; i++) {
-            topX += xstep;
-            topY += ystep;
+        double dist = Math.sqrt(dx * dx + dy * dy);
 
-            g.drawLine((topX + xinc), (topY - yinc), (topX - xinc), (topY + yinc));
-            g.drawLine((topX + xinc) - 1, (topY - yinc), (topX - xinc) - 1, (topY + yinc));
-            g.drawLine((topX + xinc), (topY - yinc) - 1, (topX - xinc), (topY + yinc) - 1);
+        dx /= dist;
+        dy /= dist;
+
+
+        int ladderWidth = 5;
+        int rungMin = 3;
+        int rungMax = 40;
+        int rungSpacing = 10;
+        //
+        //int rungNo = int(constrain(dist/rungSpacing, rungMin, rungMax));
+        int rungNo = (int)Math.min(rungMax, Math.max((int)dist/rungSpacing, rungMin));
+
+        int firstxpoint = 0;
+        int firstypoint = 0;
+        int thirdxpoint = 0;
+        int thirdypoint = 0;
+        int secondxpoint= 0;
+        int secondypoint = 0;
+        int fourthxpoint = 0;
+        int fourthypoint = 0;
+
+        for (int i = 0; i < rungNo; i++) {
+            double xpoint = bottomX + rawdX / rungNo * i;
+
+            double ypoint = bottomY + rawdY / rungNo * i;
+
+            if (i == 0) {
+                firstxpoint = (int)(xpoint + ladderWidth * dy);
+                firstypoint = (int)(ypoint - ladderWidth * dx);
+                thirdxpoint = (int)(xpoint - ladderWidth * dy);
+                thirdypoint = (int)(ypoint + ladderWidth * dx);
+            } else if (i == rungNo - 1) {
+                secondxpoint = (int)(xpoint + ladderWidth * dy);
+                secondypoint = (int)(ypoint - ladderWidth * dx);
+                fourthxpoint = (int)(xpoint - ladderWidth * dy);
+                fourthypoint = (int)(ypoint + ladderWidth * dx);
+
+            } else {
+                g.drawLine((int)(xpoint + ladderWidth * dy), (int)(ypoint - ladderWidth * dx), (int)(xpoint - ladderWidth * dy), (int)(ypoint + ladderWidth * dx));
+            }
         }
+
+        g.drawLine(firstxpoint, firstypoint, secondxpoint, secondypoint);
+        g.drawLine(thirdxpoint, thirdypoint, fourthxpoint, fourthypoint);
+
+
+        Polygon p = new Polygon();
+        p.addPoint(firstxpoint, firstypoint);
+        p.addPoint(secondxpoint, secondypoint);
+        p.addPoint(fourthxpoint, fourthypoint);
+        p.addPoint(thirdxpoint, thirdypoint);
+
+
+        Color temp = new Color(ladderColor.getRed(), ladderColor.getGreen(), ladderColor.getBlue(), 64);
+
+        g.setColor(temp);
+        g.drawPolygon(p);
+        g.fillPolygon(p);
+
 
     }
 
