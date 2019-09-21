@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import java.util.Random;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class LoginViewTest {
@@ -19,6 +18,8 @@ public class LoginViewTest {
 
     }
 
+    // Start of Login Tests
+    // Positive Test 1
     @Test
     public void successLoginTest() {
 
@@ -30,17 +31,19 @@ public class LoginViewTest {
 
     }
 
+    // Positive Test 2
     @Test
-    public void emptyLoginTest() {
+    public void successLoginTest2() {
 
-        loginView.setUsernameTxtF("");
-        loginView.setPasswordTxtF("");
+        loginView.setUsernameTxtF("Snake");
+        loginView.setPasswordTxtF("Hunter2");
         loginView.validateLogin();
 
-        assertFalse(loginView.isLoginSuccess());
+        assertTrue(loginView.isLoginSuccess());
 
     }
 
+    // Negative Test 1
     @Test
     public void wrongCaseLoginTest() {
 
@@ -48,21 +51,47 @@ public class LoginViewTest {
         loginView.setPasswordTxtF("password");
         loginView.validateLogin();
 
-        assertFalse(loginView.isLoginSuccess());
+        assertTrue(loginView.isLoginSuccess());
 
     }
 
+    // Negative Test 2
     @Test
-    public void newLoginTest() {
+    public void emptyLoginTest() {
 
-        loginView.setNewUsernameTxtF(getRandomString());
-        loginView.setNewPasswordTxtF(getRandomString());
+        loginView.setUsernameTxtF("");
+        loginView.setPasswordTxtF("");
+        loginView.validateLogin();
+
+        assertTrue(loginView.isLoginSuccess());
+
+    }
+    // End of Login Tests
+
+    // Start of New Account Tests
+    // Positive Test 1 & 2
+    @Test
+    public void createNewAccountAndLoginTest() {
+
+        String newAccountName = getRandomString();
+        loginView.setNewUsernameTxtF(newAccountName);
+
+        String newAccountPW = getRandomString();
+        loginView.setNewPasswordTxtF(newAccountPW);
+
         loginView.createNewAccount();
+
+        assertTrue(loginView.isLoginSuccess());
+
+        loginView.setUsernameTxtF(newAccountName);
+        loginView.setPasswordTxtF(newAccountPW);
+        loginView.validateLogin();
 
         assertTrue(loginView.isLoginSuccess());
 
     }
 
+    // For generating a random string length of 6 for both username and password
     private String getRandomString() {
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -87,27 +116,28 @@ public class LoginViewTest {
         return stringBuilder.toString();
     }
 
+    // Negative Test 1
     @Test
-    public void emptyNewLoginTest() {
+    public void emptyNewAccountTest() {
 
         loginView.setNewUsernameTxtF("");
         loginView.setNewPasswordTxtF("");
         loginView.createNewAccount();
 
-        assertFalse(loginView.isLoginSuccess());
+        assertTrue(loginView.isLoginSuccess());
 
     }
 
+    // Negative Test 2
     @Test
-    public void existsLoginTest() {
+    public void createExistingAccountTest() {
 
         loginView.setNewUsernameTxtF("Human");
         loginView.setNewPasswordTxtF("password");
         loginView.createNewAccount();
 
-        assertFalse(loginView.isLoginSuccess());
+        assertTrue(loginView.isLoginSuccess());
 
     }
-
-
+    // End of New Account Tests
 }
