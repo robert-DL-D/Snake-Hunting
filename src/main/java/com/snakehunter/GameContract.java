@@ -65,6 +65,8 @@ public class GameContract {
 
         GameStage getGameStage();
 
+        Square[][] getSquares();
+
         void addSnake(Snake snake);
 
         void addLadder(Ladder ladder);

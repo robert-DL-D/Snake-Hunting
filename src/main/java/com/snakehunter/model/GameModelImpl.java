@@ -42,6 +42,10 @@ public class GameModelImpl
         ladderList = new ArrayList<>();
     }
 
+    public Square[][] getSquares(){
+        return squares;
+    }
+
     //region interaction
     @Override
     public void addSnake(Snake snake) {
@@ -167,7 +171,7 @@ public class GameModelImpl
                 y++;
             } else {
                 x += increment;
-            }
+            };
         }
     }
 

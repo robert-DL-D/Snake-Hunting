@@ -111,15 +111,19 @@ public class DiceView
                 }
                 System.out.println(lastNum);
                 int playerIndex = 0;
+
+                //TODO fix this so you can cancel, and it'll store that dice value to use next time you press dice (so you can't cheat but also don't get stuck in infinite loop territory)
                 boolean validPlayerChosen = false;
                 do {
                 try {
-                    playerIndex = Integer.parseInt(JOptionPane.showInputDialog("Which human would you like to move?"));
+                    playerIndex = Integer.parseInt(JOptionPane.showInputDialog("Which human piece would you like to move?"));
                     listener.onDiceRolled(playerIndex - 1, lastNum);
                     validPlayerChosen = true;
                 } catch (Exception e){
                     JOptionPane.showMessageDialog(this,"Please enter a valid player number");
                 } } while (!validPlayerChosen);
+
+
 
                 setEnabled(true);
             }).start();
