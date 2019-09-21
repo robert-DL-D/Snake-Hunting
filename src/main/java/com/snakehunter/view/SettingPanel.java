@@ -15,7 +15,7 @@ public class SettingPanel
         extends JPanel
         implements ActionListener {
 
-    private final String[] buttons = {"Add Snake", "Add Ladder", "Add Humans", "Start"};
+    private final String[] buttons = {"Add Snake","Add Random Snake", "Add Ladder", "Add Random Ladder", "Add Humans", "Start"};
 
     private ActionListener listener;
 

@@ -25,6 +25,10 @@ public class GameContract {
 
         void showErrorDialog(String message);
 
+        void hideDicePanel();
+
+        void showDicePanel();
+
         void hideSettingPanel();
 
         void setOnViewEventListener(ViewEventListener listener);
@@ -43,11 +47,17 @@ public class GameContract {
 
         void onStartClick();
 
+        void onRandomSnakeClick();
+
+        void onRandomLadderClick();
+
         void onDiceClick();
 
         void onDiceRolled(int num);
 
         void onNumOfHumansEntered(int numOfHumans);
+
+
     }
 
     public interface GameModel {

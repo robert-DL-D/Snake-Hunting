@@ -166,6 +166,15 @@ public class GameViewImpl
     }
 
     @Override
+    public void hideDicePanel(){
+        diceView.setVisible(false);
+    }
+
+    @Override
+    public void showDicePanel(){
+        diceView.setVisible(true);
+    }
+    @Override
     public void hideSettingPanel() {
         settingPanel.setVisible(false);
     }
@@ -240,6 +249,11 @@ public class GameViewImpl
         case "Start":
             listener.onStartClick();
             break;
+        case "Add Random Snake":
+            listener.onRandomSnakeClick();
+            break;
+        case "Add Random Ladder":
+            listener.onRandomLadderClick();
         default:
             break;
         }

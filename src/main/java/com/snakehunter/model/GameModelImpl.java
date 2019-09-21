@@ -54,7 +54,7 @@ public class GameModelImpl
         Square square = getSquare(snake.getPosition());
 
         if (square.getSnake() != null) {
-            listener.onAddSnakeFailed("Cannot place two snake in the same position.");
+            listener.onAddSnakeFailed("Cannot place two snakes in the same position.");
             return;
         }
 
@@ -77,7 +77,7 @@ public class GameModelImpl
 
         Square square = getSquare(ladder.getPosition());
         if (square.getLadder() != null) {
-            listener.onAddLadderFailed("Cannot place two ladder in the same position.");
+            listener.onAddLadderFailed("Cannot place two ladders in the same position.");
             return;
         }
 
@@ -204,6 +204,34 @@ public class GameModelImpl
             } else if (head - tail > 30) {
                 errorMessage = "Snake's length cannot greater than 30.";
             }
+            //converting from ladder validation
+            //checking if this new snake is overlapping other snake's head OR tail
+            else if (!snakePlayer.getPieceList().isEmpty()) {
+                for (Snake s : snakePlayer.getPieceList()) {
+                    if (head >= 81 && s.getPosition() >= 81){
+                        errorMessage = "Only one snake head can be in the range 81-100";
+                        break;
+                    }
+                    else if (head == s.getPosition() || tail == s.getPosition()) {
+                        errorMessage = "Snake's top or base is same as another snake's head position";
+                        break;
+                    } else if (head - 1 == s.getPosition() || head + 1 == s.getPosition()) {
+                        errorMessage = "Snake head cannot be next to another snake head";
+                    }
+                }
+            }
+            // converting from ladder validation
+            //checking if new snake is overlapping ladder's top or base
+            else if (ladderList.size() > 0) {
+                System.out.println(ladderList.size());
+                for (Ladder ladderInList : ladderList) {
+                    if ((head == ladderInList.getConnectedPosition() || head == ladderInList.getPosition())) {
+                        errorMessage = "Snakes's head position is same as a ladder's top or base";
+                        break;
+                    }
+                }
+            }
+
         }
 
         return errorMessage;
@@ -238,9 +266,11 @@ public class GameModelImpl
                 }
             }
             // This probably doesn't work
-            else if (ladderList.size() > 1) {
+            // does now work as intended
+            else if (ladderList.size() > 0) {
+                System.out.println(ladderList.size());
                 for (Ladder ladderInList : ladderList) {
-                    if (ladder != ladderInList && base == ladderInList.getPosition()) {
+                    if (ladder != ladderInList && (base == ladderInList.getConnectedPosition())) {
                         errorMessage = "Ladder's base position is same as another ladder's top";
                         break;
                     }
