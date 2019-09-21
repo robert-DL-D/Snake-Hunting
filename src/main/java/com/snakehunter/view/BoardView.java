@@ -1,5 +1,6 @@
 package com.snakehunter.view;
 
+import com.snakehunter.GameContract.GameModel;
 import com.snakehunter.model.piece.Human;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Snake;
@@ -23,15 +24,17 @@ public class BoardView
 
     private double factor = 0.2;
 
+    private GameModel gameModel;
+
     private List<Snake> snakeList;
     private List<Ladder> ladderList;
-    private List<Human> humanList;
 
-    public BoardView() {
+    public BoardView(GameModel gameModel) {
+        this.gameModel = gameModel;
+
         setSize(440, 440);
         snakeList = new ArrayList<>();
         ladderList = new ArrayList<>();
-        humanList = new ArrayList<>();
 
         new Thread(this).start();
     }
@@ -43,10 +46,6 @@ public class BoardView
 
     public void addLadder(Ladder ladder) {
         ladderList.add(ladder);
-    }
-
-    public void addHumans(List<Human> humanList) {
-        this.humanList = humanList;
     }
 
     @Override
@@ -77,10 +76,7 @@ public class BoardView
             drawLadder(graphics, ladder);
         }
 
-        if (!humanList.isEmpty()) {
-            drawHumans(graphics);
-        }
-
+        drawHumans(graphics, gameModel.getHumanList());
     }
 
     private void drawSnake(Graphics g, Snake snake) {
@@ -181,7 +177,7 @@ public class BoardView
 
     }
 
-    private void drawHumans(Graphics g) {
+    private void drawHumans(Graphics g, List<Human> humanList) {
         Color[] color = new Color[] {Color.WHITE, Color.RED, Color.GREEN, Color.CYAN};
 
         for (int i = 1; i <= humanList.size(); i++) {

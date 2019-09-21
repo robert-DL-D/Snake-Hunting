@@ -117,10 +117,6 @@ public class GameModelImpl
         }
 
         initHumans(numOfHumans);
-
-        if (listener != null) {
-            listener.onHumansAdded(humanPlayer.getPieceList());
-        }
     }
 
     @Override
@@ -328,6 +324,12 @@ public class GameModelImpl
     public void setOnDataChangedListener(DataChangedListener listener) {
         this.listener = listener;
     }
+
+    @Override
+    public List<Human> getHumanList() {
+        return humanPlayer.getPieceList();
+    }
+
     //endregion
 
     // Testing method

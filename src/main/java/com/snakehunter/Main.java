@@ -15,8 +15,8 @@ public class Main {
     private static boolean isDebugMode = false;
 
     public static void main(String[] args) {
-        GameView gameView = new GameViewImpl();
         GameModel gameModel = new GameModelImpl();
+        GameView gameView = new GameViewImpl(gameModel);
         GameController gameController = new GameController(gameView, gameModel);
 
         gameModel.setOnDataChangedListener(gameView);

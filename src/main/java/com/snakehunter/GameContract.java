@@ -87,6 +87,8 @@ public class GameContract {
 
         // Test only
         void setNumOfGuards(int num);
+
+        List<Human> getHumanList();
     }
 
     public interface DataChangedListener {
@@ -101,8 +103,6 @@ public class GameContract {
         void onGuardAdded(int position);
 
         void onExceedMaxNumOfGuards();
-
-        void onHumansAdded(List<Human> humanList);
 
         void onNextTurn(Player player);
 
