@@ -3,6 +3,7 @@ package com.snakehunter.model;
 import com.snakehunter.GameContract;
 import com.snakehunter.GameContract.DataChangedListener;
 import com.snakehunter.GameStage;
+import com.snakehunter.model.exceptions.InvalidParamsException;
 import com.snakehunter.model.piece.Human;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Player;
@@ -124,7 +125,7 @@ public class GameModelImpl
 
     @Override
     public Player getCurrentPlayer() {
-        if (numOfTurns % 2 == 0){
+        if (numOfTurns % 2 == 0) {
             return snakePlayer;
         } else {
             return humanPlayer;
@@ -147,7 +148,11 @@ public class GameModelImpl
 
     @Override
     public void movePlayer(int index, int steps) {
-        humanPlayer.getPiece(index).move(squares, steps);
+        try {
+            humanPlayer.getPiece(index).move(squares, steps);
+        } catch (InvalidParamsException e) {
+            e.printStackTrace();
+        }
     }
     //endregion
 
@@ -209,11 +214,10 @@ public class GameModelImpl
             //checking if this new snake is overlapping other snake's head OR tail
             else if (!snakePlayer.getPieceList().isEmpty()) {
                 for (Snake s : snakePlayer.getPieceList()) {
-                    if (head >= 81 && s.getPosition() >= 81){
+                    if (head >= 81 && s.getPosition() >= 81) {
                         errorMessage = "Only one snake head can be in the range 81-100";
                         break;
-                    }
-                    else if (head == s.getPosition() || tail == s.getPosition()) {
+                    } else if (head == s.getPosition() || tail == s.getPosition()) {
                         errorMessage = "Snake's top or base is same as another snake's head position";
                         break;
                     } else if (head - 1 == s.getPosition() || head + 1 == s.getPosition()) {
