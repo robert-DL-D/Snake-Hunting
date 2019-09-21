@@ -12,7 +12,7 @@ import java.util.List;
  * @date 2019-08-26
  */
 public class Square {
-    
+
     private int squareNo;
     private int column;
     private int row;
@@ -57,6 +57,11 @@ public class Square {
     public int getRow() {
         return row;
     }
+
+    public boolean hasPiece(Piece piece) {
+        return pieceList.contains(piece);
+    }
+
     public Snake getSnake() {
         for (Piece piece : pieceList) {
             if (piece instanceof Snake) {

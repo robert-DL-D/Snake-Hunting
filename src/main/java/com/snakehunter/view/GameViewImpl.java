@@ -1,9 +1,9 @@
 package com.snakehunter.view;
 
 import com.snakehunter.GameContract;
+import com.snakehunter.GameContract.GameModel;
 import com.snakehunter.GameContract.ViewEventListener;
 import com.snakehunter.Main;
-import com.snakehunter.model.piece.Human;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Player;
 import com.snakehunter.model.piece.Snake;
@@ -12,7 +12,6 @@ import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -29,20 +28,24 @@ public class GameViewImpl
         implements GameContract.GameView,
                    ActionListener {
 
+    private GameModel gameModel;
+
     private ViewEventListener listener;
     private BoardView boardView;
     private DiceView diceView;
     private SettingPanel settingPanel;
 
-    public GameViewImpl() {
+    public GameViewImpl(GameModel gameModel) {
         super("Snakes n Ladders!");
+        this.gameModel = gameModel;
+
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(645, 520);
 
         Container contentPane = getContentPane();
 
-        boardView = new BoardView();
+        boardView = new BoardView(gameModel);
         boardView.setLocation(0, 0);
         contentPane.add(boardView);
 
@@ -215,11 +218,6 @@ public class GameViewImpl
     @Override
     public void onExceedMaxNumOfGuards() {
         showErrorDialog("Cannot place more than 3 guards.");
-    }
-
-    @Override
-    public void onHumansAdded(List<Human> humanList) {
-        boardView.addHumans(humanList);
     }
 
     @Override

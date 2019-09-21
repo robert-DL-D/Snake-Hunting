@@ -12,8 +12,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 /**
@@ -113,7 +113,7 @@ public class GameControllerTest {
         gameController.onDiceClick();
 
         // then
-        verifyZeroInteractions(gameView);
+        verify(gameView, times(0)).rollTheDice();
     }
 
     @Test
