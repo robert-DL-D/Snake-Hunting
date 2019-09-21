@@ -100,8 +100,10 @@ public class GameController
     }
 
     @Override
-    public void onDiceRolled(int num) {
-        gameModel.movePlayer(num);
+    public void onDiceRolled(int player, int num) {
+        System.out.println("onDiceRolled" + num);
+
+        gameModel.movePlayer(player, num);
         gameModel.nextTurn();
     }
 

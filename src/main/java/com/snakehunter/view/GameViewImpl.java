@@ -30,7 +30,6 @@ public class GameViewImpl
                    ActionListener {
 
     private ViewEventListener listener;
-
     private BoardView boardView;
     private DiceView diceView;
     private SettingPanel settingPanel;
@@ -73,7 +72,8 @@ public class GameViewImpl
             if (num == 0) {
                 diceView.roll();
             } else {
-                listener.onDiceRolled(num);
+                //TODO add this back in later
+                //listener.onDiceRolled(num);
             }
         } else {
             diceView.roll();
@@ -144,20 +144,27 @@ public class GameViewImpl
 
     @Override
     public void showHumanBuilder() {
-        int numOfHumans;
+        if (Main.isDebugMode()){
+            int numOfHumans;
 
-        try {
-            numOfHumans = Integer.parseInt(JOptionPane.showInputDialog("How many players? (2 ~ 4)"));
-        } catch (NumberFormatException e) {
-            if (listener != null) {
-                listener.onNumOfHumansEntered(-1);
+            try {
+                numOfHumans = Integer.parseInt(JOptionPane.showInputDialog("How many players? (2 ~ 4)"));
+            } catch (NumberFormatException e) {
+                if (listener != null) {
+                    listener.onNumOfHumansEntered(-1);
+                }
+                return;
             }
-            return;
+
+            if (listener != null) {
+                listener.onNumOfHumansEntered(numOfHumans);
+            }
+        } else {
+            if (listener != null){
+                listener.onNumOfHumansEntered(4);
+            }
         }
 
-        if (listener != null) {
-            listener.onNumOfHumansEntered(numOfHumans);
-        }
     }
 
     @Override

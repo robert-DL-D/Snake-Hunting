@@ -146,7 +146,8 @@ public class GameModelImpl
     }
 
     @Override
-    public void movePlayer(int steps) {
+    public void movePlayer(int index, int steps) {
+        humanPlayer.getPiece(index).move(squares, steps);
     }
     //endregion
 
@@ -223,7 +224,7 @@ public class GameModelImpl
             // converting from ladder validation
             //checking if new snake is overlapping ladder's top or base
             else if (ladderList.size() > 0) {
-                System.out.println(ladderList.size());
+                //System.out.println(ladderList.size());
                 for (Ladder ladderInList : ladderList) {
                     if ((head == ladderInList.getConnectedPosition() || head == ladderInList.getPosition())) {
                         errorMessage = "Snakes's head position is same as a ladder's top or base";
@@ -268,7 +269,7 @@ public class GameModelImpl
             // This probably doesn't work
             // does now work as intended
             else if (ladderList.size() > 0) {
-                System.out.println(ladderList.size());
+                //System.out.println(ladderList.size());
                 for (Ladder ladderInList : ladderList) {
                     if (ladder != ladderInList && (base == ladderInList.getConnectedPosition())) {
                         errorMessage = "Ladder's base position is same as another ladder's top";

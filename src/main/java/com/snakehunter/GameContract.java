@@ -53,7 +53,7 @@ public class GameContract {
 
         void onDiceClick();
 
-        void onDiceRolled(int num);
+        void onDiceRolled(int player, int num);
 
         void onNumOfHumansEntered(int numOfHumans);
 
@@ -79,7 +79,7 @@ public class GameContract {
 
         void nextTurn();
 
-        void movePlayer(int steps);
+        void movePlayer(int index, int steps);
 
         void setOnDataChangedListener(DataChangedListener listener);
 

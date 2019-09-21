@@ -7,6 +7,8 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
+
 
 /**
  * @author WeiYi Yu
@@ -47,9 +49,9 @@ public class DiceView
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
 
-        graphics.setColor(Color.BLACK);
+        graphics.setColor(Color.RED);
         graphics.fill3DRect(0, 0, DICE_LENGTH, DICE_LENGTH, false);
-        graphics.setColor(Color.WHITE);
+        graphics.setColor(Color.BLACK);
 
         if (lastNum == 1) {
             graphics.fillOval(20, 20, DOT_LENGTH, DOT_LENGTH);
@@ -107,8 +109,18 @@ public class DiceView
                         System.out.println("Dice roll exception " + e);
                     }
                 }
+                System.out.println(lastNum);
+                int playerIndex = 0;
+                boolean validPlayerChosen = false;
+                do {
+                try {
+                    playerIndex = Integer.parseInt(JOptionPane.showInputDialog("Which human would you like to move?"));
+                    listener.onDiceRolled(playerIndex - 1, lastNum);
+                    validPlayerChosen = true;
+                } catch (Exception e){
+                    JOptionPane.showMessageDialog(this,"Please enter a valid player number");
+                } } while (!validPlayerChosen);
 
-                listener.onDiceRolled(lastNum);
                 setEnabled(true);
             }).start();
 

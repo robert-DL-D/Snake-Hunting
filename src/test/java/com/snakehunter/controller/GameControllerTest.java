@@ -119,10 +119,10 @@ public class GameControllerTest {
     @Test
     public void givenDiceRolls5_whenDiceRolled_thenMoveThePlayer_andNextTurn() {
         // when
-        gameController.onDiceRolled(5);
+        gameController.onDiceRolled(0, 5);
 
         // then
-        verify(gameModel).movePlayer(5);
+        verify(gameModel).movePlayer(0,5);
         verify(gameModel).nextTurn();
     }
 
