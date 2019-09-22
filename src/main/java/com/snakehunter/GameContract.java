@@ -65,7 +65,7 @@ public class GameContract {
 
         void onDiceRolled(int player, int num);
 
-        void onSnakeMove(int snake, int steps);
+        String onSnakeMove(int snake, int steps);
 
         void onNumOfHumansEntered(int numOfHumans);
 
@@ -95,7 +95,7 @@ public class GameContract {
 
         void movePlayer(int index, int steps);
 
-        void moveSnake(int index, int steps);
+        String moveSnake(int index, int steps);
 
         void setOnDataChangedListener(DataChangedListener listener);
 
