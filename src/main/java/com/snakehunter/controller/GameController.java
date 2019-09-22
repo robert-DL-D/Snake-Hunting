@@ -4,7 +4,6 @@ import com.snakehunter.GameContract.GameModel;
 import com.snakehunter.GameContract.GameView;
 import com.snakehunter.GameContract.ViewEventListener;
 import com.snakehunter.GameStage;
-import com.snakehunter.model.Square;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Snake;
 
@@ -36,6 +35,7 @@ public class GameController
     @Override
     public void onSnakeBuilt(Snake snake) {
         gameModel.addSnake(snake);
+
     }
 
     @Override
@@ -83,9 +83,11 @@ public class GameController
     public void onStartClick() {
         if (gameModel.isGameReady()) {
             gameView.hideSettingPanel();
-            gameView.showDicePanel();
+            gameView.showTurnPanel();
             gameModel.setGameStage(GameStage.SECOND);
             gameModel.nextTurn();
+            gameView.updateStage(gameModel.getGameStage());
+            gameView.updateTurnNo(gameModel.getNumOfTurns());
         } else {
             gameView.showErrorDialog("Make sure you add snakes, ladders and humans before start the game.");
         }
@@ -96,21 +98,27 @@ public class GameController
         if (gameModel.getGameStage().equals(GameStage.INITIAL)) {
             return;
         }
-
         gameView.rollTheDice();
+    }
+
+    public void onDiceShow(){
+        gameView.showDicePanel();
     }
 
     @Override
     public void onDiceRolled(int player, int num) {
-        System.out.println("onDiceRolled" + num);
 
         gameModel.movePlayer(player, num);
         gameModel.nextTurn();
+        gameView.updateTurnNo(gameModel.getNumOfTurns());
+        gameView.hideDicePanel();
     }
 
     @Override
     public void onSnakeMove(int snake, int steps){
         gameModel.moveSnake(snake, steps);
+        gameModel.nextTurn();
+        gameView.updateTurnNo(gameModel.getNumOfTurns());
     }
 
     @Override

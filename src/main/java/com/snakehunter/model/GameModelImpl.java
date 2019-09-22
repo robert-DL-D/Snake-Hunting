@@ -42,15 +42,12 @@ public class GameModelImpl
         ladderList = new ArrayList<>();
     }
 
-    public Square[][] getSquares(){
-        return squares;
-    }
 
     //region interaction
     @Override
     public void addSnake(Snake snake) {
         String errorMessage = validateSnake(snake);
-
+        System.out.println(errorMessage);
         if (errorMessage != null && listener != null) {
             listener.onAddSnakeFailed(errorMessage);
             return;
@@ -64,7 +61,6 @@ public class GameModelImpl
         }
 
         snakePlayer.addPiece(snake);
-
         square.addPiece(snake);
 
         if (listener != null) {
@@ -157,8 +153,13 @@ public class GameModelImpl
     }
 
     @Override
-    public void moveSnake(int index, int steps)  {
-        snakePlayer.getPiece(index).move(squares, steps);
+    public void moveSnake(int index, int steps) {
+        try {
+            String s = snakePlayer.getPiece(0).move(squares, steps);
+            System.out.println(s);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
     //endregion
 
@@ -220,10 +221,10 @@ public class GameModelImpl
             //checking if this new snake is overlapping other snake's head OR tail
             else if (!snakePlayer.getPieceList().isEmpty()) {
                 for (Snake s : snakePlayer.getPieceList()) {
-                    if (head >= 81 && s.getPosition() >= 81) {
+                    if (snake != s && head >= 81 && s.getPosition() >= 81) {
                         errorMessage = "Only one snake head can be in the range 81-100";
                         break;
-                    } else if (head == s.getPosition() || tail == s.getPosition()) {
+                    } else if (snake != s && (head == s.getPosition() || tail == s.getPosition())) {
                         errorMessage = "Snake's top or base is same as another snake's head position";
                         break;
                     } else if (head - 1 == s.getPosition() || head + 1 == s.getPosition()) {
@@ -338,6 +339,14 @@ public class GameModelImpl
     @Override
     public List<Human> getHumanList() {
         return humanPlayer.getPieceList();
+    }
+
+    public Square[][] getSquares(){
+        return squares;
+    }
+
+    public int getNumOfTurns(){
+        return numOfTurns;
     }
 
     public List<Snake> getSnakeList(){

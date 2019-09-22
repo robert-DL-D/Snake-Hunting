@@ -29,6 +29,14 @@ public class GameContract {
 
         void showDicePanel();
 
+        void showTurnPanel();
+
+        void hideTurnPanel();
+
+        void updateTurnNo(int turnNo);
+
+        void updateStage(GameStage s);
+
         void hideSettingPanel();
 
         void setOnViewEventListener(ViewEventListener listener);
@@ -52,6 +60,8 @@ public class GameContract {
         void onRandomLadderClick();
 
         void onDiceClick();
+
+        void onDiceShow();
 
         void onDiceRolled(int player, int num);
 
@@ -90,6 +100,8 @@ public class GameContract {
         void setOnDataChangedListener(DataChangedListener listener);
 
         Square getSquare(int squareNo);
+
+        int getNumOfTurns();
 
         // Test only
         void setNumOfGuards(int num);
