@@ -168,8 +168,7 @@ public class GameModelImpl
     @Override
     public String moveSnake(int index, int steps) {
         try {
-            String s = snakePlayer.getPiece(0).move(squares, steps);
-            return s;
+            return snakePlayer.getPiece(0).move(squares, steps);
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -192,7 +191,7 @@ public class GameModelImpl
                 y++;
             } else {
                 x += increment;
-            };
+            }
         }
     }
 
@@ -362,8 +361,14 @@ public class GameModelImpl
         return squares;
     }
 
+    @Override
     public int getNumOfTurns(){
         return numOfTurns;
+    }
+
+    @Override
+    public int getNumOfGuards(){
+        return numOfGuards;
     }
 
     public List<Snake> getSnakeList(){

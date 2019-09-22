@@ -39,6 +39,8 @@ public class GameContract {
 
         void updateStage(GameStage s);
 
+        void updateGuardNo();
+
         void hideSettingPanel();
 
         void setOnViewEventListener(ViewEventListener listener);
@@ -108,6 +110,8 @@ public class GameContract {
         Square getSquare(int squareNo);
 
         int getNumOfTurns();
+
+        int getNumOfGuards();
 
         // Test only
         void setNumOfGuards(int num);

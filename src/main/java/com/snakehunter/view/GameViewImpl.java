@@ -201,6 +201,11 @@ public class GameViewImpl
     }
 
     @Override
+    public void updateGuardNo() {
+        turnPanel.updateGuardNo();
+    }
+
+    @Override
     public void hideDicePanel(){
         diceView.setVisible(false);
     }
@@ -251,6 +256,8 @@ public class GameViewImpl
     @Override
     public void onGuardAdded(int position) {
         gameModel.nextTurn();
+        gameModel.setNumOfGuards(gameModel.getNumOfGuards() -1);
+        turnPanel.updateGuardNo();
         turnPanel.updateTurnNo(gameModel.getNumOfTurns());
         turnPanel.updateStage(gameModel.getGameStage());
         turnPanel.repaint();
@@ -275,6 +282,7 @@ public class GameViewImpl
     public void onSnakeMoved(){
         boardView.drawSnake(boardView.getGraphics(), gameModel.getSnakeList());
     }
+
 
     @Override
     public void onNumOfHumansEnteredError() {

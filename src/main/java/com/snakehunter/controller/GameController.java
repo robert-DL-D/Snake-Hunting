@@ -86,6 +86,8 @@ public class GameController
             gameView.showTurnPanel();
             gameModel.setGameStage(GameStage.SECOND);
             gameModel.nextTurn();
+            gameModel.setNumOfGuards(3);
+            gameView.updateGuardNo();
             gameView.updateStage(gameModel.getGameStage());
             gameView.updateTurnNo(gameModel.getNumOfTurns());
         } else {
