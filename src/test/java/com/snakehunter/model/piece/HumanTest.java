@@ -36,6 +36,7 @@ public class HumanTest {
 
         // then
         assertTrue(getSquare(2).hasPiece(human));
+        assertEquals(2, human.getPosition());
         assertEquals("Move to position 2", message);
     }
 
@@ -50,6 +51,7 @@ public class HumanTest {
 
         // then
         assertTrue(getSquare(7).hasPiece(human));
+        assertEquals(7, human.getPosition());
         assertEquals("Move to position 7", message);
     }
 
@@ -114,6 +116,7 @@ public class HumanTest {
 
         // then
         assertTrue(getSquare(25).hasPiece(human));
+        assertEquals(25, human.getPosition());
         assertEquals("Move to position 16 then climb a ladder to position 25", message);
     }
 
@@ -132,6 +135,7 @@ public class HumanTest {
 
         // then
         assertTrue(getSquare(25).hasPiece(human));
+        assertEquals(25, human.getPosition());
         assertEquals("Move to position 16 then climb a ladder to position 25", message);
     }
 
@@ -152,6 +156,7 @@ public class HumanTest {
 
         // then
         assertTrue(getSquare(16).hasPiece(human));
+        assertEquals(16, human.getPosition());
         assertEquals("Move to position 16\nMaximum climb number of ladders exceeded.", message);
     }
 
@@ -170,6 +175,7 @@ public class HumanTest {
 
         // then
         assertTrue(getSquare(16).hasPiece(human));
+        assertEquals(16, human.getPosition());
         assertEquals("Move to position 16\nAlready climbed this ladder before.", message);
     }
     //endregion
@@ -187,6 +193,7 @@ public class HumanTest {
 
         // then
         assertTrue(getSquare(5).hasPiece(human));
+        assertEquals(5, human.getPosition());
         assertTrue(human.isParalyzed());
         assertEquals("Move to position 16 then swallowed by a snake and back to position 5", message);
     }

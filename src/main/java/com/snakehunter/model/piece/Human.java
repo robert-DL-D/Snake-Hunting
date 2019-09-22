@@ -85,6 +85,7 @@ public class Human
                 message = String.format(" then climb a ladder to position %1s", connectorPiece.getConnectedPosition());
             } catch (LadderClimbedException | MaxClimbNumExceedException e) {
                 destSquare.addPiece(this);
+                setPosition(newPosition);
 
                 message = e.getMessage();
                 stringBuilder.append("\n").append(message);
@@ -95,6 +96,7 @@ public class Human
         newPosition = connectorPiece.getConnectedPosition();
         destSquare = getSquare(squares, newPosition);
         destSquare.addPiece(this);
+        setPosition(newPosition);
 
         return stringBuilder.append(message).toString();
     }
