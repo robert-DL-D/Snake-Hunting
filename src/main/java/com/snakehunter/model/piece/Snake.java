@@ -6,9 +6,11 @@ import com.snakehunter.model.Square;
  * @author David Manolitsas
  * @date 2019-09-08
  */
+
 public class Snake
         extends ConnectorPiece
         implements Movable {
+
     public Snake(int position, int connectedPosition) {
         super(position, connectedPosition);
     }
@@ -18,33 +20,50 @@ public class Snake
     private static final int LEFT = 2;
     private static final int RIGHT = 3;
 
-
-    //TODO add final ints for up down left right
-
     @Override
-    public String move(Square[][] squares, int steps) {
+    public String move(Square[][] squares, int steps) throws ArrayIndexOutOfBoundsException {
         String message;
         Square currSquare = getSquare(squares, getPosition());
 
         if (steps == UP){
-            moveUp(squares, currSquare);
-            message = "Snake moved up to  position " + getPosition();
-            return message;
+            if (moveUp(squares, currSquare) == true) {
+                message = "Snake moved up to position " + getPosition();
+                return message;
+            }
+            else {
+                message = "Snake can not move up";
+                return message;
+            }
         }
         else if (steps == DOWN){
-            moveDown(squares, currSquare);
-            message = "Snake moved down to  position " + getPosition();
-            return message;
+            if(moveDown(squares, currSquare) == true) {
+                message = "Snake moved down to position " + getPosition();
+                return message;
+            }
+            else {
+                message = "Snake can not move down";
+                return message;
+            }
         }
         else if (steps == LEFT){
-            moveLeft(squares, currSquare);
-            message = "Snake moved left to  position " + getPosition();
-            return message;
+            if (moveLeft(squares, currSquare) == true) {
+                message = "Snake moved left to position " + getPosition();
+                return message;
+            }
+            else {
+                message = "Snake can not move left";
+                return message;
+            }
         }
         else if(steps == RIGHT){
-            moveRight(squares, currSquare);
-            message = "Snake moved right to  position " + getPosition();
-            return message;
+            if (moveRight(squares, currSquare) == true) {
+                message = "Snake moved right to position " + getPosition();
+                return message;
+            }
+            else {
+                message = "Snake can not move right";
+                return message;
+            }
         } else {
             message = "Invalid Input";
             return message;
@@ -52,8 +71,7 @@ public class Snake
 
     }
 
-    //TODO move method return string and
-    public int moveUp(Square[][] squares, Square currSquare) throws ArrayIndexOutOfBoundsException {
+    public boolean moveUp(Square[][] squares, Square currSquare) {
         int headRow = currSquare.getRow();
         int headCol = currSquare.getColumn();
         Square tail = getSquare(squares, getConnectedPosition());
@@ -62,23 +80,30 @@ public class Snake
         int newHeadPosition, newTailPosition;
         Square newHeadSquare, newTailSquare;
 
-        //move head up
-        newHeadSquare = squares[headCol][headRow + 1];
-        newHeadPosition = newHeadSquare.getSquareNo();
-        setPosition(newHeadPosition);
+        if (headRow + 1 > 9) {
+            return false;
+        }
+        else {
+            newHeadSquare = squares[headCol][headRow + 1];
+            if (newHeadSquare.isGuarded() == true){
+                return false;
+            }
+            else {
+                //move head up
+                newHeadPosition = newHeadSquare.getSquareNo();
+                setPosition(newHeadPosition);
 
-        //move tail up
-        newTailSquare = squares[tailCol][tailRow + 1];
-        newTailPosition = newTailSquare.getSquareNo();
-        setConnectedPosition(newTailPosition);
-
-        return newHeadPosition;
-
+                //move tail up
+                newTailSquare = squares[tailCol][tailRow + 1];
+                newTailPosition = newTailSquare.getSquareNo();
+                setConnectedPosition(newTailPosition);
+                return true;
+            }
+        }
     }
 
 
-
-    public int moveDown(Square[][] squares, Square currSquare) {
+    public boolean moveDown(Square[][] squares, Square currSquare) {
         int headRow = currSquare.getRow();
         int headCol = currSquare.getColumn();
         Square tail = getSquare(squares, getConnectedPosition());
@@ -87,21 +112,31 @@ public class Snake
         int newHeadPosition, newTailPosition;
         Square newHeadSquare, newTailSquare;
 
-        //move head down
-        newHeadSquare = squares[headCol][headRow - 1];
-        newHeadPosition = newHeadSquare.getSquareNo();
-        setPosition(newHeadPosition);
+        if (tailRow - 1 < 0) {
+            return false;
+        }
+        else {
+            newHeadSquare = squares[headCol][headRow - 1];
+            if (newHeadSquare.isGuarded() == true){
+                return false;
+            }
+            else {
+                //move head down
+                newHeadPosition = newHeadSquare.getSquareNo();
+                setPosition(newHeadPosition);
 
-        //move tail down
-        newTailSquare = squares[tailCol][tailRow - 1];
-        newTailPosition = newTailSquare.getSquareNo();
-        setConnectedPosition(newTailPosition);
+                //move tail down
+                newTailSquare = squares[tailCol][tailRow - 1];
+                newTailPosition = newTailSquare.getSquareNo();
+                setConnectedPosition(newTailPosition);
 
-        return newHeadPosition;
+                return true;
+            }
+        }
     }
 
 
-    public int moveRight(Square[][] squares, Square currSquare) {
+    public boolean moveRight(Square[][] squares, Square currSquare) {
         int headRow = currSquare.getRow();
         int headCol = currSquare.getColumn();
         Square tail = getSquare(squares, getConnectedPosition());
@@ -110,20 +145,31 @@ public class Snake
         int newHeadPosition, newTailPosition;
         Square newHeadSquare, newTailSquare;
 
-        //move head right
-        newHeadSquare = squares[headCol + 1][headRow];
-        newHeadPosition = newHeadSquare.getSquareNo();
-        setPosition(newHeadPosition);
+        if ( (headCol + 1 > 9) || (tailCol + 1 > 9) ) {
+            return false;
+        }
+        else {
+            newHeadSquare = squares[headCol + 1][headRow];
+            if (newHeadSquare.isGuarded() == true){
+                return false;
+            }
+            else {
+                //move head right
+                newHeadPosition = newHeadSquare.getSquareNo();
+                setPosition(newHeadPosition);
 
-        //move tail right
-        newTailSquare = squares[tailCol + 1][tailRow];
-        newTailPosition = newTailSquare.getSquareNo();
-        setConnectedPosition(newTailPosition);
+                //move tail right
+                newTailSquare = squares[tailCol + 1][tailRow];
+                newTailPosition = newTailSquare.getSquareNo();
+                setConnectedPosition(newTailPosition);
 
-        return newHeadPosition;
+                return true;
+            }
+        }
     }
 
-    public int moveLeft(Square[][] squares, Square currSquare) {
+
+    public boolean moveLeft(Square[][] squares, Square currSquare) {
         int headRow = currSquare.getRow();
         int headCol = currSquare.getColumn();
         Square tail = getSquare(squares, getConnectedPosition());
@@ -132,16 +178,26 @@ public class Snake
         int newHeadPosition, newTailPosition;
         Square newHeadSquare, newTailSquare;
 
-        //move head left
-        newHeadSquare = squares[headCol - 1][headRow];
-        newHeadPosition = newHeadSquare.getSquareNo();
-        setPosition(newHeadPosition);
+        if ( (headCol - 1 < 0) || (tailCol - 1 < 0) ) {
+            return false;
+        }
+        else {
+            newHeadSquare = squares[headCol - 1][headRow];
+            if (newHeadSquare.isGuarded() == true){
+                return false;
+            }
+            else {
+                //move head left
+                newHeadPosition = newHeadSquare.getSquareNo();
+                setPosition(newHeadPosition);
 
-        //move tail left
-        newTailSquare = squares[tailCol - 1][tailRow];
-        newTailPosition = newTailSquare.getSquareNo();
-        setConnectedPosition(newTailPosition);
+                //move tail left
+                newTailSquare = squares[tailCol - 1][tailRow];
+                newTailPosition = newTailSquare.getSquareNo();
+                setConnectedPosition(newTailPosition);
 
-        return newHeadPosition;
+                return true;
+            }
+        }
     }
 }

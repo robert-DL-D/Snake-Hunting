@@ -154,6 +154,11 @@ public class GameModelImpl
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void moveSnake(int index, int steps)  {
+        snakePlayer.getPiece(index).move(squares, steps);
+    }
     //endregion
 
     //region private method

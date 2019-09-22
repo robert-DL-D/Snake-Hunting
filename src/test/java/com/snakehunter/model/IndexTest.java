@@ -34,8 +34,7 @@ public class IndexTest {
     @Test
     public void snakeMoveUp(){
         //Actions
-        Square square = squares[4][6];
-        snake.moveUp(squares, square);
+        snake.moveUp(squares, squares[4][6]);
 
         //actual results
         int testHead = snake.getPosition();

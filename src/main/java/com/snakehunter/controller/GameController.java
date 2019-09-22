@@ -4,6 +4,7 @@ import com.snakehunter.GameContract.GameModel;
 import com.snakehunter.GameContract.GameView;
 import com.snakehunter.GameContract.ViewEventListener;
 import com.snakehunter.GameStage;
+import com.snakehunter.model.Square;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Snake;
 
@@ -105,6 +106,11 @@ public class GameController
 
         gameModel.movePlayer(player, num);
         gameModel.nextTurn();
+    }
+
+    @Override
+    public void onSnakeMove(int snake, int steps){
+        gameModel.moveSnake(snake, steps);
     }
 
     @Override
