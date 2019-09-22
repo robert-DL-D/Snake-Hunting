@@ -115,10 +115,19 @@ public class GameController
     }
 
     @Override
-    public void onSnakeMove(int snake, int steps){
-        gameModel.moveSnake(snake, steps);
-        gameModel.nextTurn();
-        gameView.updateTurnNo(gameModel.getNumOfTurns());
+    public String onSnakeMove(int snake, int steps){
+        String s = gameModel.moveSnake(snake, steps);
+        System.out.println(s);
+        if (s!=null){
+            gameView.showErrorDialog(s);
+            return s;
+        } else {
+            gameModel.nextTurn();
+            gameView.updateTurnNo(gameModel.getNumOfTurns());
+            return null;
+        }
+
+
     }
 
     @Override
