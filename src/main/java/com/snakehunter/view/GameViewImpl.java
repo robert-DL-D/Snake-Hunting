@@ -3,6 +3,7 @@ package com.snakehunter.view;
 import com.snakehunter.GameContract;
 import com.snakehunter.GameContract.GameModel;
 import com.snakehunter.GameContract.ViewEventListener;
+import com.snakehunter.GameStage;
 import com.snakehunter.Main;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Player;
@@ -34,6 +35,7 @@ public class GameViewImpl
     private BoardView boardView;
     private DiceView diceView;
     private SettingPanel settingPanel;
+    private TurnPanel turnPanel;
 
     public GameViewImpl(GameModel gameModel) {
         super("Snakes n Ladders!");
@@ -56,6 +58,10 @@ public class GameViewImpl
         settingPanel = new SettingPanel(this);
         settingPanel.setLocation(450, 20);
         contentPane.add(settingPanel);
+
+        turnPanel = new TurnPanel(this, gameModel);
+        turnPanel.setLocation(450, 20);
+        contentPane.add(turnPanel);
 
         setVisible(true);
     }
@@ -176,6 +182,25 @@ public class GameViewImpl
     }
 
     @Override
+    public void showTurnPanel(){
+        turnPanel.setVisible(true);
+    }
+
+    @Override
+    public void hideTurnPanel(){
+        turnPanel.setVisible(false);
+    }
+
+    public void updateTurnNo(int turnNo){
+        turnPanel.updateTurnNo(turnNo);
+    }
+
+    @Override
+    public void updateStage(GameStage s) {
+        turnPanel.updateStage(s);
+    }
+
+    @Override
     public void hideDicePanel(){
         diceView.setVisible(false);
     }
@@ -264,6 +289,22 @@ public class GameViewImpl
             break;
         case "Add Random Ladder":
             listener.onRandomLadderClick();
+            break;
+        case "Move Up":
+            listener.onSnakeMove(0, 0);
+            break;
+        case "Move Down":
+            listener.onSnakeMove(0, 1);
+            break;
+        case "Move Left":
+            listener.onSnakeMove(0, 2);
+            break;
+        case "Move Right":
+            listener.onSnakeMove(0, 3);
+            break;
+        case "Roll Dice":
+            listener.onDiceShow();
+            break;
         default:
             break;
         }
