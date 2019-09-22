@@ -122,7 +122,7 @@ public class BoardView
 
 
 
-    private void drawSnake(Graphics g, List <Snake> snakeList) {
+    protected void drawSnake(Graphics g, List <Snake> snakeList) {
 
         for (int j = 01; j <= snakeList.size(); j++) {
 

@@ -159,6 +159,7 @@ public class GameModelImpl
     @Override
     public void moveSnake(int index, int steps)  {
         snakePlayer.getPiece(index).move(squares, steps);
+        listener.onSnakeMoved();
     }
     //endregion
 

@@ -117,5 +117,7 @@ public class GameContract {
         void onPlayerMoved(Player player, int destPosition);
 
         void onNumOfHumansEnteredError();
+
+        void onSnakeMoved();
     }
 }

@@ -37,6 +37,7 @@ public class SnakeMoveTest {
 //    private static final int LEFT = 2;
 //    private static final int RIGHT = 3;
 
+    //Negative Test 1
     @Test
     public void snakesMovesOutOfBounds(){
         //Actions
@@ -51,7 +52,6 @@ public class SnakeMoveTest {
         int test3 = snake3.getPosition();
         int test4 = snake4.getPosition();
 
-
         //Assertions
         assertEquals(63, test1);
         assertEquals(97, test2);
@@ -60,6 +60,7 @@ public class SnakeMoveTest {
     }
 
 
+    //Negative Test 2
     @Test
     public void snakesMovesGuardedSquare(){
         //Actions
@@ -87,6 +88,7 @@ public class SnakeMoveTest {
     }
 
 
+    //Positive Test 1
     @Test
     public void snakesValidMoves(){
         //Actions
@@ -124,6 +126,7 @@ public class SnakeMoveTest {
     }
 
 
+    //Positive Test 2
     @Test
     public void snakeMultiMove(){
         snake1.move(squares, 1); //Down
@@ -140,6 +143,17 @@ public class SnakeMoveTest {
         assertEquals(56, testHead);
         assertEquals(38, testTail);
 
+    }
+
+
+    @Test
+    public void stringTest(){
+        String test = snake1.move(squares, 1);
+
+        String expected = "Snake moved down to position 58";
+
+        System.out.println(test);
+        assertEquals(expected, test);
     }
 
 

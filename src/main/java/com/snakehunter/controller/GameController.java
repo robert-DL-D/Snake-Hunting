@@ -7,6 +7,7 @@ import com.snakehunter.GameStage;
 import com.snakehunter.model.Square;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Snake;
+import com.snakehunter.view.BoardView;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -111,6 +112,7 @@ public class GameController
     @Override
     public void onSnakeMove(int snake, int steps){
         gameModel.moveSnake(snake, steps);
+        gameView.onSnakeMoved();
     }
 
     @Override

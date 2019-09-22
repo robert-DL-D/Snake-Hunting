@@ -230,6 +230,11 @@ public class GameViewImpl
     }
 
     @Override
+    public void onSnakeMoved(){
+        boardView.drawSnake(boardView.getGraphics(), gameModel.getSnakeList());
+    }
+
+    @Override
     public void onNumOfHumansEnteredError() {
         showErrorDialog("Please enter a number between 2 ~ 4.");
     }
