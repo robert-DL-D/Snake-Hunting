@@ -4,6 +4,8 @@ import com.snakehunter.GameContract.GameModel;
 import com.snakehunter.GameContract.GameView;
 import com.snakehunter.GameContract.ViewEventListener;
 import com.snakehunter.GameStage;
+import com.snakehunter.model.GameModelImpl;
+import com.snakehunter.model.SaveLoadGame;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Snake;
 
@@ -54,7 +56,7 @@ public class GameController
     }
 
     @Override
-    public void onRandomSnakeClick(){
+    public void onRandomSnakeClick() {
         int snakeHead = ThreadLocalRandom.current().nextInt(3, 99);
         int snakeLength = ThreadLocalRandom.current().nextInt(1, 30);
         int snakeTail = snakeHead - snakeLength;
@@ -67,7 +69,7 @@ public class GameController
     }
 
     @Override
-    public void onRandomLadderClick(){
+    public void onRandomLadderClick() {
         int ladderTop = ThreadLocalRandom.current().nextInt(3, 99);
         int ladderLength = ThreadLocalRandom.current().nextInt(1, 30);
         int ladderBase = ladderTop - ladderLength;
@@ -81,7 +83,9 @@ public class GameController
 
     @Override
     public void onStartClick() {
+        //quickAdd();
         if (gameModel.isGameReady()) {
+
             gameView.hideSettingPanel();
             gameView.showTurnPanel();
             gameModel.setGameStage(GameStage.SECOND);
@@ -90,9 +94,48 @@ public class GameController
             gameView.updateGuardNo();
             gameView.updateStage(gameModel.getGameStage());
             gameView.updateTurnNo(gameModel.getNumOfTurns());
+
+            //changeData();
+
         } else {
             gameView.showErrorDialog("Make sure you add snakes, ladders and humans before start the game.");
         }
+    }
+
+    private void quickAdd() {
+        onRandomSnakeClick();
+        onRandomSnakeClick();
+        onRandomSnakeClick();
+        onRandomSnakeClick();
+        onRandomSnakeClick();
+        onRandomLadderClick();
+        onRandomLadderClick();
+        onRandomLadderClick();
+        onRandomLadderClick();
+        onRandomLadderClick();
+        onAddHumansClick();
+    }
+
+    private void changeData() {
+        gameModel.movePlayer(0, 6);
+        gameModel.movePlayer(1, 4);
+        gameModel.movePlayer(2, 3);
+        gameModel.movePlayer(3, 1);
+        gameModel.addGuard(25);
+        gameModel.addGuard(33);
+        gameModel.addGuard(46);
+    }
+
+    @Override
+    public void onSaveClick() {
+        SaveLoadGame saveLoadGame = new SaveLoadGame((GameModelImpl) gameModel);
+        saveLoadGame.saveGame();
+    }
+
+    @Override
+    public void onLoadClick() {
+        SaveLoadGame saveLoadGame = new SaveLoadGame((GameModelImpl) gameModel, gameView);
+        saveLoadGame.loadGame();
     }
 
     @Override
@@ -104,7 +147,7 @@ public class GameController
     }
 
     @Override
-    public void onDiceShow(){
+    public void onDiceShow() {
         gameView.showDicePanel();
     }
 
@@ -124,10 +167,10 @@ public class GameController
     }
 
     @Override
-    public String onSnakeMove(int snake, int steps){
+    public String onSnakeMove(int snake, int steps) {
         String s = gameModel.moveSnake(snake, steps);
         System.out.println(s);
-        if (s!=null){
+        if (s != null) {
             gameView.showErrorDialog(s);
             return s;
         } else {
@@ -135,7 +178,6 @@ public class GameController
             gameView.updateTurnNo(gameModel.getNumOfTurns());
             return null;
         }
-
 
     }
 

@@ -59,6 +59,10 @@ public class GameContract {
 
         void onStartClick();
 
+        void onSaveClick();
+
+        void onLoadClick();
+
         void onRandomSnakeClick();
 
         void onRandomLadderClick();
@@ -119,6 +123,8 @@ public class GameContract {
         List<Human> getHumanList();
 
         List<Snake> getSnakeList();
+
+        List<Ladder> getLadderList();
     }
 
     public interface DataChangedListener {

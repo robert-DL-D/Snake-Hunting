@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 public class TurnPanel
         extends JPanel
         implements ActionListener {
+    private final String saveGameString = "Save Game";
 
     private final String turnNoString = "Turn No: %s /50";
     private final String stageLabelString = "Stage: ";
@@ -41,12 +42,17 @@ public class TurnPanel
     private JLabel guardLabel;
     private StringBuilder sb = new StringBuilder();
 
-
+    private JButton saveGameButton;
     public TurnPanel(ActionListener listener, GameModel gameModel) {
         this.listener = listener;
         this.gameModel = gameModel;
 
         setSize(150, 400);
+
+        saveGameButton = new JButton(saveGameString);
+        saveGameButton.setPreferredSize(new Dimension(150, 50));
+        saveGameButton.addActionListener(this);
+        add(saveGameButton);
 
         stageNoLabel = new JLabel((stageLabelString + gameModel.getGameStage()));
         stageNoLabel.setPreferredSize(new Dimension(150, 25));
@@ -81,7 +87,6 @@ public class TurnPanel
         } else {
             showHumanButtons();
         }
-
         turntakerLabel.setText(playerturnString + s);
     }
 

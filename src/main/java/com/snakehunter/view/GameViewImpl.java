@@ -27,7 +27,7 @@ import javax.swing.JTextField;
 public class GameViewImpl
         extends JFrame
         implements GameContract.GameView,
-                   ActionListener {
+        ActionListener {
 
     private GameModel gameModel;
 
@@ -104,7 +104,7 @@ public class GameViewImpl
         pane.add(tailField);
 
         int option = JOptionPane.showConfirmDialog(this, pane, "Add Snake", JOptionPane.OK_CANCEL_OPTION,
-                                                   JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.INFORMATION_MESSAGE);
 
         if (option == JOptionPane.OK_OPTION) {
             String headInput = headField.getText();
@@ -135,7 +135,7 @@ public class GameViewImpl
         pane.add(baseField);
 
         int option = JOptionPane.showConfirmDialog(this, pane, "Add Ladder", JOptionPane.OK_CANCEL_OPTION,
-                                                   JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.INFORMATION_MESSAGE);
 
         if (option == JOptionPane.OK_OPTION) {
             String topInput = topField.getText();
@@ -153,7 +153,7 @@ public class GameViewImpl
 
     @Override
     public void showHumanBuilder() {
-        if (Main.isDebugMode()){
+        if (Main.isDebugMode()) {
             int numOfHumans;
 
             try {
@@ -169,7 +169,7 @@ public class GameViewImpl
                 listener.onNumOfHumansEntered(numOfHumans);
             }
         } else {
-            if (listener != null){
+            if (listener != null) {
                 listener.onNumOfHumansEntered(4);
             }
         }
@@ -182,16 +182,16 @@ public class GameViewImpl
     }
 
     @Override
-    public void showTurnPanel(){
+    public void showTurnPanel() {
         turnPanel.setVisible(true);
     }
 
     @Override
-    public void hideTurnPanel(){
+    public void hideTurnPanel() {
         turnPanel.setVisible(false);
     }
 
-    public void updateTurnNo(int turnNo){
+    public void updateTurnNo(int turnNo) {
         turnPanel.updateTurnNo(turnNo);
     }
 
@@ -206,14 +206,15 @@ public class GameViewImpl
     }
 
     @Override
-    public void hideDicePanel(){
+    public void hideDicePanel() {
         diceView.setVisible(false);
     }
 
     @Override
-    public void showDicePanel(){
+    public void showDicePanel() {
         diceView.setVisible(true);
     }
+
     @Override
     public void hideSettingPanel() {
         settingPanel.setVisible(false);
@@ -235,7 +236,7 @@ public class GameViewImpl
     //region GameModel interaction
     @Override
     public void onSnakeAdded(Snake snake) {
-        //gameModel.addSnake(snake);
+        boardView.addSnake(snake);
     }
 
     @Override
@@ -279,7 +280,7 @@ public class GameViewImpl
     }
 
     @Override
-    public void onSnakeMoved(){
+    public void onSnakeMoved() {
         boardView.drawSnake(boardView.getGraphics(), gameModel.getSnakeList());
     }
 
@@ -297,44 +298,50 @@ public class GameViewImpl
         }
 
         switch (e.getActionCommand()) {
-        case "Add Snake":
-            listener.onAddSnakeClick();
-            break;
-        case "Add Ladder":
-            listener.onAddLadderClick();
-            break;
-        case "Add Humans":
-            listener.onAddHumansClick();
-            break;
-        case "Start":
-            listener.onStartClick();
-            break;
-        case "Add Random Snake":
-            listener.onRandomSnakeClick();
-            break;
-        case "Add Random Ladder":
-            listener.onRandomLadderClick();
-            break;
-        case "Move Up":
-            listener.onSnakeMove(0, 0);
-            break;
-        case "Move Down":
-            listener.onSnakeMove(0, 1);
-            break;
-        case "Move Left":
-            listener.onSnakeMove(0, 2);
-            break;
-        case "Move Right":
-            listener.onSnakeMove(0, 3);
-            break;
-        case "Roll Dice":
-            listener.onDiceShow();
-            break;
-        case "Place Guard":
-            listener.onPlaceGuard();
-            break;
-        default:
-            break;
+            case "Add Snake":
+                listener.onAddSnakeClick();
+                break;
+            case "Add Ladder":
+                listener.onAddLadderClick();
+                break;
+            case "Add Humans":
+                listener.onAddHumansClick();
+                break;
+            case "Start":
+                listener.onStartClick();
+                break;
+            case "Add Random Snake":
+                listener.onRandomSnakeClick();
+                break;
+            case "Add Random Ladder":
+                listener.onRandomLadderClick();
+                break;
+            case "Move Up":
+                listener.onSnakeMove(0, 0);
+                break;
+            case "Move Down":
+                listener.onSnakeMove(0, 1);
+                break;
+            case "Move Left":
+                listener.onSnakeMove(0, 2);
+                break;
+            case "Move Right":
+                listener.onSnakeMove(0, 3);
+                break;
+            case "Roll Dice":
+                listener.onDiceShow();
+                break;
+            case "Place Guard":
+                listener.onPlaceGuard();
+                break;
+            case "Save Game":
+                listener.onSaveClick();
+                break;
+            case "Load Game":
+                listener.onLoadClick();
+                break;
+            default:
+                break;
         }
     }
 

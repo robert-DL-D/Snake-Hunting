@@ -23,7 +23,7 @@ public class LoginViewTest {
     @Test
     public void successLoginTest() {
 
-        loginView.setUsernameTxtF("Human");
+        loginView.setUsernameTxtF("human");
         loginView.setPasswordTxtF("password");
         loginView.validateLogin();
 
@@ -35,8 +35,8 @@ public class LoginViewTest {
     @Test
     public void successLoginTest2() {
 
-        loginView.setUsernameTxtF("Snake");
-        loginView.setPasswordTxtF("Hunter2");
+        loginView.setUsernameTxtF("HuMaN");
+        loginView.setPasswordTxtF("password");
         loginView.validateLogin();
 
         assertTrue(loginView.isLoginSuccess());
@@ -48,7 +48,7 @@ public class LoginViewTest {
     public void wrongCaseLoginTest() {
 
         loginView.setUsernameTxtF("human");
-        loginView.setPasswordTxtF("password");
+        loginView.setPasswordTxtF("Password");
         loginView.validateLogin();
 
         assertTrue(loginView.isLoginSuccess());
@@ -132,7 +132,7 @@ public class LoginViewTest {
     @Test
     public void createExistingAccountTest() {
 
-        loginView.setNewUsernameTxtF("Human");
+        loginView.setNewUsernameTxtF("human");
         loginView.setNewPasswordTxtF("password");
         loginView.createNewAccount();
 

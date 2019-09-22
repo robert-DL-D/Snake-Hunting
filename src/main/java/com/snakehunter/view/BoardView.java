@@ -1,10 +1,10 @@
 package com.snakehunter.view;
 
 import com.snakehunter.GameContract.GameModel;
+import com.snakehunter.model.Square;
 import com.snakehunter.model.piece.Human;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Snake;
-import com.snakehunter.model.Square;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -52,18 +52,24 @@ public class BoardView
 
     private GameModel gameModel;
 
+    private List<Snake> snakeList;
+
     private List<Ladder> ladderList;
 
     public BoardView(GameModel gameModel) {
         this.gameModel = gameModel;
 
         setSize(440, 440);
+
+        snakeList = new ArrayList<>();
         ladderList = new ArrayList<>();
 
         new Thread(this).start();
     }
 
-
+    public void addSnake(Snake snake) {
+        snakeList.add(snake);
+    }
 
     public void addLadder(Ladder ladder) {
         ladderList.add(ladder);
@@ -86,20 +92,20 @@ public class BoardView
 
         Square[][] localSquares = gameModel.getSquares();
 
-        for(int i=0; i < localSquares.length ; i++){
-            for (int j=0; j < localSquares[0].length ; j++){
+        for (int i = 0; i < localSquares.length; i++) {
+            for (int j = 0; j < localSquares[0].length; j++) {
 
                 //System.out.println(i + " " + j);
-                if (localSquares[i][9 - j].getSquareNo() % 2 == 0){
+                if (localSquares[i][9 - j].getSquareNo() % 2 == 0) {
                     graphics.setColor(boardColor1);
                 } else {
                     graphics.setColor(boardColor2);
                 }
 
-                if (localSquares[i][9 - j].getPieceList().size() != 0){
-                    if (localSquares[i][9 - j].getSnake()!= null) {
+                if (localSquares[i][9 - j].getPieceList().size() != 0) {
+                    if (localSquares[i][9 - j].getSnake() != null) {
                         graphics.setColor(snakeHeadHereColor);
-                    } else if (localSquares[i][9 - j].getLadder() != null){
+                    } else if (localSquares[i][9 - j].getLadder() != null) {
                         graphics.setColor(ladderBaseHereColor);
                     }
                 }
@@ -110,15 +116,13 @@ public class BoardView
 
                 graphics.fillRect(i * 40 + 20, j * 40 + 20, 40, 40);
                 graphics.setColor(boardNumberColor);
-                graphics.drawString(Integer.toString(localSquares[i][9-j].getSquareNo()), i * 40 + 20, j * 40 + 40);
+                graphics.drawString(Integer.toString(localSquares[i][9 - j].getSquareNo()), i * 40 + 20, j * 40 + 40);
             }
         }
-
 
 //        for (int i = 0; i < 100; i++) {
 //            graphics.drawString("" + (i + 1), getX(i + 1), getY(i + 1) + 20);
 //        }
-
 
         for (Ladder ladder : ladderList) {
             drawLadder(graphics, ladder);
@@ -129,16 +133,14 @@ public class BoardView
         drawSnake(graphics, gameModel.getSnakeList());
     }
 
-
-
-    protected void drawSnake(Graphics g, List <Snake> snakeList) {
+    protected void drawSnake(Graphics g, List<Snake> snakeList) {
 
         for (int j = 01; j <= snakeList.size(); j++) {
 
-            int headX = getX(snakeList.get(j-1).getPosition());
-            int headY = getY(snakeList.get(j-1).getPosition());
-            int tailX = getX(snakeList.get(j-1).getConnectedPosition());
-            int tailY = getY(snakeList.get(j-1).getConnectedPosition());
+            int headX = getX(snakeList.get(j - 1).getPosition());
+            int headY = getY(snakeList.get(j - 1).getPosition());
+            int tailX = getX(snakeList.get(j - 1).getConnectedPosition());
+            int tailY = getY(snakeList.get(j - 1).getConnectedPosition());
 
             int steps =
                     (int) Math.sqrt((tailY - headY) * (tailY - headY) + (tailX - headX) * (tailX - headX)) / 150 * 18 +
@@ -218,20 +220,19 @@ public class BoardView
         dx /= dist;
         dy /= dist;
 
-
         int ladderWidth = 5;
         int rungMin = 3;
         int rungMax = 40;
         int rungSpacing = 10;
         //
         //int rungNo = int(constrain(dist/rungSpacing, rungMin, rungMax));
-        int rungNo = (int)Math.min(rungMax, Math.max((int)dist/rungSpacing, rungMin));
+        int rungNo = (int) Math.min(rungMax, Math.max((int) dist / rungSpacing, rungMin));
 
         int firstxpoint = 0;
         int firstypoint = 0;
         int thirdxpoint = 0;
         int thirdypoint = 0;
-        int secondxpoint= 0;
+        int secondxpoint = 0;
         int secondypoint = 0;
         int fourthxpoint = 0;
         int fourthypoint = 0;
@@ -242,24 +243,23 @@ public class BoardView
             double ypoint = bottomY + rawdY / rungNo * i;
 
             if (i == 0) {
-                firstxpoint = (int)(xpoint + ladderWidth * dy);
-                firstypoint = (int)(ypoint - ladderWidth * dx);
-                thirdxpoint = (int)(xpoint - ladderWidth * dy);
-                thirdypoint = (int)(ypoint + ladderWidth * dx);
+                firstxpoint = (int) (xpoint + ladderWidth * dy);
+                firstypoint = (int) (ypoint - ladderWidth * dx);
+                thirdxpoint = (int) (xpoint - ladderWidth * dy);
+                thirdypoint = (int) (ypoint + ladderWidth * dx);
             } else if (i == rungNo - 1) {
-                secondxpoint = (int)(xpoint + ladderWidth * dy);
-                secondypoint = (int)(ypoint - ladderWidth * dx);
-                fourthxpoint = (int)(xpoint - ladderWidth * dy);
-                fourthypoint = (int)(ypoint + ladderWidth * dx);
+                secondxpoint = (int) (xpoint + ladderWidth * dy);
+                secondypoint = (int) (ypoint - ladderWidth * dx);
+                fourthxpoint = (int) (xpoint - ladderWidth * dy);
+                fourthypoint = (int) (ypoint + ladderWidth * dx);
 
             } else {
-                g.drawLine((int)(xpoint + ladderWidth * dy), (int)(ypoint - ladderWidth * dx), (int)(xpoint - ladderWidth * dy), (int)(ypoint + ladderWidth * dx));
+                g.drawLine((int) (xpoint + ladderWidth * dy), (int) (ypoint - ladderWidth * dx), (int) (xpoint - ladderWidth * dy), (int) (ypoint + ladderWidth * dx));
             }
         }
 
         g.drawLine(firstxpoint, firstypoint, secondxpoint, secondypoint);
         g.drawLine(thirdxpoint, thirdypoint, fourthxpoint, fourthypoint);
-
 
         Polygon p = new Polygon();
         p.addPoint(firstxpoint, firstypoint);
@@ -267,18 +267,16 @@ public class BoardView
         p.addPoint(fourthxpoint, fourthypoint);
         p.addPoint(thirdxpoint, thirdypoint);
 
-
         Color temp = new Color(ladderColor.getRed(), ladderColor.getGreen(), ladderColor.getBlue(), 64);
 
         g.setColor(temp);
         g.drawPolygon(p);
         g.fillPolygon(p);
 
-
     }
 
     private void drawHumans(Graphics g, List<Human> humanList) {
-        Color[] color = new Color[] {piece1Color, piece2Color, piece3Color, piece4Color};
+        Color[] color = new Color[]{piece1Color, piece2Color, piece3Color, piece4Color};
 
         for (int i = 1; i <= humanList.size(); i++) {
             g.setColor(color[i - 1]);
@@ -309,7 +307,7 @@ public class BoardView
 
             g.setColor(Color.BLACK);
             g.drawString(String.valueOf(i), getX(humanPosition) - (xOffset - 5),
-                         getY(humanPosition) + (-yOffset + 15));
+                    getY(humanPosition) + (-yOffset + 15));
         }
     }
 
