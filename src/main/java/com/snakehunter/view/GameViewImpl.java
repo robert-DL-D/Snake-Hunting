@@ -193,7 +193,7 @@ public class GameViewImpl
     //region GameModel interaction
     @Override
     public void onSnakeAdded(Snake snake) {
-        boardView.addSnake(snake);
+        gameModel.addSnake(snake);
     }
 
     @Override

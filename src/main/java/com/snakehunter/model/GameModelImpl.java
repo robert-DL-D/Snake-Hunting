@@ -64,6 +64,7 @@ public class GameModelImpl
         }
 
         snakePlayer.addPiece(snake);
+
         square.addPiece(snake);
 
         if (listener != null) {
@@ -337,6 +338,10 @@ public class GameModelImpl
     @Override
     public List<Human> getHumanList() {
         return humanPlayer.getPieceList();
+    }
+
+    public List<Snake> getSnakeList(){
+        return snakePlayer.getPieceList();
     }
 
     //endregion

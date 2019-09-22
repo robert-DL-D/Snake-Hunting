@@ -95,6 +95,8 @@ public class GameContract {
         void setNumOfGuards(int num);
 
         List<Human> getHumanList();
+
+        List<Snake> getSnakeList();
     }
 
     public interface DataChangedListener {
