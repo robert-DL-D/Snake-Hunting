@@ -199,7 +199,7 @@ public class GameModelImpl
         snakePlayer = new Player<>("Snake Player");
     }
 
-    private void initHumans(int numOfHumans) {
+    void initHumans(int numOfHumans) {
         humanPlayer.getPieceList().clear();
 
         Square startSquare = squares[0][0];
