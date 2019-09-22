@@ -90,7 +90,6 @@ public class GameController
             gameView.showTurnPanel();
             gameModel.setGameStage(GameStage.SECOND);
             gameModel.nextTurn();
-            gameModel.setNumOfGuards(3);
             gameView.updateGuardNo();
             gameView.updateStage(gameModel.getGameStage());
             gameView.updateTurnNo(gameModel.getNumOfTurns());
@@ -159,7 +158,6 @@ public class GameController
 
     @Override
     public void onDiceRolled(int player, int num) {
-
         gameModel.movePlayer(player, num);
         gameModel.nextTurn();
         gameView.updateTurnNo(gameModel.getNumOfTurns());

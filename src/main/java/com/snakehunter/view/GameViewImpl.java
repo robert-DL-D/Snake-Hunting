@@ -224,7 +224,7 @@ public class GameViewImpl
     public void showGuardPlacer(){
         try {
             int squareNo = Integer.parseInt(JOptionPane.showInputDialog("Enter square number to place guard on:"));
-            gameModel.placeGuard(squareNo);
+            gameModel.addGuard(squareNo);
 
         } catch (Exception e){
             showErrorDialog("Enter a valid square number");
@@ -257,7 +257,6 @@ public class GameViewImpl
     @Override
     public void onGuardAdded(int position) {
         gameModel.nextTurn();
-        gameModel.setNumOfGuards(gameModel.getNumOfGuards() -1);
         turnPanel.updateGuardNo();
         turnPanel.updateTurnNo(gameModel.getNumOfTurns());
         turnPanel.updateStage(gameModel.getGameStage());

@@ -103,8 +103,6 @@ public class GameContract {
 
         void nextTurn();
 
-        boolean placeGuard(int squareNo);
-
         void movePlayer(int index, int steps);
 
         String moveSnake(int index, int steps);
@@ -115,7 +113,7 @@ public class GameContract {
 
         int getNumOfTurns();
 
-        int getNumOfGuards();
+        int getRemainingGuards();
 
         // Test only
         void setNumOfGuards(int num);

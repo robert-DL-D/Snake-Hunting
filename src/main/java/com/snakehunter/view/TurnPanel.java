@@ -67,7 +67,7 @@ public class TurnPanel
 
         guardLabel = new JLabel();
         guardLabel.setPreferredSize(new Dimension(150, 25));
-        guardLabel.setText(humanGuardString + gameModel.getNumOfGuards());
+        guardLabel.setText(humanGuardString + gameModel.getRemainingGuards());
         add(guardLabel);
 
         turntakerLabel = new JLabel(playerturnString + gameModel.getCurrentPlayer());
@@ -91,7 +91,7 @@ public class TurnPanel
     }
 
     public void updateGuardNo(){
-        guardLabel.setText(humanGuardString + gameModel.getNumOfGuards());
+        guardLabel.setText(humanGuardString + gameModel.getRemainingGuards());
     }
 
     @Override

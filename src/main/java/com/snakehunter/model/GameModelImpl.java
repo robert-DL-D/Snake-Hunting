@@ -99,6 +99,7 @@ public class GameModelImpl
             return;
         }
 
+        numOfGuards++;
         Square square = getSquare(position);
         square.setGuarded(true);
 
@@ -136,22 +137,12 @@ public class GameModelImpl
     @Override
     public void nextTurn() {
         numOfTurns++;
-        for(Human h : getHumanList()){
+        for (Human h : getHumanList()) {
             h.isParalyzed();
         }
 
         if (listener != null) {
             listener.onNextTurn(getCurrentPlayer());
-        }
-    }
-
-    public boolean placeGuard(int squareNo){
-        try {
-            getSquare(squareNo).setGuarded(true);
-            listener.onGuardAdded(squareNo);
-            return true;
-        } catch (Exception e){
-            return false;
         }
     }
 
@@ -365,8 +356,8 @@ public class GameModelImpl
     }
 
     @Override
-    public int getNumOfGuards(){
-        return numOfGuards;
+    public int getRemainingGuards() {
+        return MAX_GUARDS - numOfGuards;
     }
 
     public List<Snake> getSnakeList() {
