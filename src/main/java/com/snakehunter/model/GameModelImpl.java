@@ -153,13 +153,14 @@ public class GameModelImpl
     }
 
     @Override
-    public void moveSnake(int index, int steps) {
+    public String moveSnake(int index, int steps) {
         try {
             String s = snakePlayer.getPiece(0).move(squares, steps);
-            System.out.println(s);
+            return s;
         } catch (Exception e){
             e.printStackTrace();
         }
+        return null;
     }
     //endregion
 
