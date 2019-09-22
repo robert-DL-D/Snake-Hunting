@@ -101,9 +101,16 @@ public class GameController
         gameView.rollTheDice();
     }
 
+    @Override
     public void onDiceShow(){
         gameView.showDicePanel();
     }
+
+    @Override
+    public void onPlaceGuard(){
+        gameView.showGuardPlacer();
+    }
+
 
     @Override
     public void onDiceRolled(int player, int num) {

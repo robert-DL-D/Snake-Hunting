@@ -36,6 +36,10 @@ public class Human
         }
     }
 
+    public int getParalyzeTurns(){
+        return paralyzedTurns;
+    }
+
     /**
      * First: Move human piece by the number rolled from dice.
      * Second: Move this human piece to connected position if the human land on a Snake or Ladder

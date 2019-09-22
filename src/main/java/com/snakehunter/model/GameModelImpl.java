@@ -137,9 +137,22 @@ public class GameModelImpl
     @Override
     public void nextTurn() {
         numOfTurns++;
+        for(Human h : getHumanList()){
+            h.isParalyzed();
+        }
 
         if (listener != null) {
             listener.onNextTurn(getCurrentPlayer());
+        }
+    }
+
+    public boolean placeGuard(int squareNo){
+        try {
+            getSquare(squareNo).setGuarded(true);
+            listener.onGuardAdded(squareNo);
+            return true;
+        } catch (Exception e){
+            return false;
         }
     }
 

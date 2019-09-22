@@ -31,6 +31,8 @@ public class GameContract {
 
         void showTurnPanel();
 
+        void showGuardPlacer();
+
         void hideTurnPanel();
 
         void updateTurnNo(int turnNo);
@@ -63,6 +65,8 @@ public class GameContract {
 
         void onDiceShow();
 
+        void onPlaceGuard();
+
         void onDiceRolled(int player, int num);
 
         String onSnakeMove(int snake, int steps);
@@ -92,6 +96,8 @@ public class GameContract {
         boolean isGameReady();
 
         void nextTurn();
+
+        boolean placeGuard(int squareNo);
 
         void movePlayer(int index, int steps);
 

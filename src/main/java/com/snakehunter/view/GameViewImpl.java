@@ -213,12 +213,24 @@ public class GameViewImpl
     public void hideSettingPanel() {
         settingPanel.setVisible(false);
     }
+
+    @Override
+    public void showGuardPlacer(){
+        try {
+            int squareNo = Integer.parseInt(JOptionPane.showInputDialog("Enter square number to place guard on:"));
+            gameModel.placeGuard(squareNo);
+
+        } catch (Exception e){
+            showErrorDialog("Enter a valid square number");
+        }
+
+    }
     //endregion
 
     //region GameModel interaction
     @Override
     public void onSnakeAdded(Snake snake) {
-        gameModel.addSnake(snake);
+        //gameModel.addSnake(snake);
     }
 
     @Override
@@ -238,6 +250,11 @@ public class GameViewImpl
 
     @Override
     public void onGuardAdded(int position) {
+        gameModel.nextTurn();
+        turnPanel.updateTurnNo(gameModel.getNumOfTurns());
+        turnPanel.updateStage(gameModel.getGameStage());
+        turnPanel.repaint();
+        System.out.println("test");
     }
 
     @Override
@@ -304,6 +321,9 @@ public class GameViewImpl
             break;
         case "Roll Dice":
             listener.onDiceShow();
+            break;
+        case "Place Guard":
+            listener.onPlaceGuard();
             break;
         default:
             break;
