@@ -199,6 +199,9 @@ public class GameModelImpl
         }
     }
 
+    // FIXME Validation is not handling this scenario:
+    // When snake 2's head is the same as snake 1's tail
+    // eg: snake 1 (60,40) and snake 2 (40,20)
     private String validateSnake(Snake snake) {
         String errorMessage = null;
 
