@@ -61,7 +61,9 @@ public class GameViewImpl
 
         turnPanel = new TurnPanel(this, gameModel);
         turnPanel.setLocation(450, 20);
+        turnPanel.setVisible(false);
         contentPane.add(turnPanel);
+
 
         setVisible(true);
     }
@@ -287,6 +289,13 @@ public class GameViewImpl
     @Override
     public void onNumOfHumansEnteredError() {
         showErrorDialog("Please enter a number between 2 ~ 4.");
+    }
+    //endregion
+
+
+    //region Getters
+    public TurnPanel getTurnPanel(){
+        return turnPanel;
     }
     //endregion
 

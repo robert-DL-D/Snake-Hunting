@@ -5,6 +5,7 @@ import com.snakehunter.model.piece.Human;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Player;
 import com.snakehunter.model.piece.Snake;
+import com.snakehunter.view.TurnPanel;
 
 import java.util.List;
 
@@ -42,6 +43,8 @@ public class GameContract {
         void updateGuardNo();
 
         void hideSettingPanel();
+
+        TurnPanel getTurnPanel();
 
         void setOnViewEventListener(ViewEventListener listener);
     }

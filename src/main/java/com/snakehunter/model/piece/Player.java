@@ -17,6 +17,10 @@ public class Player<T> {
         pieceList = new ArrayList<>();
     }
 
+    public boolean isSnake(){
+        return pieceList.get(0) instanceof Snake;
+    }
+
     public List<T> getPieceList() {
         return pieceList;
     }

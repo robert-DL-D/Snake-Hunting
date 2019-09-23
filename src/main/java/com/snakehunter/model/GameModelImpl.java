@@ -136,11 +136,13 @@ public class GameModelImpl
 
     @Override
     public void nextTurn() {
-        numOfTurns++;
-        for (Human h : getHumanList()) {
-            h.isParalyzed();
-        }
 
+        if (numOfTurns % 2 == 0){
+            for (Human h : getHumanList()) {
+                h.isParalyzed();
+            }
+        }
+        numOfTurns++;
         if (listener != null) {
             listener.onNextTurn(getCurrentPlayer());
         }
