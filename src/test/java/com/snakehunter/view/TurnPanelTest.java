@@ -90,16 +90,16 @@ public class TurnPanelTest {
 
         gameController.onDiceRolled(2, 3);
 
-        assertEquals("Turn No: 2/50", gameView.getTurnPanel().getTurnNoLabel().getText());
+        assertEquals("Turn No: 1/50", gameView.getTurnPanel().getTurnNoLabel().getText());
 
         gameController.onSnakeMove(2, 0);
 
-        assertEquals("Turn No: 3/50", gameView.getTurnPanel().getTurnNoLabel().getText());
+        assertEquals("Turn No: 2/50", gameView.getTurnPanel().getTurnNoLabel().getText());
 
         gameController.onDiceRolled(2, 3);
         gameController.onSnakeMove(2, 0);
 
-        assertEquals("Turn No: 5/50", gameView.getTurnPanel().getTurnNoLabel().getText());
+        assertEquals("Turn No: 3/50", gameView.getTurnPanel().getTurnNoLabel().getText());
     }
 
     @Test
@@ -114,7 +114,6 @@ public class TurnPanelTest {
         int initPosition = pieces.get(3).getPosition();
         gameController.onDiceRolled(3, 5);
         assertEquals(initPosition + 5, pieces.get(3).getPosition());
-
     }
 
     @After

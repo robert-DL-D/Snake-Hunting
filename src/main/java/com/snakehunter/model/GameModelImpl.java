@@ -143,6 +143,20 @@ public class GameModelImpl
             }
         }
         numOfTurns++;
+
+        if (numOfTurns >= getGameStage().getMaxTurns()){
+            listener.onGameOver(snakePlayer);
+        }
+        if (getGameStage() == GameStage.SECOND){
+            for(Human h : getHumanList()){
+                System.out.println(h);
+                if (h.getPosition() > 99){
+                    listener.onFinalStage();
+                }
+            }
+        }
+
+
         if (listener != null) {
             listener.onNextTurn(getCurrentPlayer());
         }
@@ -197,7 +211,7 @@ public class GameModelImpl
 
         Square startSquare = squares[0][0];
         for (int i = 0; i < numOfHumans; i++) {
-            Human human = new Human(1);
+            Human human = new Human(90);
             humanPlayer.addPiece(human);
             startSquare.addPiece(human);
         }
@@ -368,6 +382,11 @@ public class GameModelImpl
 
     public List<Ladder> getLadderList() {
         return ladderList;
+    }
+
+    @Override
+    public void setNumOfTurns(int turns){
+        numOfTurns = turns;
     }
 
     //endregion

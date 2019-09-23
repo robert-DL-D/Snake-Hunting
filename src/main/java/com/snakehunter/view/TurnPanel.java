@@ -22,7 +22,7 @@ public class TurnPanel
         implements ActionListener {
     private final String saveGameString = "Save Game";
 
-    private final String turnNoString = "Turn No: %s/50";
+    private final String turnNoString = "Turn No: %s/%s";
     private final String stageLabelString = "Stage: ";
     private final String playerturnString = "Player turn: ";
     private final String humanGuardString = "Guards left: ";
@@ -58,7 +58,7 @@ public class TurnPanel
         stageNoLabel.setPreferredSize(new Dimension(150, 25));
         add(stageNoLabel);
 
-        sb.append(String.format("Turn No: %s 50", (int)(gameModel.getNumOfTurns() / 2)));
+        sb.append(String.format("Turn No: "));
         //gameModel.getNumOfTurns()
         turnNoLabel= new JLabel();
         turnNoLabel.setPreferredSize(new Dimension(150, 25));
@@ -80,7 +80,7 @@ public class TurnPanel
 
     public void updateTurnNo(int turnNo){
         sb = new StringBuilder();
-        sb.append(String.format(turnNoString, (int)Math.ceil(turnNo / 2.0)));
+        sb.append(String.format(turnNoString, (int)Math.ceil(turnNo / 2.0), (int)Math.ceil(gameModel.getGameStage().getMaxTurns() / 2.0)));
         turnNoLabel.setText(sb.toString());
         String s = "Human";
         if (gameModel.getCurrentPlayer().isSnake()){
@@ -109,6 +109,9 @@ public class TurnPanel
         for(JButton b : sButtons){
             remove(b);
         }
+        for(JButton b : hButtons){
+            remove(b);
+        }
         repaint();
         sButtons.clear();
         for (String buttonStr : humanButtons) {
@@ -122,6 +125,9 @@ public class TurnPanel
 
     private void showSnakeButtons(){
         for(JButton b : hButtons){
+            remove(b);
+        }
+        for(JButton b : sButtons){
             remove(b);
         }
         repaint();
