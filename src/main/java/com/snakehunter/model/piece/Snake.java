@@ -27,7 +27,6 @@ public class Snake
 
         if (steps == UP){
             if (moveUp(squares, currSquare) == true) {
-                //message = "Snake moved up to position " + getPosition();
                 message = null;
                 return message;
             }
@@ -38,7 +37,6 @@ public class Snake
         }
         else if (steps == DOWN){
             if(moveDown(squares, currSquare) == true) {
-                //message = "Snake moved down to position " + getPosition();
                 message = null;
                 return message;
             }
@@ -49,7 +47,6 @@ public class Snake
         }
         else if (steps == LEFT){
             if (moveLeft(squares, currSquare) == true) {
-                //message = "Snake moved left to position " + getPosition();
                 message = null;
                 return message;
             }
@@ -60,7 +57,6 @@ public class Snake
         }
         else if(steps == RIGHT){
             if (moveRight(squares, currSquare) == true) {
-                //message = "Snake moved right to position " + getPosition();
                 message = null;
                 return message;
             }

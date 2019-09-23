@@ -146,17 +146,6 @@ public class SnakeMoveTest {
     }
 
 
-    @Test
-    public void stringTest(){
-        String test = snake1.move(squares, 1);
-
-        String expected = "Snake moved down to position 58";
-
-        System.out.println(test);
-        assertEquals(expected, test);
-    }
-
-
     @After
     public void tearDown() throws Exception {
     }
