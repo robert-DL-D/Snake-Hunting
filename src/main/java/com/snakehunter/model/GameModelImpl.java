@@ -154,6 +154,13 @@ public class GameModelImpl
                     listener.onFinalStage();
                 }
             }
+        } else if (getGameStage() == GameStage.FINAL){
+            if (getHumanList().size() < 4){
+                listener.onGameOver(snakePlayer);
+            }
+            if (numOfTurns >= getGameStage().getMaxTurns()){
+                listener.onGameOver(humanPlayer);
+            }
         }
 
 
