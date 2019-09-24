@@ -86,6 +86,7 @@ public class GameController
         //quickAdd();
         if (gameModel.isGameReady()) {
 
+            gameView.hideGameOverPanel();
             gameView.hideSettingPanel();
             gameView.showTurnPanel();
             gameModel.setGameStage(GameStage.SECOND);
@@ -153,6 +154,7 @@ public class GameController
     @Override
     public void onPlaceGuard(){
         gameView.showGuardPlacer();
+        gameView.hideDicePanel();
     }
 
 
@@ -177,6 +179,14 @@ public class GameController
             return null;
         }
 
+    }
+
+    @Override
+    public void onFinalStage(){
+        gameModel.setGameStage(GameStage.FINAL);
+        gameModel.setNumOfTurns(1);
+        gameView.updateStage(GameStage.FINAL);
+        gameView.updateTurnNo(gameModel.getNumOfTurns());
     }
 
     @Override

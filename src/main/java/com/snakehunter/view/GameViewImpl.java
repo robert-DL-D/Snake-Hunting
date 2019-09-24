@@ -36,6 +36,7 @@ public class GameViewImpl
     private DiceView diceView;
     private SettingPanel settingPanel;
     private TurnPanel turnPanel;
+    private GameOverPanel gameOverPanel;
 
     public GameViewImpl(GameModel gameModel) {
         super("Snakes n Ladders!");
@@ -61,7 +62,14 @@ public class GameViewImpl
 
         turnPanel = new TurnPanel(this, gameModel);
         turnPanel.setLocation(450, 20);
+        turnPanel.setVisible(false);
         contentPane.add(turnPanel);
+
+        gameOverPanel = new GameOverPanel(this, gameModel);
+        gameOverPanel.setLocation(450, 20);
+        gameOverPanel.setVisible(false);
+        contentPane.add(gameOverPanel);
+
 
         setVisible(true);
     }
@@ -221,6 +229,22 @@ public class GameViewImpl
     }
 
     @Override
+    public void showSettingPanel(){
+        settingPanel.setVisible(true);
+    }
+
+    @Override
+    public void hideGameOverPanel() {
+        gameOverPanel.setVisible(false);
+    }
+
+    @Override
+    public void showGameOverPanel(Player p) {
+    gameOverPanel.setVisible(true);
+    gameOverPanel.updateWinner(p);
+    }
+
+    @Override
     public void showGuardPlacer(){
         try {
             int squareNo = Integer.parseInt(JOptionPane.showInputDialog("Enter square number to place guard on:"));
@@ -271,7 +295,15 @@ public class GameViewImpl
 
     @Override
     public void onNextTurn(Player player) {
-        diceView.setEnabled(true);
+        //diceView.setVisible(true);
+    }
+
+
+    @Override
+    public void onGameOver(Player winner){
+        hideDicePanel();
+        hideTurnPanel();
+        showGameOverPanel(winner);
     }
 
     @Override
@@ -283,10 +315,22 @@ public class GameViewImpl
         boardView.drawSnake(boardView.getGraphics(), gameModel.getSnakeList());
     }
 
+    @Override
+    public void onFinalStage() {
+        listener.onFinalStage();
+    }
+
 
     @Override
     public void onNumOfHumansEnteredError() {
         showErrorDialog("Please enter a number between 2 ~ 4.");
+    }
+    //endregion
+
+
+    //region Getters
+    public TurnPanel getTurnPanel(){
+        return turnPanel;
     }
     //endregion
 

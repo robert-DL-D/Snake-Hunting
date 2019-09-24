@@ -5,7 +5,7 @@ package com.snakehunter;
  * @date 2019-08-25
  */
 public enum GameStage {
-    INITIAL(0), SECOND(50), FINAL(20);
+    INITIAL(0), SECOND(100), FINAL(40);
 
     private int maxTurns;
 

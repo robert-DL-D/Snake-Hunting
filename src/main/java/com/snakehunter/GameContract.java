@@ -5,6 +5,7 @@ import com.snakehunter.model.piece.Human;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Player;
 import com.snakehunter.model.piece.Snake;
+import com.snakehunter.view.TurnPanel;
 
 import java.util.List;
 
@@ -43,6 +44,14 @@ public class GameContract {
 
         void hideSettingPanel();
 
+        void showSettingPanel();
+
+        void hideGameOverPanel();
+
+        void showGameOverPanel(Player p);
+
+        TurnPanel getTurnPanel();
+
         void setOnViewEventListener(ViewEventListener listener);
     }
 
@@ -78,6 +87,8 @@ public class GameContract {
         String onSnakeMove(int snake, int steps);
 
         void onNumOfHumansEntered(int numOfHumans);
+
+        void onFinalStage();
 
 
     }
@@ -118,6 +129,8 @@ public class GameContract {
         // Test only
         void setNumOfGuards(int num);
 
+        void setNumOfTurns(int num);
+
         List<Human> getHumanList();
 
         List<Snake> getSnakeList();
@@ -140,10 +153,14 @@ public class GameContract {
 
         void onNextTurn(Player player);
 
+        void onGameOver(Player winner);
+
         void onPlayerMoved(Player player, int destPosition);
 
         void onNumOfHumansEnteredError();
 
         void onSnakeMoved();
+
+        void onFinalStage();
     }
 }
