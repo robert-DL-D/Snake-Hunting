@@ -121,6 +121,9 @@ public class Human
     }
     //endregion
 
+    public void setParalyzedTurns(int paralyzedTurns) {
+        this.paralyzedTurns = paralyzedTurns;
+    }
 
     // Method for testing
     List<Ladder> getLadderClimbedList() {

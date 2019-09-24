@@ -1,5 +1,6 @@
 package com.snakehunter;
 
+import com.snakehunter.model.exceptions.InvalidDetailException;
 import com.snakehunter.view.LoginView;
 
 import org.junit.Before;
@@ -7,71 +8,107 @@ import org.junit.Test;
 
 import java.util.Random;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class LoginViewTest {
+    private static final String EMPTY_USERNAME = "";
+    private static final char[] EMPTY_PASSWORD = new char[0];
     private LoginView loginView;
 
     @Before
     public void setUp() {
         loginView = new LoginView();
-
     }
 
     // Start of Login Tests
+    private void assertEmptyLogin() {
+        assertEquals(EMPTY_USERNAME, loginView.getUsernameTxtF().getText());
+        assertArrayEquals(EMPTY_PASSWORD, loginView.getPasswordTxtF().getPassword());
+    }
+
     // Positive Test 1
     @Test
     public void successLoginTest() {
 
+        assertEmptyLogin();
+
         loginView.setUsernameTxtF("human");
         loginView.setPasswordTxtF("password");
-        loginView.validateLogin();
+
+        try {
+            loginView.validateLogin();
+        } catch (InvalidDetailException e) {
+            e.printStackTrace();
+        }
 
         assertTrue(loginView.isLoginSuccess());
-
     }
 
     // Positive Test 2
     @Test
     public void successLoginTest2() {
 
+        assertEmptyLogin();
+
         loginView.setUsernameTxtF("HuMaN");
         loginView.setPasswordTxtF("password");
-        loginView.validateLogin();
+
+        try {
+            loginView.validateLogin();
+        } catch (InvalidDetailException e) {
+            e.printStackTrace();
+        }
 
         assertTrue(loginView.isLoginSuccess());
-
     }
 
     // Negative Test 1
     @Test
     public void wrongCaseLoginTest() {
 
+        assertEmptyLogin();
+
         loginView.setUsernameTxtF("human");
         loginView.setPasswordTxtF("Password");
-        loginView.validateLogin();
+        try {
+            loginView.validateLogin();
+        } catch (InvalidDetailException e) {
+            e.printStackTrace();
+        }
 
-        assertTrue(loginView.isLoginSuccess());
-
+        assertFalse(loginView.isLoginSuccess());
     }
 
     // Negative Test 2
     @Test
     public void emptyLoginTest() {
 
-        loginView.setUsernameTxtF("");
-        loginView.setPasswordTxtF("");
-        loginView.validateLogin();
+        assertEmptyLogin();
 
-        assertTrue(loginView.isLoginSuccess());
+        try {
+            loginView.validateLogin();
+        } catch (InvalidDetailException e) {
+            e.printStackTrace();
+        }
 
+        assertFalse(loginView.isLoginSuccess());
     }
     // End of Login Tests
 
     // Start of New Account Tests
+    private void assertEmptyNewAccount() {
+        assertEquals(EMPTY_USERNAME, loginView.getNewUsernameTxtF().getText());
+        assertArrayEquals(EMPTY_PASSWORD, loginView.getNewPasswordTxtF().getPassword());
+    }
+
     // Positive Test 1 & 2
     @Test
     public void createNewAccountAndLoginTest() {
+
+        assertEmptyNewAccount();
 
         String newAccountName = getRandomString();
         loginView.setNewUsernameTxtF(newAccountName);
@@ -79,20 +116,28 @@ public class LoginViewTest {
         String newAccountPW = getRandomString();
         loginView.setNewPasswordTxtF(newAccountPW);
 
-        loginView.createNewAccount();
+        try {
+            loginView.createNewAccount();
+        } catch (InvalidDetailException e) {
+            e.printStackTrace();
+        }
 
         assertTrue(loginView.isLoginSuccess());
 
         loginView.setUsernameTxtF(newAccountName);
         loginView.setPasswordTxtF(newAccountPW);
-        loginView.validateLogin();
+        try {
+            loginView.validateLogin();
+        } catch (InvalidDetailException e) {
+            e.printStackTrace();
+        }
 
         assertTrue(loginView.isLoginSuccess());
-
     }
 
     // For generating a random string length of 6 for both username and password
     private String getRandomString() {
+
         StringBuilder stringBuilder = new StringBuilder();
 
         Random random = new Random();
@@ -120,24 +165,37 @@ public class LoginViewTest {
     @Test
     public void emptyNewAccountTest() {
 
-        loginView.setNewUsernameTxtF("");
-        loginView.setNewPasswordTxtF("");
-        loginView.createNewAccount();
+        assertEmptyNewAccount();
 
-        assertTrue(loginView.isLoginSuccess());
+        try {
+            try {
+                loginView.createNewAccount();
+            } catch (InvalidDetailException e) {
+                e.printStackTrace();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
+        assertFalse(loginView.isLoginSuccess());
     }
 
     // Negative Test 2
     @Test
     public void createExistingAccountTest() {
 
+        assertEmptyNewAccount();
+
         loginView.setNewUsernameTxtF("human");
         loginView.setNewPasswordTxtF("password");
-        loginView.createNewAccount();
 
-        assertTrue(loginView.isLoginSuccess());
+        try {
+            loginView.createNewAccount();
+        } catch (InvalidDetailException ex) {
+            ex.printStackTrace();
+        }
 
+        assertFalse(loginView.isLoginSuccess());
     }
     // End of New Account Tests
 }

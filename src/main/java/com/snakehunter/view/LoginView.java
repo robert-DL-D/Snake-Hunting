@@ -3,6 +3,7 @@ package com.snakehunter.view;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import com.snakehunter.model.exceptions.InvalidDetailException;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -86,13 +87,37 @@ public class LoginView {
 
         importUsernamePassword();
 
-        loginButton.addActionListener(e -> validateLogin());
+        loginButton.addActionListener(e -> {
+            try {
+                validateLogin();
+            } catch (InvalidDetailException ex) {
+                ex.printStackTrace();
+            }
+        });
 
-        passwordTxtF.addActionListener(e -> validateLogin());
+        passwordTxtF.addActionListener(e -> {
+            try {
+                validateLogin();
+            } catch (InvalidDetailException ex) {
+                ex.printStackTrace();
+            }
+        });
 
-        newPasswordTxtF.addActionListener(e -> createNewAccount());
+        newPasswordTxtF.addActionListener(e -> {
+            try {
+                createNewAccount();
+            } catch (InvalidDetailException ex) {
+                ex.printStackTrace();
+            }
+        });
 
-        newAccountButton.addActionListener(e -> createNewAccount());
+        newAccountButton.addActionListener(e -> {
+            try {
+                createNewAccount();
+            } catch (InvalidDetailException ex) {
+                ex.printStackTrace();
+            }
+        });
 
         // This is to allow tabbing to go from Username to Password
         JFRAME.setFocusTraversalPolicy(new MyOwnFocusTraversalPolicy(getTextFieldsVector()));
@@ -140,7 +165,7 @@ public class LoginView {
         }
     }
 
-    public void createNewAccount() {
+    public void createNewAccount() throws InvalidDetailException {
 
         if (newUsernameTxtF.getText().length() != 0 && newPasswordTxtF.getPassword().length != 0) {
 
@@ -158,19 +183,15 @@ public class LoginView {
 
                 Entry<String, String> entry = iterator.next();
                 if (entry.getKey().equals(newUsername)) {
-                    newAccountMessages.setText("Username already exists");
-                    loginSuccess = false;
-                    break;
+                    throw new InvalidDetailException(newAccountMessages, "Username already exists");
                 } else if (!iterator.hasNext()) {
                     writeToFile();
                     setPlayerUsername(newUsername);
                     loginSuccess = true;
-
                 }
             }
         } else {
-            newAccountMessages.setText("Please fill in username or password");
-            loginSuccess = false;
+            throw new InvalidDetailException(newAccountMessages, "Please fill in username or password");
         }
     }
 
@@ -210,7 +231,7 @@ public class LoginView {
         newPasswordTxtF.setText("");
     }
 
-    public void validateLogin() {
+    public void validateLogin() throws InvalidDetailException {
         String username = usernameTxtF.getText().toUpperCase();
         String hashedPassword = hashPassword(passwordTxtF.getPassword());
 
@@ -222,8 +243,7 @@ public class LoginView {
                 loginSuccess = true;
                 break;
             } else if (!iterator.hasNext()) {
-                loginMessages.setText("Invalid username or password");
-                loginSuccess = false;
+                throw new InvalidDetailException(loginMessages, "Invalid username or password");
             }
         }
 
@@ -255,6 +275,22 @@ public class LoginView {
 
         //Get complete hashed password in hex format
         return sb.toString();
+    }
+
+    public JTextField getUsernameTxtF() {
+        return usernameTxtF;
+    }
+
+    public JPasswordField getPasswordTxtF() {
+        return passwordTxtF;
+    }
+
+    public JTextField getNewUsernameTxtF() {
+        return newUsernameTxtF;
+    }
+
+    public JPasswordField getNewPasswordTxtF() {
+        return newPasswordTxtF;
     }
 
     public void setUsernameTxtF(String username) {
@@ -511,6 +547,7 @@ public class LoginView {
         }
 
     }
+
 
 }
 

@@ -1,9 +1,9 @@
 humanName:getHumanName()
 snakeName:getSnakeName()
 stage:SECOND
-turnNumber:1
-playerTurn:Player
+turnNumber:16
 snakePos:49:52:2:4:40:65:78:88:2:25
 ladderPos:8:27:22:44:2:21:3:6:32:34
 piecePos:7:5:2:21
-snakeGuardPos:25:46:33
+pieceParalyzedTurnRemaining:0:0:0:3
+snakeGuardPos:87:46:-1

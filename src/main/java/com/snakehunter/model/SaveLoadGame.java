@@ -51,32 +51,34 @@ public class SaveLoadGame {
             fileWriter.write("turnNumber" + DELIMITER + gameModel.getNumOfTurns());
             fileWriter.write(System.lineSeparator());
 
-            fileWriter.write("playerTurn" + DELIMITER + gameModel.getCurrentPlayer().getClass().getSimpleName());
-            fileWriter.write(System.lineSeparator());
+            /*fileWriter.write("playerTurn" + DELIMITER + gameModel.getCurrentPlayer().getClass().getSimpleName());
+            fileWriter.write(System.lineSeparator());*/
 
             stringBuilder.append("snakePos");
             for (Snake snakeInList : gameModel.getSnakeList()) {
-                stringBuilder.append(DELIMITER).append(snakeInList.getConnectedPosition()).append(DELIMITER).append(snakeInList.getPosition());
+                stringBuilder.append(DELIMITER).append(snakeInList.getConnectedPosition()).append(DELIMITER)
+                             .append(snakeInList.getPosition());
             }
-            fileWriter.write(stringBuilder.toString());
-            stringBuilder.delete(0, stringBuilder.length());
-            fileWriter.write(System.lineSeparator());
+            writing(stringBuilder, fileWriter);
 
             stringBuilder.append("ladderPos");
             for (Ladder ladderInList : gameModel.getLadderList()) {
-                stringBuilder.append(DELIMITER).append(ladderInList.getPosition()).append(DELIMITER).append(ladderInList.getConnectedPosition());
+                stringBuilder.append(DELIMITER).append(ladderInList.getPosition()).append(DELIMITER)
+                             .append(ladderInList.getConnectedPosition());
             }
-            fileWriter.write(stringBuilder.toString());
-            stringBuilder.delete(0, stringBuilder.length());
-            fileWriter.write(System.lineSeparator());
+            writing(stringBuilder, fileWriter);
 
             stringBuilder.append("piecePos");
             for (Human humanInlist : gameModel.getHumanList()) {
                 stringBuilder.append(DELIMITER).append(humanInlist.getPosition());
             }
-            fileWriter.write(stringBuilder.toString());
-            stringBuilder.delete(0, stringBuilder.length());
-            fileWriter.write(System.lineSeparator());
+            writing(stringBuilder, fileWriter);
+
+            stringBuilder.append("pieceParalyzedTurnRemaining");
+            for (Human humanInlist : gameModel.getHumanList()) {
+                stringBuilder.append(DELIMITER).append(humanInlist.getParalyzeTurns());
+            }
+            writing(stringBuilder, fileWriter);
 
             stringBuilder.append("snakeGuardPos");
             Square[][] squares = gameModel.getSquares();
@@ -87,9 +89,7 @@ public class SaveLoadGame {
                     }
                 }
             }
-            fileWriter.write(stringBuilder.toString());
-            stringBuilder.delete(0, stringBuilder.length());
-            fileWriter.write(System.lineSeparator());
+            writing(stringBuilder, fileWriter);
 
             fileWriter.close();
 
@@ -100,7 +100,13 @@ public class SaveLoadGame {
         System.out.println("Game Saved");
     }
 
-    // FIXME After loadGame DicePanel gets drawn along with SettingPanel
+    private void writing(StringBuilder stringBuilder, FileWriter fileWriter) throws IOException {
+        fileWriter.write(stringBuilder.toString());
+        stringBuilder.delete(0, stringBuilder.length());
+        fileWriter.write(System.lineSeparator());
+    }
+
+    // FIXME Turn is not correctly loaded
     public void loadGame() {
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
@@ -114,33 +120,37 @@ public class SaveLoadGame {
                         break;
                     }
 
-                    stringArray = st.split(":");
+                    stringArray = st.split(DELIMITER);
                     //System.out.println(st);
 
                     switch (stringArray[0]) {
-                        case "humanName":
-                            break;
-                        case "snakeName":
-                            break;
-                        case "stage":
-                            setStage(stringArray[1]);
-                            break;
-                        case "turnNumber":
-                            setTurnNumber(stringArray[1]);
-                            break;
-                        case "playerTurn":
-                            break;
-                        case "snakePos":
-                            setSnakePos(stringArray);
-                            break;
-                        case "ladderPos":
-                            setLadderPos(stringArray);
-                            break;
-                        case "piecePos":
-                            setPiecePos(stringArray);
-                            break;
-                        case "snakeGuardPos":
-                            break;
+                    case "humanName":
+                        break;
+                    case "snakeName":
+                        break;
+                    case "stage":
+                        setStage(stringArray[1]);
+                        break;
+                    case "turnNumber":
+                        setTurnNumber(stringArray[1]);
+                        break;
+                        /*case "playerTurn":
+                            break;*/
+                    case "snakePos":
+                        setSnakePos(stringArray);
+                        break;
+                    case "ladderPos":
+                        setLadderPos(stringArray);
+                        break;
+                    case "piecePos":
+                        setPiecePos(stringArray);
+                        break;
+                    case "pieceParalyzedTurnRemaining":
+                        setParalyzedTurn(stringArray);
+                        break;
+                    case "snakeGuardPos":
+                        setGuardPos(stringArray);
+                        break;
                     }
 
                 } catch (IOException e) {
@@ -154,7 +164,10 @@ public class SaveLoadGame {
 
             System.out.println("Save file does not exists");
         }
+        gameView.hideSettingPanel();
+        gameView.showTurnPanel();
     }
+
 
     private void setStage(String stage) {
 
@@ -162,13 +175,21 @@ public class SaveLoadGame {
 
         if (stage.equals("SECOND")) {
             gameStage = GameStage.SECOND;
-        } else gameStage = GameStage.FINAL;
+        } else {
+            gameStage = GameStage.FINAL;
+        }
 
+        gameModel.setGameStage(gameStage);
         gameView.updateStage(gameStage);
     }
 
     private void setTurnNumber(String s) {
-        gameView.updateTurnNo(Integer.parseInt(s));
+        int turn = Integer.parseInt(s);
+        for (int i = 0; i < turn; i++) {
+            gameModel.nextTurn();
+        }
+        gameView.updateTurnNo(turn);
+
     }
 
     private void setSnakePos(String[] stringArray) {
@@ -180,7 +201,8 @@ public class SaveLoadGame {
 
     private void setLadderPos(String[] stringArray) {
         for (int i = 0; i < 5; i++) {
-            Ladder ladder = new Ladder(Integer.parseInt(stringArray[i * 2 + 1]), Integer.parseInt(stringArray[i * 2 + 2]));
+            Ladder ladder =
+                    new Ladder(Integer.parseInt(stringArray[i * 2 + 1]), Integer.parseInt(stringArray[i * 2 + 2]));
             gameModel.addLadder(ladder);
         }
     }
@@ -189,10 +211,32 @@ public class SaveLoadGame {
 
         gameModel.initHumans(4);
 
-        for (int i = 1; i < 5; i++) {
+        for (int i = 0; i < 4; i++) {
 
-            gameModel.getHumanList().get(i - 1).setPosition(Integer.parseInt(stringArray[i]));
+            gameModel.getHumanList().get(i).setPosition(Integer.parseInt(stringArray[i + 1]));
         }
+    }
+
+    private void setParalyzedTurn(String[] stringArray) {
+
+        for (int i = 0; i < 4; i++) {
+            gameModel.getHumanList().get(i).setParalyzedTurns(Integer.parseInt(stringArray[i + 1]));
+        }
+    }
+
+
+    private void setGuardPos(String[] stringArray) {
+
+        for (int i = 0; i < 3; i++) {
+
+            int guardPos = Integer.parseInt(stringArray[i + 1]);
+
+            if (guardPos != -1) {
+                gameModel.addGuard(guardPos);
+            }
+        }
+
+
     }
 
 }
