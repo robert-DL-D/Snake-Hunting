@@ -4,6 +4,7 @@ import com.snakehunter.model.Square;
 import com.snakehunter.model.exceptions.InvalidParamsException;
 import com.snakehunter.model.exceptions.LadderClimbedException;
 import com.snakehunter.model.exceptions.MaxClimbNumExceedException;
+import com.snakehunter.model.exceptions.MaxPositionExceedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,14 +37,16 @@ public class Human
         }
     }
 
-    public int getParalyzeTurns(){
+    public int getParalyzeTurns() {
         return paralyzedTurns;
     }
 
     /**
-     * First: Move human piece by the number rolled from dice.
-     * Second: Move this human piece to connected position if the human land on a Snake or Ladder
-     * Third: Paralyze this human piece if it swallowed by Snakes
+     * 1. Check params is valid
+     * 2. Check new position is not exceed 100
+     * 3. Move by the dice number
+     * 4. Move to Snake'stail / Ladder'stop if the piece lands on a Snake / Ladder
+     * 5. Paralyze the piece if it swallowed by a Snake
      *
      * @param squares
      *         board array
@@ -53,7 +56,7 @@ public class Human
      * @return Message about this movement
      */
     @Override
-    public String move(Square[][] squares, int steps) throws InvalidParamsException {
+    public String move(Square[][] squares, int steps) throws InvalidParamsException, MaxPositionExceedException {
         if (squares == null || steps < 0 || steps > 6) {
             throw new InvalidParamsException();
         }
@@ -66,6 +69,10 @@ public class Human
 
         // Calculate new position
         int newPosition = getPosition() + steps;
+        if (newPosition > 100) {
+            throw new MaxPositionExceedException();
+        }
+
         stringBuilder.append(String.format("Move to position %1s", newPosition));
 
         // Check if the destSquare has snakes or ladders

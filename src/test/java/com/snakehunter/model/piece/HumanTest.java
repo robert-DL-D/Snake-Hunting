@@ -4,6 +4,7 @@ import com.snakehunter.model.Square;
 import com.snakehunter.model.exceptions.InvalidParamsException;
 import com.snakehunter.model.exceptions.LadderClimbedException;
 import com.snakehunter.model.exceptions.MaxClimbNumExceedException;
+import com.snakehunter.model.exceptions.MaxPositionExceedException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +27,8 @@ public class HumanTest {
 
     //region test basic move
     @Test
-    public void givenMove1Steps_whenMoveCalled_thenHumanMoveCorrectly() throws InvalidParamsException {
+    public void givenHumanAtPosition1_whenMove1Step_thenHumanMoveCorrectly() throws InvalidParamsException,
+            MaxPositionExceedException {
         // given
         int steps = 1;
         Human human = new Human(1);
@@ -41,36 +43,151 @@ public class HumanTest {
     }
 
     @Test
-    public void givenMove6Steps_whenMoveCalled_thenHumanMoveCorrectly() throws InvalidParamsException {
+    public void givenHumanAtPosition99_whenMove1Steps_thenHumanMoveCorrectly() throws InvalidParamsException,
+            MaxPositionExceedException {
         // given
-        int steps = 6;
-        Human human = new Human(1);
+        int steps = 1;
+        Human human = new Human(99);
 
         // when
         String message = human.move(squares, steps);
 
         // then
-        assertTrue(getSquare(7).hasPiece(human));
-        assertEquals(7, human.getPosition());
-        assertEquals("Move to position 7", message);
+        assertTrue(getSquare(100).hasPiece(human));
+        assertEquals(100, human.getPosition());
+        assertEquals("Move to position 100", message);
+    }
+
+    @Test(expected = MaxPositionExceedException.class)
+    public void givenHumanAtPosition99_whenMove2Steps_thenThrowMaxPositionExceedException() throws
+            InvalidParamsException,
+            MaxPositionExceedException {
+        // given
+        int steps = 2;
+        Human human = new Human(99);
+
+        // when
+        human.move(squares, steps);
     }
 
     @Test(expected = InvalidParamsException.class)
-    public void givenNegativeSteps_whenMoveCalled_thenThrowException() throws InvalidParamsException {
+    public void givenNegativeSteps_whenMoveCalled_thenThrowException() throws InvalidParamsException,
+            MaxPositionExceedException {
         Human human = new Human(1);
         human.move(squares, -1);
     }
 
     @Test(expected = InvalidParamsException.class)
-    public void givenStepsGreaterThan6_whenMoveCalled_thenThrowException() throws InvalidParamsException {
+    public void givenStepsGreaterThan6_whenMoveCalled_thenThrowException() throws InvalidParamsException,
+            MaxPositionExceedException {
         Human human = new Human(1);
         human.move(null, 7);
     }
 
     @Test(expected = InvalidParamsException.class)
-    public void givenNullSquares_whenMoveCalled_thenThrowException() throws InvalidParamsException {
+    public void givenNullSquares_whenMoveCalled_thenThrowException() throws InvalidParamsException,
+            MaxPositionExceedException {
         Human human = new Human(1);
         human.move(null, 6);
+    }
+    //endregion
+
+    //region test human climb ladders
+    @Test
+    public void givenHumanHasZeroLadderClimbed_whenLandOnLadderBottom_thenHumanClimbToTheLadderTop() throws
+            InvalidParamsException, MaxPositionExceedException {
+        // given
+        int steps = 6;
+        Human human = new Human(10);
+        Ladder ladder = new Ladder(16, 25);
+        getSquare(16).addPiece(ladder);
+
+        // when
+        String message = human.move(squares, steps);
+
+        // then
+        assertTrue(getSquare(25).hasPiece(human));
+        assertEquals(25, human.getPosition());
+        assertEquals("Move to position 16 then climb a ladder to position 25", message);
+    }
+
+    @Test
+    public void givenHumanHasOneLadderClimbed_whenLandOnLadderBottom_thenHumanClimbToTheLadderTop() throws
+            InvalidParamsException, MaxPositionExceedException {
+        // given
+        Human human = new Human(10);
+        human.getLadderClimbedList().add(new Ladder(50, 60));
+
+        Ladder ladder = new Ladder(16, 25);
+        getSquare(16).addPiece(ladder);
+
+        // when
+        String message = human.move(squares, 6);
+
+        // then
+        assertTrue(getSquare(25).hasPiece(human));
+        assertEquals(25, human.getPosition());
+        assertEquals("Move to position 16 then climb a ladder to position 25", message);
+    }
+
+    @Test
+    public void givenHumanHasThreeLadderClimbed_whenLandOnLadderBottom_thenHumanStayAtLadderBottom() throws
+            InvalidParamsException, MaxPositionExceedException {
+        // given
+        Human human = new Human(10);
+        human.getLadderClimbedList().add(new Ladder(50, 60));
+        human.getLadderClimbedList().add(new Ladder(70, 80));
+        human.getLadderClimbedList().add(new Ladder(80, 90));
+
+        Ladder ladder = new Ladder(16, 25);
+        getSquare(16).addPiece(ladder);
+
+        // when
+        String message = human.move(squares, 6);
+
+        // then
+        assertTrue(getSquare(16).hasPiece(human));
+        assertEquals(16, human.getPosition());
+        assertEquals("Move to position 16\nMaximum climb number of ladders exceeded.", message);
+    }
+
+    @Test
+    public void givenHumanHas1LadderClimbed_whenLandOnTheSameLadderAgain_thenHumanStayAtLadderBottom() throws
+            InvalidParamsException, MaxPositionExceedException {
+        // given
+        Human human = new Human(10);
+        Ladder ladder = new Ladder(16, 25);
+        human.getLadderClimbedList().add(ladder);
+
+        getSquare(16).addPiece(ladder);
+
+        // when
+        String message = human.move(squares, 6);
+
+        // then
+        assertTrue(getSquare(16).hasPiece(human));
+        assertEquals(16, human.getPosition());
+        assertEquals("Move to position 16\nAlready climbed this ladder before.", message);
+    }
+    //endregion
+
+    //region test human swallowed by snake
+    @Test
+    public void whenHumanLandOnSnakeHead_thenHumanSwallowedToSnakeTail_andParalyzed() throws InvalidParamsException,
+            MaxPositionExceedException {
+        // given
+        Human human = new Human(10);
+        Snake snake = new Snake(16, 5);
+        getSquare(16).addPiece(snake);
+
+        // when
+        String message = human.move(squares, 6);
+
+        // then
+        assertTrue(getSquare(5).hasPiece(human));
+        assertEquals(5, human.getPosition());
+        assertTrue(human.isParalyzed());
+        assertEquals("Move to position 16 then swallowed by a snake and back to position 5", message);
     }
     //endregion
 
@@ -98,104 +215,6 @@ public class HumanTest {
 
         // when
         human.addLadderClimbed(ladder);
-    }
-    //endregion
-
-    //region test human climb ladders
-    @Test
-    public void givenHumanHasZeroLadderClimbed_whenLandOnLadderBottom_thenHumanClimbToTheLadderTop() throws
-            InvalidParamsException {
-        // given
-        int steps = 6;
-        Human human = new Human(10);
-        Ladder ladder = new Ladder(16, 25);
-        getSquare(16).addPiece(ladder);
-
-        // when
-        String message = human.move(squares, steps);
-
-        // then
-        assertTrue(getSquare(25).hasPiece(human));
-        assertEquals(25, human.getPosition());
-        assertEquals("Move to position 16 then climb a ladder to position 25", message);
-    }
-
-    @Test
-    public void givenHumanHasOneLadderClimbed_whenLandOnLadderBottom_thenHumanClimbToTheLadderTop() throws
-            InvalidParamsException {
-        // given
-        Human human = new Human(10);
-        human.getLadderClimbedList().add(new Ladder(50, 60));
-
-        Ladder ladder = new Ladder(16, 25);
-        getSquare(16).addPiece(ladder);
-
-        // when
-        String message = human.move(squares, 6);
-
-        // then
-        assertTrue(getSquare(25).hasPiece(human));
-        assertEquals(25, human.getPosition());
-        assertEquals("Move to position 16 then climb a ladder to position 25", message);
-    }
-
-    @Test
-    public void givenHumanHasThreeLadderClimbed_whenLandOnLadderBottom_thenHumanStayAtLadderBottom() throws
-            InvalidParamsException {
-        // given
-        Human human = new Human(10);
-        human.getLadderClimbedList().add(new Ladder(50, 60));
-        human.getLadderClimbedList().add(new Ladder(70, 80));
-        human.getLadderClimbedList().add(new Ladder(80, 90));
-
-        Ladder ladder = new Ladder(16, 25);
-        getSquare(16).addPiece(ladder);
-
-        // when
-        String message = human.move(squares, 6);
-
-        // then
-        assertTrue(getSquare(16).hasPiece(human));
-        assertEquals(16, human.getPosition());
-        assertEquals("Move to position 16\nMaximum climb number of ladders exceeded.", message);
-    }
-
-    @Test
-    public void givenHumanHas1LadderClimbed_whenLandOnTheSameLadderAgain_thenHumanStayAtLadderBottom() throws
-            InvalidParamsException {
-        // given
-        Human human = new Human(10);
-        Ladder ladder = new Ladder(16, 25);
-        human.getLadderClimbedList().add(ladder);
-
-        getSquare(16).addPiece(ladder);
-
-        // when
-        String message = human.move(squares, 6);
-
-        // then
-        assertTrue(getSquare(16).hasPiece(human));
-        assertEquals(16, human.getPosition());
-        assertEquals("Move to position 16\nAlready climbed this ladder before.", message);
-    }
-    //endregion
-
-    //region test human swallowed by snake
-    @Test
-    public void whenHumanLandOnSnakeHead_thenHumanSwallowedToSnakeTail_andParalyzed() throws InvalidParamsException {
-        // given
-        Human human = new Human(10);
-        Snake snake = new Snake(16, 5);
-        getSquare(16).addPiece(snake);
-
-        // when
-        String message = human.move(squares, 6);
-
-        // then
-        assertTrue(getSquare(5).hasPiece(human));
-        assertEquals(5, human.getPosition());
-        assertTrue(human.isParalyzed());
-        assertEquals("Move to position 16 then swallowed by a snake and back to position 5", message);
     }
     //endregion
 
