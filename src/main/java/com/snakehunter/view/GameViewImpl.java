@@ -360,10 +360,10 @@ public class GameViewImpl
                 }
 
                 break;
-            case "Add Random Snake":
+        case "Add 5 Random Snakes":
                 listener.onRandomSnakeClick();
                 break;
-            case "Add Random Ladder":
+        case "Add 5 Random Ladders":
                 listener.onRandomLadderClick();
                 break;
             case "Move Up":
