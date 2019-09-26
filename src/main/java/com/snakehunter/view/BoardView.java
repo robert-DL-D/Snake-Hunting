@@ -329,7 +329,7 @@ public class BoardView
         double inc = 0.05;
         while (true) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(50);
             } catch (Exception e) {
             }
             factor += inc;
