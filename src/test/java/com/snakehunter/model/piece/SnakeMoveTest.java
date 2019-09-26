@@ -112,7 +112,7 @@ public class SnakeMoveTest {
     @Test (expected = SnakeMoveToGuardedSquareException.class)
     public void moveToGuardedSquare() throws SnakeMoveOutOfBoundsException, SnakeMoveToGuardedSquareException {
         squares[3][6].setGuarded(true); //64
-        Square currSquare = snake2.getSquare(squares, snake2.getPosition());
+        Square currSquare = snake1.getSquare(squares, snake1.getPosition());
 
         snake1.moveRight(squares, currSquare);
     }
