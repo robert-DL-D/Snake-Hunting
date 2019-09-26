@@ -139,6 +139,7 @@ public class GameModelImpl
     @Override
     public void nextTurn() {
 
+        System.out.println(numOfTurns);
         if (numOfTurns % 2 == 0){
             for (Human h : getHumanList()) {
                 h.isParalyzed();
@@ -223,7 +224,7 @@ public class GameModelImpl
 
         Square startSquare = squares[0][0];
         for (int i = 0; i < numOfHumans; i++) {
-            Human human = new Human(90);
+            Human human = new Human(1);
             humanPlayer.addPiece(human);
             startSquare.addPiece(human);
         }

@@ -1,6 +1,7 @@
 package com.snakehunter.view;
 
 import com.snakehunter.GameContract.ViewEventListener;
+import com.snakehunter.Main;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -92,61 +93,81 @@ public class DiceView
     public synchronized void roll() {
         if (isEnabled()) {
             setEnabled(false);
-
-
-            new Thread(() -> {
-                int num;
-
-                if (usedStoredValue){
-                    // fake dice animation
-                    for (int i = 1; i <= 20; i++) {
-                        do {
-                            num = getRandomNumber(DICE_NUM_MIN, DICE_NUM_MAX);
-                        } while (lastNum == num);
-                        lastNum = num;
-
-                        repaint();
-                        // This creates the fake dice roll animation
-                        try {
-                            Thread.sleep(100);
-                        } catch (Exception e) {
-                            System.out.println("Dice roll exception " + e);
-                        }
-                    }
-                    System.out.println(lastNum);
-                    storedValue = lastNum;
-                } else {
-                    lastNum = storedValue;
-                }
-
-                int playerIndex = 0;
-
-
-                boolean validPlayerChosen = false;
-                setEnabled(true);
-                do {
+            lastNum = 1;
+            if (Main.isDebugMode()){
+                int i;
+                String s = JOptionPane.showInputDialog("DEBUG - input dice number");
                 try {
-                    String playerInput = JOptionPane.showInputDialog("Which human piece would you like to move?");
-                    if (playerInput == null){
-                        System.out.println("cancelled");
-                        usedStoredValue = false;
-                        return;
+                    lastNum = Integer.parseInt(s);
+                    String s1 = JOptionPane.showInputDialog("DEBUG - input player number");
+                    try {
+                        i = Integer.parseInt(s1);
+                        listener.onDiceRolled(i - 1, lastNum);
+                    } catch (Exception e){
+                        JOptionPane.showMessageDialog(this, "Invalid player number");
                     }
-                    playerIndex = Integer.parseInt(playerInput);
-                    listener.onDiceRolled(playerIndex - 1, lastNum);
-                    validPlayerChosen = true;
-                    usedStoredValue = true;
-                } catch (NullPointerException npe){
-                    JOptionPane.showMessageDialog(this, "Please input a valid player number");
+                } catch (Exception e){
+                    JOptionPane.showMessageDialog(this,"Invalid dice number");
                 }
-                catch (Exception e){
-                    JOptionPane.showMessageDialog(this, "You can't move humans above square 100! - skipping turn");
-                    validPlayerChosen = true;
-                    usedStoredValue = true;
-                    listener.onDiceRolled(-2, lastNum);
-                } } while (!validPlayerChosen);
+            }else {
 
-            }).start();
+                new Thread(() -> {
+                    int num;
+
+                    if (usedStoredValue) {
+                        // fake dice animation
+                        for (int i = 1; i <= 20; i++) {
+                            do {
+                                num = getRandomNumber(DICE_NUM_MIN, DICE_NUM_MAX);
+                            } while (lastNum == num);
+                            lastNum = num;
+
+                            repaint();
+                            // This creates the fake dice roll animation
+                            try {
+                                Thread.sleep(100);
+                            } catch (Exception e) {
+                                System.out.println("Dice roll exception " + e);
+                            }
+                        }
+                        System.out.println(lastNum);
+                        storedValue = lastNum;
+                    } else {
+                        lastNum = storedValue;
+                    }
+
+                    int playerIndex = 0;
+
+
+                    boolean validPlayerChosen = false;
+                    setEnabled(true);
+                    do {
+                        try {
+                            String playerInput =
+                                    JOptionPane.showInputDialog("Which human piece would you like to move?");
+                            if (playerInput == null) {
+                                System.out.println("cancelled");
+                                usedStoredValue = false;
+                                return;
+                            }
+                            playerIndex = Integer.parseInt(playerInput);
+                            listener.onDiceRolled(playerIndex - 1, lastNum);
+                            validPlayerChosen = true;
+                            usedStoredValue = true;
+                        } catch (NullPointerException npe) {
+                            JOptionPane.showMessageDialog(this, "Please input a valid player number");
+                        } catch (Exception e) {
+                            JOptionPane
+                                    .showMessageDialog(this, "You can't move humans above square 100! - skipping turn");
+                            validPlayerChosen = true;
+                            usedStoredValue = true;
+                            listener.onDiceRolled(-2, lastNum);
+                        }
+                    } while (!validPlayerChosen);
+
+
+                }).start();
+            }
         }
     }
 

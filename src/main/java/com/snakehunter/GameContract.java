@@ -1,5 +1,6 @@
 package com.snakehunter;
 
+import com.snakehunter.controller.GameNotReadyException;
 import com.snakehunter.model.Square;
 import com.snakehunter.model.piece.Human;
 import com.snakehunter.model.piece.Ladder;
@@ -66,7 +67,7 @@ public class GameContract {
 
         void onAddHumansClick();
 
-        void onStartClick();
+        void onStartClick() throws GameNotReadyException;
 
         void onSaveClick();
 

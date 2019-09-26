@@ -5,6 +5,7 @@ import com.snakehunter.GameContract.GameModel;
 import com.snakehunter.GameContract.ViewEventListener;
 import com.snakehunter.GameStage;
 import com.snakehunter.Main;
+import com.snakehunter.controller.GameNotReadyException;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Player;
 import com.snakehunter.model.piece.Snake;
@@ -78,20 +79,21 @@ public class GameViewImpl
     @Override
     public void rollTheDice() {
         if (Main.isDebugMode()) {
-            int num = 0;
-            try {
-                num = Integer.parseInt(JOptionPane.showInputDialog("Enter 0 to throw dice. Enter 1 - 6 for Testing."));
-            } catch (NumberFormatException e) {
-                showErrorDialog("PLease enters a valid number!");
-                return;
-            }
-
-            if (num == 0) {
-                diceView.roll();
-            } else {
-                //TODO add this back in later
-                //listener.onDiceRolled(num);
-            }
+            diceView.roll();
+//            int num = 0;
+//            try {
+//                num = Integer.parseInt(JOptionPane.showInputDialog("Enter 0 to throw dice. Enter 1 - 6 for Testing."));
+//            } catch (NumberFormatException e) {
+//                showErrorDialog("PLease enters a valid number!");
+//                return;
+//            }
+//
+//            if (num == 0) {
+//                diceView.roll();
+//            } else {
+//                //TODO add this back in later
+//                //listener.onDiceRolled(num);
+//            }
         } else {
             diceView.roll();
         }
@@ -351,7 +353,12 @@ public class GameViewImpl
                 listener.onAddHumansClick();
                 break;
             case "Start":
-                listener.onStartClick();
+                try {
+                    listener.onStartClick();
+                } catch (GameNotReadyException gnre){
+                    JOptionPane.showMessageDialog(this, "Game not yet ready: " + gnre.getMessage());
+                }
+
                 break;
             case "Add Random Snake":
                 listener.onRandomSnakeClick();

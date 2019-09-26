@@ -72,7 +72,12 @@ public class GameControllerTest {
         when(gameModel.isGameReady()).thenReturn(true);
 
         // when
-        gameController.onStartClick();
+        try {
+            gameController.onStartClick();
+        }
+        catch (GameNotReadyException e) {
+            System.out.println(e.getMessage());
+        }
 
         // then
         verify(gameView).hideSettingPanel();
@@ -86,7 +91,11 @@ public class GameControllerTest {
         when(gameModel.isGameReady()).thenReturn(false);
 
         // when
-        gameController.onStartClick();
+        try {
+            gameController.onStartClick();
+        } catch (GameNotReadyException e){
+            System.out.println(e.getMessage());
+        }
 
         // then
         verify(gameView).showErrorDialog(anyString());

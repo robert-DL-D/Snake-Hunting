@@ -12,7 +12,7 @@ import com.snakehunter.view.GameViewImpl;
  */
 public class Main {
 
-    private static boolean isDebugMode = false;
+    private static boolean isDebugMode = true;
 
     public static void main(String[] args) {
         GameModel gameModel = new GameModelImpl();

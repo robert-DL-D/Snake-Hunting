@@ -82,10 +82,17 @@ public class GameController
     }
 
     @Override
-    public void onStartClick() {
+    public void onStartClick() throws GameNotReadyException{
         //quickAdd();
-        if (gameModel.isGameReady()) {
 
+        if (gameModel.getSnakeList().size() < 5){
+            throw new GameNotReadyException("Less than 5 snakes placed on board");
+        } else if (gameModel.getHumanList().size() < 4){
+            throw new GameNotReadyException("Humans haven't been added to board");
+        } else if (gameModel.getLadderList().size() < 5){
+            throw new GameNotReadyException("Less than 5 ladders placed on board");
+        }
+        if (gameModel.isGameReady()) {
             gameView.hideGameOverPanel();
             gameView.hideSettingPanel();
             gameView.showTurnPanel();
@@ -98,7 +105,8 @@ public class GameController
             //changeData();
 
         } else {
-            gameView.showErrorDialog("Make sure you add snakes, ladders and humans before start the game.");
+
+            //gameView.showErrorDialog("Make sure you add snakes, ladders and humans before start the game.");
         }
     }
 
