@@ -20,11 +20,6 @@ public class SaveLoadGame {
     private GameModelImpl gameModel;
     private GameContract.GameView gameView;
 
-    /*public static void main(String[] args) {
-        saveGame();
-        loadGame();
-    }*/
-
     public SaveLoadGame(GameModelImpl gameModel) {
         this.gameModel = gameModel;
     }
@@ -47,12 +42,6 @@ public class SaveLoadGame {
 
             fileWriter.write("stage" + DELIMITER + gameModel.getGameStage());
             fileWriter.write(System.lineSeparator());
-
-            fileWriter.write("turnNumber" + DELIMITER + gameModel.getNumOfTurns());
-            fileWriter.write(System.lineSeparator());
-
-            /*fileWriter.write("playerTurn" + DELIMITER + gameModel.getCurrentPlayer().getClass().getSimpleName());
-            fileWriter.write(System.lineSeparator());*/
 
             stringBuilder.append("snakePos");
             for (Snake snakeInList : gameModel.getSnakeList()) {
@@ -89,6 +78,10 @@ public class SaveLoadGame {
                     }
                 }
             }
+
+            fileWriter.write("turnNumber" + DELIMITER + gameModel.getNumOfTurns());
+            fileWriter.write(System.lineSeparator());
+
             writing(stringBuilder, fileWriter);
 
             fileWriter.close();
@@ -106,7 +99,6 @@ public class SaveLoadGame {
         fileWriter.write(System.lineSeparator());
     }
 
-    // FIXME Turn is not correctly loaded
     public void loadGame() {
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
@@ -121,7 +113,6 @@ public class SaveLoadGame {
                     }
 
                     stringArray = st.split(DELIMITER);
-                    //System.out.println(st);
 
                     switch (stringArray[0]) {
                     case "humanName":
@@ -130,9 +121,6 @@ public class SaveLoadGame {
                         break;
                     case "stage":
                         setStage(stringArray[1]);
-                        break;
-                    case "turnNumber":
-                        setTurnNumber(stringArray[1]);
                         break;
                         /*case "playerTurn":
                             break;*/
@@ -151,6 +139,9 @@ public class SaveLoadGame {
                     case "snakeGuardPos":
                         setGuardPos(stringArray);
                         break;
+                    case "turnNumber":
+                        setTurnNumber(stringArray[1]);
+                        break;
                     }
 
                 } catch (IOException e) {
@@ -158,10 +149,7 @@ public class SaveLoadGame {
                 }
 
             }
-
-            //System.out.println(Arrays.toString(stringArray));
         } catch (FileNotFoundException e) {
-
             System.out.println("Save file does not exists");
         }
         gameView.hideSettingPanel();
@@ -170,7 +158,6 @@ public class SaveLoadGame {
 
 
     private void setStage(String stage) {
-
         GameStage gameStage;
 
         if (stage.equals("SECOND")) {
@@ -181,15 +168,6 @@ public class SaveLoadGame {
 
         gameModel.setGameStage(gameStage);
         gameView.updateStage(gameStage);
-    }
-
-    private void setTurnNumber(String s) {
-        int turn = Integer.parseInt(s);
-        for (int i = 0; i < turn; i++) {
-            gameModel.nextTurn();
-        }
-        gameView.updateTurnNo(turn);
-
     }
 
     private void setSnakePos(String[] stringArray) {
@@ -208,7 +186,6 @@ public class SaveLoadGame {
     }
 
     private void setPiecePos(String[] stringArray) {
-
         gameModel.initHumans(4);
 
         for (int i = 0; i < 4; i++) {
@@ -226,7 +203,6 @@ public class SaveLoadGame {
 
 
     private void setGuardPos(String[] stringArray) {
-
         for (int i = 0; i < 3; i++) {
 
             int guardPos = Integer.parseInt(stringArray[i + 1]);
@@ -235,8 +211,12 @@ public class SaveLoadGame {
                 gameModel.addGuard(guardPos);
             }
         }
+    }
 
-
+    private void setTurnNumber(String s) {
+        int turn = Integer.parseInt(s);
+        gameModel.setNumOfTurns(turn);
+        gameView.updateTurnNo(turn);
     }
 
 }

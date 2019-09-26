@@ -21,16 +21,9 @@ public class LoginViewTest {
     }
 
     // Start of Login Tests
-    private void assertEmptyLogin() {
-        assertEquals(EMPTY_USERNAME, loginView.getUsernameTxtF().getText());
-        assertArrayEquals(EMPTY_PASSWORD, loginView.getPasswordTxtF().getPassword());
-    }
-
     // Positive Test 1
     @Test
     public void successLoginTest() {
-
-        assertEmptyLogin();
 
         loginView.setUsernameTxtF("human");
         loginView.setPasswordTxtF("password");
@@ -48,8 +41,6 @@ public class LoginViewTest {
     @Test
     public void successLoginTest2() {
 
-        assertEmptyLogin();
-
         loginView.setUsernameTxtF("HuMaN");
         loginView.setPasswordTxtF("password");
 
@@ -66,8 +57,6 @@ public class LoginViewTest {
     @Test(expected = InvalidDetailException.class)
     public void wrongCaseLoginTest() throws InvalidDetailException {
 
-        assertEmptyLogin();
-
         loginView.setUsernameTxtF("human");
         loginView.setPasswordTxtF("Password");
         loginView.validateLogin();
@@ -77,11 +66,13 @@ public class LoginViewTest {
     @Test(expected = InvalidDetailException.class)
     public void emptyLoginTest() throws InvalidDetailException {
 
-        assertEmptyLogin();
+        assertEquals(EMPTY_USERNAME, loginView.getUsernameTxtF().getText());
+        assertArrayEquals(EMPTY_PASSWORD, loginView.getPasswordTxtF().getPassword());
 
         loginView.validateLogin();
     }
     // End of Login Tests
+
 
 //    // Start of New Account Tests
 //    private void assertEmptyNewAccount() {
