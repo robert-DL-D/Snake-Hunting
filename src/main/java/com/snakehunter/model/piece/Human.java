@@ -1,7 +1,6 @@
 package com.snakehunter.model.piece;
 
 import com.snakehunter.model.Square;
-import com.snakehunter.model.exceptions.InvalidParamsException;
 import com.snakehunter.model.exceptions.LadderClimbedException;
 import com.snakehunter.model.exceptions.MaxClimbNumExceedException;
 import com.snakehunter.model.exceptions.MaxPositionExceedException;
@@ -56,11 +55,7 @@ public class Human
      * @return Message about this movement
      */
     @Override
-    public String move(Square[][] squares, int steps) throws InvalidParamsException, MaxPositionExceedException {
-        if (squares == null || steps < 0 || steps > 6) {
-            throw new InvalidParamsException();
-        }
-
+    public String move(Square[][] squares, int steps) throws MaxPositionExceedException {
         StringBuilder stringBuilder = new StringBuilder();
 
         // Remove piece from current square

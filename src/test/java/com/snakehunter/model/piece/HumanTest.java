@@ -1,7 +1,6 @@
 package com.snakehunter.model.piece;
 
 import com.snakehunter.model.Square;
-import com.snakehunter.model.exceptions.InvalidParamsException;
 import com.snakehunter.model.exceptions.LadderClimbedException;
 import com.snakehunter.model.exceptions.MaxClimbNumExceedException;
 import com.snakehunter.model.exceptions.MaxPositionExceedException;
@@ -27,8 +26,7 @@ public class HumanTest {
 
     //region test basic move
     @Test
-    public void givenHumanAtPosition1_whenMove1Step_thenHumanMoveCorrectly() throws InvalidParamsException,
-            MaxPositionExceedException {
+    public void givenHumanAtPosition1_whenMove1Step_thenHumanMoveCorrectly() throws MaxPositionExceedException {
         // given
         int steps = 1;
         Human human = new Human(1);
@@ -43,8 +41,7 @@ public class HumanTest {
     }
 
     @Test
-    public void givenHumanAtPosition99_whenMove1Steps_thenHumanMoveCorrectly() throws InvalidParamsException,
-            MaxPositionExceedException {
+    public void givenHumanAtPosition99_whenMove1Steps_thenHumanMoveCorrectly() throws MaxPositionExceedException {
         // given
         int steps = 1;
         Human human = new Human(99);
@@ -60,7 +57,6 @@ public class HumanTest {
 
     @Test(expected = MaxPositionExceedException.class)
     public void givenHumanAtPosition99_whenMove2Steps_thenThrowMaxPositionExceedException() throws
-            InvalidParamsException,
             MaxPositionExceedException {
         // given
         int steps = 2;
@@ -70,32 +66,22 @@ public class HumanTest {
         human.move(squares, steps);
     }
 
-    @Test(expected = InvalidParamsException.class)
-    public void givenNegativeSteps_whenMoveCalled_thenThrowException() throws InvalidParamsException,
+    @Test(expected = MaxPositionExceedException.class)
+    public void givenHumanAtPosition95_whenMove6Steps_thenThrowMaxPositionExceedException() throws
             MaxPositionExceedException {
-        Human human = new Human(1);
-        human.move(squares, -1);
-    }
+        // given
+        int steps = 6;
+        Human human = new Human(95);
 
-    @Test(expected = InvalidParamsException.class)
-    public void givenStepsGreaterThan6_whenMoveCalled_thenThrowException() throws InvalidParamsException,
-            MaxPositionExceedException {
-        Human human = new Human(1);
-        human.move(null, 7);
-    }
-
-    @Test(expected = InvalidParamsException.class)
-    public void givenNullSquares_whenMoveCalled_thenThrowException() throws InvalidParamsException,
-            MaxPositionExceedException {
-        Human human = new Human(1);
-        human.move(null, 6);
+        // when
+        human.move(squares, steps);
     }
     //endregion
 
     //region test human climb ladders
     @Test
     public void givenHumanHasZeroLadderClimbed_whenLandOnLadderBottom_thenHumanClimbToTheLadderTop() throws
-            InvalidParamsException, MaxPositionExceedException {
+            MaxPositionExceedException {
         // given
         int steps = 6;
         Human human = new Human(10);
@@ -113,7 +99,7 @@ public class HumanTest {
 
     @Test
     public void givenHumanHasOneLadderClimbed_whenLandOnLadderBottom_thenHumanClimbToTheLadderTop() throws
-            InvalidParamsException, MaxPositionExceedException {
+            MaxPositionExceedException {
         // given
         Human human = new Human(10);
         human.getLadderClimbedList().add(new Ladder(50, 60));
@@ -132,7 +118,7 @@ public class HumanTest {
 
     @Test
     public void givenHumanHasThreeLadderClimbed_whenLandOnLadderBottom_thenHumanStayAtLadderBottom() throws
-            InvalidParamsException, MaxPositionExceedException {
+            MaxPositionExceedException {
         // given
         Human human = new Human(10);
         human.getLadderClimbedList().add(new Ladder(50, 60));
@@ -153,7 +139,7 @@ public class HumanTest {
 
     @Test
     public void givenHumanHas1LadderClimbed_whenLandOnTheSameLadderAgain_thenHumanStayAtLadderBottom() throws
-            InvalidParamsException, MaxPositionExceedException {
+            MaxPositionExceedException {
         // given
         Human human = new Human(10);
         Ladder ladder = new Ladder(16, 25);
@@ -173,7 +159,7 @@ public class HumanTest {
 
     //region test human swallowed by snake
     @Test
-    public void whenHumanLandOnSnakeHead_thenHumanSwallowedToSnakeTail_andParalyzed() throws InvalidParamsException,
+    public void whenHumanLandOnSnakeHead_thenHumanSwallowedToSnakeTail_andParalyzed() throws
             MaxPositionExceedException {
         // given
         Human human = new Human(10);

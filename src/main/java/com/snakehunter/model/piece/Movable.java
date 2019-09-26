@@ -1,7 +1,6 @@
 package com.snakehunter.model.piece;
 
 import com.snakehunter.model.Square;
-import com.snakehunter.model.exceptions.InvalidParamsException;
 import com.snakehunter.model.exceptions.MaxPositionExceedException;
 import com.snakehunter.model.exceptions.SnakeMoveOutOfBoundsException;
 import com.snakehunter.model.exceptions.SnakeMoveToGuardedSquareException;
@@ -12,6 +11,6 @@ import com.snakehunter.model.exceptions.SnakeMoveToGuardedSquareException;
  */
 public interface Movable {
     // return a message describes the movement
-    String move(Square[][] squares, int steps) throws InvalidParamsException, SnakeMoveOutOfBoundsException,
+    String move(Square[][] squares, int steps) throws SnakeMoveOutOfBoundsException,
             SnakeMoveToGuardedSquareException, MaxPositionExceedException;
 }

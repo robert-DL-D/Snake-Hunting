@@ -3,10 +3,9 @@ package com.snakehunter.model;
 import com.snakehunter.GameContract;
 import com.snakehunter.GameContract.DataChangedListener;
 import com.snakehunter.GameStage;
-import com.snakehunter.model.exceptions.InvalidParamsException;
+import com.snakehunter.model.exceptions.MaxPositionExceedException;
 import com.snakehunter.model.exceptions.SnakeMoveOutOfBoundsException;
 import com.snakehunter.model.exceptions.SnakeMoveToGuardedSquareException;
-import com.snakehunter.model.exceptions.MaxPositionExceedException;
 import com.snakehunter.model.piece.Human;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Player;
@@ -177,7 +176,7 @@ public class GameModelImpl
     public void movePlayer(int index, int steps) {
         try {
             humanPlayer.getPiece(index).move(squares, steps);
-        } catch (InvalidParamsException | MaxPositionExceedException e) {
+        } catch (MaxPositionExceedException e) {
             e.printStackTrace();
         }
     }
