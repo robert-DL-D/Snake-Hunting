@@ -57,39 +57,47 @@ public class GameController
 
     @Override
     public void onRandomSnakeClick() {
-        int snakeHead = ThreadLocalRandom.current().nextInt(3, 99);
-        int snakeLength = ThreadLocalRandom.current().nextInt(1, 30);
-        int snakeTail = snakeHead - snakeLength;
-        snakeTail = snakeTail > 99 ? 99 : snakeTail <= 2 ? 2 : snakeTail;
 
-        Snake s1 = new Snake(snakeHead, snakeTail);
-        gameModel.addSnake(s1);
-        //Debug dialog
-        //gameView.showErrorDialog(Integer.toString(snakeHead) + " " + Integer.toString(snakeLength) + " " + Integer.toString(snakeTail));
+        while (gameModel.getSnakeList().size() < 5) {
+
+            int snakeHead = ThreadLocalRandom.current().nextInt(3, 99);
+            int snakeLength = ThreadLocalRandom.current().nextInt(1, 30);
+            int snakeTail = snakeHead - snakeLength;
+            snakeTail = snakeTail > 99 ? 99 : snakeTail <= 2 ? 2 : snakeTail;
+
+            Snake s1 = new Snake(snakeHead, snakeTail);
+            gameModel.addSnake(s1);
+            //Debug dialog
+            //gameView.showErrorDialog(Integer.toString(snakeHead) + " " + Integer.toString(snakeLength) + " " +
+            // Integer.toString(snakeTail));
+        }
     }
 
     @Override
     public void onRandomLadderClick() {
-        int ladderTop = ThreadLocalRandom.current().nextInt(3, 99);
-        int ladderLength = ThreadLocalRandom.current().nextInt(1, 30);
-        int ladderBase = ladderTop - ladderLength;
-        ladderBase = ladderBase > 99 ? 99 : ladderBase <= 2 ? 2 : ladderBase;
+        while (gameModel.getLadderList().size() < 5) {
+            int ladderTop = ThreadLocalRandom.current().nextInt(3, 99);
+            int ladderLength = ThreadLocalRandom.current().nextInt(1, 30);
+            int ladderBase = ladderTop - ladderLength;
+            ladderBase = ladderBase > 99 ? 99 : ladderBase <= 2 ? 2 : ladderBase;
 
-        Ladder l1 = new Ladder(ladderBase, ladderTop);
-        gameModel.addLadder(l1);
-        //Debug dialog
-        //gameView.showErrorDialog(Integer.toString(ladderTop) + " " + Integer.toString(ladderLength) + " " + Integer.toString(ladderBase));
+            Ladder l1 = new Ladder(ladderBase, ladderTop);
+            gameModel.addLadder(l1);
+            //Debug dialog
+            //gameView.showErrorDialog(Integer.toString(ladderTop) + " " + Integer.toString(ladderLength) + " " +
+            // Integer
+            // .toString(ladderBase));
+        }
     }
 
     @Override
-    public void onStartClick() throws GameNotReadyException{
-        //quickAdd();
+    public void onStartClick() throws GameNotReadyException {
 
-        if (gameModel.getSnakeList().size() < 5){
+        if (gameModel.getSnakeList().size() < 5) {
             throw new GameNotReadyException("Less than 5 snakes placed on board");
-        } else if (gameModel.getHumanList().size() < 4){
+        } else if (gameModel.getHumanList().size() < 4) {
             throw new GameNotReadyException("Humans haven't been added to board");
-        } else if (gameModel.getLadderList().size() < 5){
+        } else if (gameModel.getLadderList().size() < 5) {
             throw new GameNotReadyException("Less than 5 ladders placed on board");
         }
         if (gameModel.isGameReady()) {
@@ -108,20 +116,6 @@ public class GameController
 
             //gameView.showErrorDialog("Make sure you add snakes, ladders and humans before start the game.");
         }
-    }
-
-    private void quickAdd() {
-        onRandomSnakeClick();
-        onRandomSnakeClick();
-        onRandomSnakeClick();
-        onRandomSnakeClick();
-        onRandomSnakeClick();
-        onRandomLadderClick();
-        onRandomLadderClick();
-        onRandomLadderClick();
-        onRandomLadderClick();
-        onRandomLadderClick();
-        onAddHumansClick();
     }
 
     private void changeData() {
@@ -160,7 +154,7 @@ public class GameController
     }
 
     @Override
-    public void onPlaceGuard(){
+    public void onPlaceGuard() {
         gameView.showGuardPlacer();
         gameView.hideDicePanel();
     }
@@ -168,7 +162,7 @@ public class GameController
 
     @Override
     public void onDiceRolled(int player, int num) {
-        if (player >=0){
+        if (player >= 0) {
             gameModel.movePlayer(player, num);
         }
         gameModel.nextTurn();
@@ -192,7 +186,7 @@ public class GameController
     }
 
     @Override
-    public void onFinalStage(){
+    public void onFinalStage() {
         gameModel.setGameStage(GameStage.FINAL);
         gameModel.setNumOfTurns(1);
         gameView.updateStage(GameStage.FINAL);
