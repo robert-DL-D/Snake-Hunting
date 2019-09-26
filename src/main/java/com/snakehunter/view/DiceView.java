@@ -109,6 +109,7 @@ public class DiceView
                 } catch (Exception e){
                     JOptionPane.showMessageDialog(this,"Invalid dice number");
                 }
+                setEnabled(true);
             }else {
 
                 new Thread(() -> {
