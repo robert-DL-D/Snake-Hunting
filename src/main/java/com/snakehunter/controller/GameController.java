@@ -160,7 +160,9 @@ public class GameController
 
     @Override
     public void onDiceRolled(int player, int num) {
-        gameModel.movePlayer(player, num);
+        if (player >=0){
+            gameModel.movePlayer(player, num);
+        }
         gameModel.nextTurn();
         gameView.updateTurnNo(gameModel.getNumOfTurns());
         gameView.hideDicePanel();

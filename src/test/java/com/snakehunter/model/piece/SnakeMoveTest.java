@@ -2,6 +2,8 @@ package com.snakehunter.model.piece;
 
 import com.snakehunter.model.GameModelImpl;
 import com.snakehunter.model.Square;
+import com.snakehunter.model.exceptions.SnakeMoveOutOfBoundsException;
+import com.snakehunter.model.exceptions.SnakeMoveToGuardedSquareException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,6 +22,15 @@ public class SnakeMoveTest {
     GameModelImpl gameModel;
     Square[][] squares;
 
+    /**
+     * LEGEND:
+     * [col][row]
+     * UP = 0;
+     * DOWN = 1;
+     * LEFT = 2;
+     * RIGHT = 3;
+     */
+
     @Before
     public void setUp() throws Exception {
         snake1 = new Snake (63, 41); //left col
@@ -28,69 +39,12 @@ public class SnakeMoveTest {
         snake4 = new Snake (71, 53); //right col
         gameModel = new GameModelImpl();
         initSquare();
-
     }
 
-//    [col][row]
-//    private static final int UP = 0;
-//    private static final int DOWN = 1;
-//    private static final int LEFT = 2;
-//    private static final int RIGHT = 3;
-
-    //Negative Test 1
+    //Positive Tests
+    //Move a snake in all four directions
     @Test
-    public void snakesMovesOutOfBounds(){
-        //Actions
-        snake1.move(squares, 2);
-        snake2.move(squares, 0);
-        snake3.move(squares, 1);
-        snake4.move(squares, 3);
-
-        //Actual
-        int test1 = snake1.getPosition();
-        int test2 = snake2.getPosition();
-        int test3 = snake3.getPosition();
-        int test4 = snake4.getPosition();
-
-        //Assertions
-        assertEquals(63, test1);
-        assertEquals(97, test2);
-        assertEquals(25, test3);
-        assertEquals(71, test4);
-    }
-
-
-    //Negative Test 2
-    @Test
-    public void snakesMovesGuardedSquare(){
-        //Actions
-        squares[3][6].setGuarded(true); //64
-        squares[3][8].setGuarded(true); //84
-        squares[4][3].setGuarded(true); //36
-        squares[8][7].setGuarded(true); //72
-
-        snake1.move(squares, 3);
-        snake2.move(squares, 1);
-        snake3.move(squares, 0);
-        snake4.move(squares, 2);
-
-        //Actual
-        int test1 = snake1.getPosition();
-        int test2 = snake2.getPosition();
-        int test3 = snake3.getPosition();
-        int test4 = snake4.getPosition();
-
-        //Assertions
-        assertEquals(63, test1);
-        assertEquals(97, test2);
-        assertEquals(25, test3);
-        assertEquals(71, test4);
-    }
-
-
-    //Positive Test 1
-    @Test
-    public void snakesValidMoves(){
+    public void snakesValidMoves() throws SnakeMoveOutOfBoundsException, SnakeMoveToGuardedSquareException {
         //Actions
         snake1.move(squares, 0); //Up
         snake2.move(squares, 1); //Down
@@ -110,7 +64,6 @@ public class SnakeMoveTest {
         int testHead4 = snake4.getPosition();
         int testTail4 = snake4.getConnectedPosition();
 
-
         //Assertions
         assertEquals(78, testHead1);
         assertEquals(60, testTail1);
@@ -127,8 +80,9 @@ public class SnakeMoveTest {
 
 
     //Positive Test 2
+    //Give a single snake multiple movement directions
     @Test
-    public void snakeMultiMove(){
+    public void snakeMultiMove() throws SnakeMoveOutOfBoundsException, SnakeMoveToGuardedSquareException {
         snake1.move(squares, 1); //Down
         snake1.move(squares, 3); //Right
         snake1.move(squares, 3); //Right
@@ -143,6 +97,24 @@ public class SnakeMoveTest {
         assertEquals(56, testHead);
         assertEquals(38, testTail);
 
+    }
+
+    //Negative Tests
+    //Snake tries to move off the board
+    @Test (expected = SnakeMoveOutOfBoundsException.class)
+    public void moveOffBoard() throws SnakeMoveOutOfBoundsException, SnakeMoveToGuardedSquareException {
+        Square currSquare = snake2.getSquare(squares, snake2.getPosition());
+
+        snake2.moveUp(squares, currSquare);
+    }
+
+    //Snake tries to move on to a guarded square
+    @Test (expected = SnakeMoveToGuardedSquareException.class)
+    public void moveToGuardedSquare() throws SnakeMoveOutOfBoundsException, SnakeMoveToGuardedSquareException {
+        squares[3][6].setGuarded(true); //64
+        Square currSquare = snake2.getSquare(squares, snake2.getPosition());
+
+        snake1.moveRight(squares, currSquare);
     }
 
 
@@ -167,5 +139,57 @@ public class SnakeMoveTest {
             }
         }
     }
+
+    //Old Tests
+
+    //Negative Test 1
+//    @Test
+//    public void snakesMovesOutOfBounds() throws InvalidSnakeMovementException {
+//        //Actions
+//        snake1.move(squares, 2);
+//        snake2.move(squares, 0);
+//        snake3.move(squares, 1);
+//        snake4.move(squares, 3);
+//
+//        //Actual
+//        int test1 = snake1.getPosition();
+//        int test2 = snake2.getPosition();
+//        int test3 = snake3.getPosition();
+//        int test4 = snake4.getPosition();
+//
+//        //Assertions
+//        assertEquals(63, test1);
+//        assertEquals(97, test2);
+//        assertEquals(25, test3);
+//        assertEquals(71, test4);
+//    }
+//
+//
+//    //Negative Test 2
+//    @Test
+//    public void snakesMovesGuardedSquare() throws InvalidSnakeMovementException {
+//        //Actions
+//        squares[3][6].setGuarded(true); //64
+//        squares[3][8].setGuarded(true); //84
+//        squares[4][3].setGuarded(true); //36
+//        squares[8][7].setGuarded(true); //72
+//
+//        snake1.move(squares, 3);
+//        snake2.move(squares, 1);
+//        snake3.move(squares, 0);
+//        snake4.move(squares, 2);
+//
+//        //Actual
+//        int test1 = snake1.getPosition();
+//        int test2 = snake2.getPosition();
+//        int test3 = snake3.getPosition();
+//        int test4 = snake4.getPosition();
+//
+//        //Assertions
+//        assertEquals(63, test1);
+//        assertEquals(97, test2);
+//        assertEquals(25, test3);
+//        assertEquals(71, test4);
+//    }
 
 }

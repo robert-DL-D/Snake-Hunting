@@ -27,6 +27,8 @@ public class DiceView
 
     private Random random;
     private int lastNum = 1;
+    private int storedValue;
+    private boolean usedStoredValue = true;
 
     public DiceView() {
         setSize(DICE_LENGTH, DICE_LENGTH);
@@ -91,43 +93,60 @@ public class DiceView
         if (isEnabled()) {
             setEnabled(false);
 
+
             new Thread(() -> {
                 int num;
 
-                // fake dice animation
-                for (int i = 1; i <= 20; i++) {
-                    do {
-                        num = getRandomNumber(DICE_NUM_MIN, DICE_NUM_MAX);
-                    } while (lastNum == num);
-                    lastNum = num;
+                if (usedStoredValue){
+                    // fake dice animation
+                    for (int i = 1; i <= 20; i++) {
+                        do {
+                            num = getRandomNumber(DICE_NUM_MIN, DICE_NUM_MAX);
+                        } while (lastNum == num);
+                        lastNum = num;
 
-                    repaint();
-                    // This creates the fake dice roll animation
-                    try {
-                        Thread.sleep(100);
-                    } catch (Exception e) {
-                        System.out.println("Dice roll exception " + e);
+                        repaint();
+                        // This creates the fake dice roll animation
+                        try {
+                            Thread.sleep(100);
+                        } catch (Exception e) {
+                            System.out.println("Dice roll exception " + e);
+                        }
                     }
+                    System.out.println(lastNum);
+                    storedValue = lastNum;
+                } else {
+                    lastNum = storedValue;
                 }
-                System.out.println(lastNum);
+
                 int playerIndex = 0;
 
-                //TODO fix this so you can cancel, and it'll store that dice value to use next time you press dice (so you can't cheat but also don't get stuck in infinite loop territory)
+
                 boolean validPlayerChosen = false;
+                setEnabled(true);
                 do {
                 try {
-                    playerIndex = Integer.parseInt(JOptionPane.showInputDialog("Which human piece would you like to move?"));
+                    String playerInput = JOptionPane.showInputDialog("Which human piece would you like to move?");
+                    if (playerInput == null){
+                        System.out.println("cancelled");
+                        usedStoredValue = false;
+                        return;
+                    }
+                    playerIndex = Integer.parseInt(playerInput);
                     listener.onDiceRolled(playerIndex - 1, lastNum);
                     validPlayerChosen = true;
-                } catch (Exception e){
-                    JOptionPane.showMessageDialog(this,"Please enter a valid player number");
+                    usedStoredValue = true;
+                } catch (NullPointerException npe){
+                    JOptionPane.showMessageDialog(this, "Please input a valid player number");
+                }
+                catch (Exception e){
+                    JOptionPane.showMessageDialog(this, "You can't move humans above square 100! - skipping turn");
+                    validPlayerChosen = true;
+                    usedStoredValue = true;
+                    listener.onDiceRolled(-2, lastNum);
                 } } while (!validPlayerChosen);
 
-
-
-                setEnabled(true);
             }).start();
-
         }
     }
 
