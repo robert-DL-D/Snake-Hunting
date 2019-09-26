@@ -8,7 +8,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class LoginViewTest {
@@ -64,35 +63,23 @@ public class LoginViewTest {
     }
 
     // Negative Test 1
-    @Test
-    public void wrongCaseLoginTest() {
+    @Test(expected = InvalidDetailException.class)
+    public void wrongCaseLoginTest() throws InvalidDetailException {
 
         assertEmptyLogin();
 
         loginView.setUsernameTxtF("human");
         loginView.setPasswordTxtF("Password");
-        try {
-            loginView.validateLogin();
-        } catch (InvalidDetailException e) {
-            e.printStackTrace();
-        }
-
-        assertFalse(loginView.isLoginSuccess());
+        loginView.validateLogin();
     }
 
     // Negative Test 2
-    @Test
-    public void emptyLoginTest() {
+    @Test(expected = InvalidDetailException.class)
+    public void emptyLoginTest() throws InvalidDetailException {
 
         assertEmptyLogin();
 
-        try {
-            loginView.validateLogin();
-        } catch (InvalidDetailException e) {
-            e.printStackTrace();
-        }
-
-        assertFalse(loginView.isLoginSuccess());
+        loginView.validateLogin();
     }
     // End of Login Tests
 
