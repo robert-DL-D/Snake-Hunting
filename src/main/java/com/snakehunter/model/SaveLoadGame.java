@@ -232,6 +232,7 @@ public class SaveLoadGame {
         } catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(new JFrame(), "No save file found in folder", "No save file found", JOptionPane.WARNING_MESSAGE);
         } catch (NullPointerException nullEx) {
+            JOptionPane.showMessageDialog(new JFrame(), nullEx.toString(), "NullPointerException", JOptionPane.WARNING_MESSAGE);
         }
     }
 
