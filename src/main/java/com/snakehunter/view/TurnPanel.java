@@ -24,7 +24,7 @@ public class TurnPanel
 
     private final String turnNoString = "Turn No: %s/%s";
     private final String stageLabelString = "Stage: ";
-    private final String playerturnString = "Player turn: ";
+    private final String playerturnString = " turn: ";
     private final String humanGuardString = "Guards left: ";
 
     private final String[] humanButtons = {"Roll Dice", "Place Guard"};
@@ -42,14 +42,13 @@ public class TurnPanel
     private JLabel guardLabel;
     private StringBuilder sb = new StringBuilder();
 
-    private JButton saveGameButton;
     public TurnPanel(ActionListener listener, GameModel gameModel) {
         this.listener = listener;
         this.gameModel = gameModel;
 
         setSize(150, 400);
 
-        saveGameButton = new JButton(saveGameString);
+        JButton saveGameButton = new JButton(saveGameString);
         saveGameButton.setPreferredSize(new Dimension(150, 50));
         saveGameButton.addActionListener(this);
         add(saveGameButton);
@@ -60,7 +59,7 @@ public class TurnPanel
 
         sb.append(String.format("Turn No: "));
         //gameModel.getNumOfTurns()
-        turnNoLabel= new JLabel();
+        turnNoLabel = new JLabel();
         turnNoLabel.setPreferredSize(new Dimension(150, 25));
         turnNoLabel.setText(sb.toString());
         add(turnNoLabel);
@@ -78,21 +77,21 @@ public class TurnPanel
 
     //region functionality
 
-    public void updateTurnNo(int turnNo){
+    public void updateTurnNo(int turnNo) {
         sb = new StringBuilder();
-        sb.append(String.format(turnNoString, (int)Math.ceil(turnNo / 2.0), (int)Math.ceil(gameModel.getGameStage().getMaxTurns() / 2.0)));
+        sb.append(String.format(turnNoString, (int) Math.ceil(turnNo / 2.0), (int) Math.ceil(gameModel.getGameStage().getMaxTurns() / 2.0)));
         turnNoLabel.setText(sb.toString());
-        String s = "Human";
-        if (gameModel.getCurrentPlayer().isSnake()){
-            s = "Snake";
+        String s = "Human's";
+        if (gameModel.getCurrentPlayer().isSnake()) {
+            s = "Snake's";
             showSnakeButtons();
         } else {
             showHumanButtons();
         }
-        turntakerLabel.setText(playerturnString + s);
+        turntakerLabel.setText(s + playerturnString + gameModel.getCurrentPlayer().getName());
     }
 
-    public void updateGuardNo(){
+    public void updateGuardNo() {
         guardLabel.setText(humanGuardString + gameModel.getRemainingGuards());
     }
 
@@ -105,11 +104,11 @@ public class TurnPanel
         stageNoLabel.setText(stageLabelString + s);
     }
 
-    private void showHumanButtons(){
-        for(JButton b : sButtons){
+    private void showHumanButtons() {
+        for (JButton b : sButtons) {
             remove(b);
         }
-        for(JButton b : hButtons){
+        for (JButton b : hButtons) {
             remove(b);
         }
         repaint();
@@ -123,11 +122,11 @@ public class TurnPanel
         }
     }
 
-    private void showSnakeButtons(){
-        for(JButton b : hButtons){
+    private void showSnakeButtons() {
+        for (JButton b : hButtons) {
             remove(b);
         }
-        for(JButton b : sButtons){
+        for (JButton b : sButtons) {
             remove(b);
         }
         repaint();
@@ -140,6 +139,7 @@ public class TurnPanel
             add(button);
         }
     }
+
     //endregion
     //region getters
     public JLabel getTurnNoLabel() {

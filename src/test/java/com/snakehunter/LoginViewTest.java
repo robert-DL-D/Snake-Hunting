@@ -1,5 +1,6 @@
 package com.snakehunter;
 
+import com.snakehunter.controller.LoginController;
 import com.snakehunter.model.exceptions.InvalidDetailException;
 import com.snakehunter.view.LoginView;
 
@@ -11,13 +12,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class LoginViewTest {
-    private static final String EMPTY_USERNAME = "";
-    private static final char[] EMPTY_PASSWORD = new char[0];
+
+    private LoginController loginController;
     private LoginView loginView;
 
     @Before
     public void setUp() {
+
         loginView = new LoginView();
+
+        loginController = new LoginController(loginView);
     }
 
     // Start of Login Tests
@@ -29,12 +33,12 @@ public class LoginViewTest {
         loginView.setPasswordTxtF("password");
 
         try {
-            loginView.validateLogin();
+            loginController.validateLogin();
         } catch (InvalidDetailException e) {
             e.printStackTrace();
         }
 
-        assertTrue(loginView.isLoginSuccess());
+        assertTrue(loginController.getIsLoginSuccess());
     }
 
     // Positive Test 2
@@ -45,12 +49,12 @@ public class LoginViewTest {
         loginView.setPasswordTxtF("password");
 
         try {
-            loginView.validateLogin();
+            loginController.validateLogin();
         } catch (InvalidDetailException e) {
             e.printStackTrace();
         }
 
-        assertTrue(loginView.isLoginSuccess());
+        assertTrue(loginController.getIsLoginSuccess());
     }
 
     // Negative Test 1
@@ -59,20 +63,19 @@ public class LoginViewTest {
 
         loginView.setUsernameTxtF("human");
         loginView.setPasswordTxtF("Password");
-        loginView.validateLogin();
+        loginController.validateLogin();
     }
 
     // Negative Test 2
     @Test(expected = InvalidDetailException.class)
     public void emptyLoginTest() throws InvalidDetailException {
 
-        assertEquals(EMPTY_USERNAME, loginView.getUsernameTxtF().getText());
-        assertArrayEquals(EMPTY_PASSWORD, loginView.getPasswordTxtF().getPassword());
+        assertEquals("", loginView.getUsernameTxtF().getText());
+        assertArrayEquals(new char[0], loginView.getPasswordTxtF().getPassword());
 
-        loginView.validateLogin();
+        loginController.validateLogin();
     }
     // End of Login Tests
-
 
 //    // Start of New Account Tests
 //    private void assertEmptyNewAccount() {

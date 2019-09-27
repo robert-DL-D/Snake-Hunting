@@ -13,31 +13,49 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 public class SaveLoadGame {
 
-    private static final String DELIMITER = ":";
-    private static File file = new File("src/main/java/com/snakehunter/file/savegame.txt");
     private GameModelImpl gameModel;
     private GameContract.GameView gameView;
 
-    public SaveLoadGame(GameModelImpl gameModel) {
-        this.gameModel = gameModel;
-    }
+    private static final String DELIMITER = ":";
 
-    public SaveLoadGame(GameModelImpl gameModel, GameContract.GameView gameView) {
-        this.gameModel = gameModel;
-        this.gameView = gameView;
+    private static final String saveFileNameTemplate = "savefile";
+    private int saveNumber = 1;
+    private String saveFileName = saveFileNameTemplate + saveNumber;
+    private File file = new File("src/main/java/com/snakehunter/file/" + saveFileName + ".txt");
+    private static final String FOLDER_PATH = "src/main/java/com/snakehunter/file";
+
+    private boolean loadedGame = false;
+
+    private String humanName;
+    private String snakeName;
+
+    public SaveLoadGame() {
     }
 
     public void saveGame() {
         StringBuilder stringBuilder = new StringBuilder();
         try {
+
+            if (!loadedGame) {
+                while (file.exists()) {
+                    saveNumber++;
+                    saveFileName = saveFileNameTemplate + saveNumber;
+                    file = new File("src/main/java/com/snakehunter/file/" + saveFileName + ".txt");
+                }
+            }
+
             FileWriter fileWriter = new FileWriter(file, false);
 
-            fileWriter.write("humanName" + DELIMITER + "getHumanName()");
+            fileWriter.write("humanName" + DELIMITER + gameModel.getHumanPlayer().getName());
             fileWriter.write(System.lineSeparator());
 
-            fileWriter.write("snakeName" + DELIMITER + "getSnakeName()");
+            fileWriter.write("snakeName" + DELIMITER + gameModel.getSnakePlayer().getName());
             fileWriter.write(System.lineSeparator());
 
             fileWriter.write("stage" + DELIMITER + gameModel.getGameStage());
@@ -46,14 +64,14 @@ public class SaveLoadGame {
             stringBuilder.append("snakePos");
             for (Snake snakeInList : gameModel.getSnakeList()) {
                 stringBuilder.append(DELIMITER).append(snakeInList.getConnectedPosition()).append(DELIMITER)
-                             .append(snakeInList.getPosition());
+                        .append(snakeInList.getPosition());
             }
             writing(stringBuilder, fileWriter);
 
             stringBuilder.append("ladderPos");
             for (Ladder ladderInList : gameModel.getLadderList()) {
                 stringBuilder.append(DELIMITER).append(ladderInList.getPosition()).append(DELIMITER)
-                             .append(ladderInList.getConnectedPosition());
+                        .append(ladderInList.getConnectedPosition());
             }
             writing(stringBuilder, fileWriter);
 
@@ -70,27 +88,42 @@ public class SaveLoadGame {
             writing(stringBuilder, fileWriter);
 
             stringBuilder.append("snakeGuardPos");
-            Square[][] squares = gameModel.getSquares();
-            for (int i = 0; i < squares.length; i++) {
-                for (int j = 0; j < squares[0].length; j++) {
-                    if (squares[i][j].isGuarded()) {
-                        stringBuilder.append(DELIMITER).append(squares[i][j].getSquareNo());
+            String[] snakeGuardPos = new String[3];
+            Square[][] twoDSquareArray = gameModel.getSquares();
+            if (gameModel.getRemainingGuards() == 3) {
+                for (int i = 0; i < 3; i++) {
+                    stringBuilder.append(DELIMITER).append("-1");
+                }
+            } else
+                for (Square[] squareArray : twoDSquareArray) {
+                    for (Square square : squareArray) {
+                        if (square.isGuarded()) {
+                            for (int i = 0; i < snakeGuardPos.length; i++) {
+                                if (snakeGuardPos[i] == null) {
+                                    snakeGuardPos[i] = String.valueOf(square.getSquareNo());
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
+            for (int i = 0; i < snakeGuardPos.length; i++) {
+                if (snakeGuardPos[i] != null) {
+                    stringBuilder.append(DELIMITER).append(snakeGuardPos[i]);
+                } else {
+                    stringBuilder.append(DELIMITER).append("-1");
+                }
             }
+            writing(stringBuilder, fileWriter);
 
             fileWriter.write("turnNumber" + DELIMITER + gameModel.getNumOfTurns());
-            fileWriter.write(System.lineSeparator());
-
-            writing(stringBuilder, fileWriter);
 
             fileWriter.close();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        System.out.println("Game Saved");
+        JOptionPane.showMessageDialog(new JFrame(), "Game Saved Successfully\n" + "Your save file is " + saveFileNameTemplate + saveNumber, "Game Saved", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void writing(StringBuilder stringBuilder, FileWriter fileWriter) throws IOException {
@@ -100,9 +133,79 @@ public class SaveLoadGame {
     }
 
     public void loadGame() {
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
 
+        JFileChooser jFileChooser = new JFileChooser(FOLDER_PATH);
+        jFileChooser.showOpenDialog(null);
+        file = jFileChooser.getSelectedFile();
+
+        getPlayerNameInFile(file);
+
+        if (gameModel.getHumanPlayer().getName().equals(humanName) && gameModel.getSnakePlayer().getName().equals(snakeName)) {
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                String st;
+                String[] stringArray;
+
+                while (true) {
+                    try {
+                        if ((st = br.readLine()) == null) {
+                            break;
+                        }
+
+                        stringArray = st.split(DELIMITER);
+
+                        switch (stringArray[0]) {
+                            case "humanName":
+                                gameModel.getHumanPlayer().setName(stringArray[1]);
+                                break;
+                            case "snakeName":
+                                gameModel.getSnakePlayer().setName(stringArray[1]);
+                                break;
+                            case "stage":
+                                setStage(stringArray[1]);
+                                break;
+                            case "snakePos":
+                                setSnakePos(stringArray);
+                                break;
+                            case "ladderPos":
+                                setLadderPos(stringArray);
+                                break;
+                            case "piecePos":
+                                setPiecePos(stringArray);
+                                break;
+                            case "pieceParalyzedTurnRemaining":
+                                setParalyzedTurn(stringArray);
+                                break;
+                            case "snakeGuardPos":
+                                setGuardPos(stringArray);
+                                break;
+                            case "turnNumber":
+                                setTurnNumber(stringArray[1]);
+                                break;
+                        }
+                    } catch (IOException e) {
+                        JOptionPane.showMessageDialog(new JFrame(), e.toString(), "IOException", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+                loadedGame = true;
+                gameView.hideSettingPanel();
+                gameView.showTurnPanel();
+            } catch (FileNotFoundException e) {
+                JOptionPane.showMessageDialog(new JFrame(), "File not found", "File not found", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            if (file.getName().contains(saveFileNameTemplate)) {
+                JOptionPane.showMessageDialog(new JFrame(), "Incorrect save file for current players", "Incorrect save file", JOptionPane.WARNING_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(new JFrame(), "Not a valid save file", "Invalid save file", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }
+
+    private void getPlayerNameInFile(File file) {
+        try {
+
+            BufferedReader br = new BufferedReader(new FileReader(file));
             String st;
             String[] stringArray;
 
@@ -115,47 +218,22 @@ public class SaveLoadGame {
                     stringArray = st.split(DELIMITER);
 
                     switch (stringArray[0]) {
-                    case "humanName":
-                        break;
-                    case "snakeName":
-                        break;
-                    case "stage":
-                        setStage(stringArray[1]);
-                        break;
-                        /*case "playerTurn":
-                            break;*/
-                    case "snakePos":
-                        setSnakePos(stringArray);
-                        break;
-                    case "ladderPos":
-                        setLadderPos(stringArray);
-                        break;
-                    case "piecePos":
-                        setPiecePos(stringArray);
-                        break;
-                    case "pieceParalyzedTurnRemaining":
-                        setParalyzedTurn(stringArray);
-                        break;
-                    case "snakeGuardPos":
-                        setGuardPos(stringArray);
-                        break;
-                    case "turnNumber":
-                        setTurnNumber(stringArray[1]);
-                        break;
+                        case "humanName":
+                            humanName = stringArray[1];
+                            break;
+                        case "snakeName":
+                            snakeName = stringArray[1];
+                            break;
                     }
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
         } catch (FileNotFoundException e) {
-            System.out.println("Save file does not exists");
+            JOptionPane.showMessageDialog(new JFrame(), "No save file found in folder", "No save file found", JOptionPane.WARNING_MESSAGE);
+        } catch (NullPointerException nullEx) {
         }
-        gameView.hideSettingPanel();
-        gameView.showTurnPanel();
     }
-
 
     private void setStage(String stage) {
         GameStage gameStage;
@@ -201,8 +279,8 @@ public class SaveLoadGame {
         }
     }
 
-
     private void setGuardPos(String[] stringArray) {
+
         for (int i = 0; i < 3; i++) {
 
             int guardPos = Integer.parseInt(stringArray[i + 1]);
@@ -219,4 +297,11 @@ public class SaveLoadGame {
         gameView.updateTurnNo(turn);
     }
 
+    public void setGameModel(GameModelImpl gameModel) {
+        this.gameModel = gameModel;
+    }
+
+    public void setGameView(GameContract.GameView gameView) {
+        this.gameView = gameView;
+    }
 }

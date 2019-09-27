@@ -402,6 +402,14 @@ public class GameModelImpl
         numOfTurns = turns;
     }
 
+    public Player<Human> getHumanPlayer() {
+        return humanPlayer;
+    }
+
+    public Player<Snake> getSnakePlayer() {
+        return snakePlayer;
+    }
+
     //endregion
 
     // Testing method

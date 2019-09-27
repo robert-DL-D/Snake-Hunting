@@ -1,0 +1,9 @@
+humanName:testing
+snakeName:debug
+stage:SECOND
+snakePos:69:87:57:78:7:23:12:18:14:36
+ladderPos:17:34:86:89:11:35:40:42:20:49
+piecePos:9:1:1:1
+pieceParalyzedTurnRemaining:0:0:0:0
+snakeGuardPos:10:-1:-1
+turnNumber:6

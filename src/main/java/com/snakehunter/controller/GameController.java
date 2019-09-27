@@ -20,10 +20,12 @@ public class GameController
 
     private GameView gameView;
     private GameModel gameModel;
+    private SaveLoadGame saveLoadGame;
 
-    public GameController(GameView gameView, GameModel gameModel) {
+    public GameController(GameView gameView, GameModel gameModel, SaveLoadGame saveLoadGame) {
         this.gameView = gameView;
         this.gameModel = gameModel;
+        this.saveLoadGame = saveLoadGame;
         this.gameModel.setGameStage(GameStage.INITIAL);
         this.gameView.hideDicePanel();
     }
@@ -110,7 +112,7 @@ public class GameController
             gameView.updateStage(gameModel.getGameStage());
             gameView.updateTurnNo(gameModel.getNumOfTurns());
 
-            //changeData();
+            System.out.println("DEBUG: The first snake is at " + gameModel.getSnakeList().get(0).getPosition() + " " + gameModel.getSnakeList().get(0).getConnectedPosition());
 
         } else {
 
@@ -118,25 +120,16 @@ public class GameController
         }
     }
 
-    private void changeData() {
-        gameModel.movePlayer(0, 6);
-        gameModel.movePlayer(1, 4);
-        gameModel.movePlayer(2, 3);
-        gameModel.movePlayer(3, 1);
-        gameModel.addGuard(25);
-        gameModel.addGuard(33);
-        gameModel.addGuard(46);
-    }
-
     @Override
     public void onSaveClick() {
-        SaveLoadGame saveLoadGame = new SaveLoadGame((GameModelImpl) gameModel);
+        saveLoadGame.setGameModel((GameModelImpl) gameModel);
         saveLoadGame.saveGame();
     }
 
     @Override
     public void onLoadClick() {
-        SaveLoadGame saveLoadGame = new SaveLoadGame((GameModelImpl) gameModel, gameView);
+        saveLoadGame.setGameModel((GameModelImpl) gameModel);
+        saveLoadGame.setGameView(gameView);
         saveLoadGame.loadGame();
     }
 
