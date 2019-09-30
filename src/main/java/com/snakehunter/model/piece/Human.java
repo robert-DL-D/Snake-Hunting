@@ -58,15 +58,16 @@ public class Human
     public String move(Square[][] squares, int steps) throws MaxPositionExceedException {
         StringBuilder stringBuilder = new StringBuilder();
 
-        // Remove piece from current square
         Square currentSquare = getSquare(squares, getPosition());
-        currentSquare.removePiece(this);
 
         // Calculate new position
         int newPosition = getPosition() + steps;
         if (newPosition > 100) {
             throw new MaxPositionExceedException();
         }
+
+        // Remove piece from current square
+        currentSquare.removePiece(this);
 
         stringBuilder.append(String.format("Move to position %1s", newPosition));
 
