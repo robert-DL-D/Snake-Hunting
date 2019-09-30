@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -75,14 +76,15 @@ public class SaveLoadGame {
             }
             writing(stringBuilder, fileWriter);
 
+            List<Human> humanList = gameModel.getHumanList();
             stringBuilder.append("piecePos");
-            for (Human humanInlist : gameModel.getHumanList()) {
+            for (Human humanInlist : humanList) {
                 stringBuilder.append(DELIMITER).append(humanInlist.getPosition());
             }
             writing(stringBuilder, fileWriter);
 
             stringBuilder.append("pieceParalyzedTurnRemaining");
-            for (Human humanInlist : gameModel.getHumanList()) {
+            for (Human humanInlist : humanList) {
                 stringBuilder.append(DELIMITER).append(humanInlist.getParalyzeTurns());
             }
             writing(stringBuilder, fileWriter);
@@ -94,7 +96,7 @@ public class SaveLoadGame {
                 for (int i = 0; i < 3; i++) {
                     stringBuilder.append(DELIMITER).append("-1");
                 }
-            } else
+            } else {
                 for (Square[] squareArray : twoDSquareArray) {
                     for (Square square : squareArray) {
                         if (square.isGuarded()) {
@@ -107,6 +109,7 @@ public class SaveLoadGame {
                         }
                     }
                 }
+            }
             for (int i = 0; i < snakeGuardPos.length; i++) {
                 if (snakeGuardPos[i] != null) {
                     stringBuilder.append(DELIMITER).append(snakeGuardPos[i]);
