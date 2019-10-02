@@ -135,10 +135,12 @@ public class GameController
 
     @Override
     public void onDiceClick() {
+        gameView.showDicePanel();
         if (gameModel.getGameStage().equals(GameStage.INITIAL)) {
             return;
         }
         gameView.rollTheDice();
+
     }
 
     @Override

@@ -379,7 +379,8 @@ public class GameViewImpl
                 listener.onSnakeMove(0, 3);
                 break;
             case "Roll Dice":
-                listener.onDiceShow();
+                //listener.onDiceShow();
+                listener.onDiceClick();
                 break;
             case "Place Guard":
                 listener.onPlaceGuard();
