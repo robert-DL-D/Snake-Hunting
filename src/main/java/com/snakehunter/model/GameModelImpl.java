@@ -14,6 +14,8 @@ import com.snakehunter.model.piece.Snake;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 /**
  * @author WeiYi Yu
  * @date 2019-09-02
@@ -22,6 +24,7 @@ public class GameModelImpl
         implements GameContract.GameModel {
 
     private static final int MAX_GUARDS = 3;
+    private static final double NUM_OF_HUMANS = 4;
 
     private Square[][] squares = new Square[10][10];
 
@@ -41,6 +44,7 @@ public class GameModelImpl
     public GameModelImpl() {
         initSquare();
         initPlayers();
+        initHumans();
         ladderList = new ArrayList<>();
     }
 
@@ -140,32 +144,31 @@ public class GameModelImpl
     public void nextTurn() {
 
         System.out.println(numOfTurns);
-        if (numOfTurns % 2 == 0){
+        if (numOfTurns % 2 == 0) {
             for (Human h : getHumanList()) {
                 h.isParalyzed();
             }
         }
         numOfTurns++;
 
-        if (numOfTurns >= getGameStage().getMaxTurns()){
+        if (numOfTurns >= getGameStage().getMaxTurns()) {
             listener.onGameOver(snakePlayer);
         }
-        if (getGameStage() == GameStage.SECOND){
-            for(Human h : getHumanList()){
+        if (getGameStage() == GameStage.SECOND) {
+            for (Human h : getHumanList()) {
                 System.out.println(h);
-                if (h.getPosition() > 99){
+                if (h.getPosition() > 99) {
                     listener.onFinalStage();
                 }
             }
-        } else if (getGameStage() == GameStage.FINAL){
-            if (getHumanList().size() < 4){
+        } else if (getGameStage() == GameStage.FINAL) {
+            if (getHumanList().size() < 4) {
                 listener.onGameOver(snakePlayer);
             }
-            if (numOfTurns >= getGameStage().getMaxTurns()){
+            if (numOfTurns >= getGameStage().getMaxTurns()) {
                 listener.onGameOver(humanPlayer);
             }
         }
-
 
         if (listener != null) {
             listener.onNextTurn(getCurrentPlayer());
@@ -174,11 +177,17 @@ public class GameModelImpl
 
     @Override
     public void movePlayer(int index, int steps) {
+
+        while (humanPlayer.getPiece(index).getParalyzeTurns() != 0) {
+            index = Integer.parseInt(JOptionPane.showInputDialog("The selected piece is paralyzed, select another human piece.")) - 1;
+        }
+
         try {
             humanPlayer.getPiece(index).move(squares, steps);
         } catch (MaxPositionExceedException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
@@ -187,8 +196,7 @@ public class GameModelImpl
             return snakePlayer.getPiece(0).move(squares, steps);
         } catch (SnakeMoveOutOfBoundsException e) {
             e.printStackTrace();
-        }
-        catch (SnakeMoveToGuardedSquareException e1){
+        } catch (SnakeMoveToGuardedSquareException e1) {
             e1.printStackTrace();
         }
         return null;
@@ -217,6 +225,17 @@ public class GameModelImpl
     private void initPlayers() {
         humanPlayer = new Player<>("Human Player");
         snakePlayer = new Player<>("Snake Player");
+    }
+
+    private void initHumans() {
+        humanPlayer.getPieceList().clear();
+
+        Square startSquare = squares[0][0];
+        for (int i = 0; i < NUM_OF_HUMANS; i++) {
+            Human human = new Human(1);
+            humanPlayer.addPiece(human);
+            startSquare.addPiece(human);
+        }
     }
 
     void initHumans(int numOfHumans) {
@@ -398,7 +417,7 @@ public class GameModelImpl
     }
 
     @Override
-    public void setNumOfTurns(int turns){
+    public void setNumOfTurns(int turns) {
         numOfTurns = turns;
     }
 

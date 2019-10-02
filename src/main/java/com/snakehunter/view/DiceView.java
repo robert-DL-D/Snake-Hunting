@@ -136,43 +136,42 @@ public class DiceView
                     } else {
                         lastNum = storedValue;
                     }
-
-                    int playerIndex = 0;
-
-
-                    boolean validPlayerChosen = false;
-                    setEnabled(true);
-                    do {
-                        try {
-                            String playerInput =
-                                    JOptionPane.showInputDialog("Which human piece would you like to move?");
-                            if (playerInput == null) {
-                                System.out.println("cancelled");
-                                usedStoredValue = false;
-                                return;
-                            }
-                            playerIndex = Integer.parseInt(playerInput);
-                            listener.onDiceRolled(playerIndex - 1, lastNum);
-                            validPlayerChosen = true;
-                            usedStoredValue = true;
-                        } catch (NullPointerException npe) {
-                            JOptionPane.showMessageDialog(this, "Please input a valid player number");
-                        } catch (Exception e) {
-                            JOptionPane
-                                    .showMessageDialog(this, "You can't move humans above square 100! - skipping turn");
-                            validPlayerChosen = true;
-                            usedStoredValue = true;
-                            listener.onDiceRolled(-2, lastNum);
-                        }
-                    } while (!validPlayerChosen);
-
-
                 }).start();
             }
         }
     }
 
+    void moveSelectedPiece(String selectedPiece) {
+        int playerIndex;
+
+        boolean validPlayerChosen = false;
+        setEnabled(true);
+        do {
+            try {
+
+                if (selectedPiece == null) {
+                    System.out.println("cancelled");
+                    usedStoredValue = false;
+                    return;
+                }
+                playerIndex = Integer.parseInt(selectedPiece);
+                listener.onDiceRolled(playerIndex - 1, lastNum);
+                validPlayerChosen = true;
+                usedStoredValue = true;
+            } catch (NullPointerException npe) {
+                JOptionPane.showMessageDialog(this, "Please input a valid player number");
+            } catch (Exception e) {
+                JOptionPane
+                        .showMessageDialog(this, "You can't move humans above square 100! - skipping turn");
+                validPlayerChosen = true;
+                usedStoredValue = true;
+                listener.onDiceRolled(-2, lastNum);
+            }
+        } while (!validPlayerChosen);
+    }
+
     private int getRandomNumber(int min, int max) {
         return random.nextInt(max) + min;
     }
+
 }

@@ -11,6 +11,9 @@ import com.snakehunter.model.piece.Snake;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 /**
  * @author WeiYi Yu
  * @date 2019-08-25
@@ -135,6 +138,7 @@ public class GameController
 
     @Override
     public void onDiceClick() {
+
         gameView.showDicePanel();
         if (gameModel.getGameStage().equals(GameStage.INITIAL)) {
             return;
@@ -154,15 +158,18 @@ public class GameController
         gameView.hideDicePanel();
     }
 
-
     @Override
     public void onDiceRolled(int player, int num) {
         if (player >= 0) {
             gameModel.movePlayer(player, num);
         }
-        gameModel.nextTurn();
-        gameView.updateTurnNo(gameModel.getNumOfTurns());
-        gameView.hideDicePanel();
+        if (num != 6) {
+            gameModel.nextTurn();
+            gameView.updateTurnNo(gameModel.getNumOfTurns());
+            gameView.hideDicePanel();
+        } else {
+            JOptionPane.showMessageDialog(new JFrame(), "Human rolled a 6, they can roll again!");
+        }
     }
 
     @Override

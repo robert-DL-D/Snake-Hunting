@@ -54,7 +54,7 @@ public class GameViewImpl
         contentPane.add(boardView);
 
         diceView = new DiceView();
-        diceView.setLocation(500, 400);
+        diceView.setLocation(500, 410);
         contentPane.add(diceView);
 
         settingPanel = new SettingPanel(this);
@@ -96,6 +96,7 @@ public class GameViewImpl
 //            }
         } else {
             diceView.roll();
+            turnPanel.showPieceButtons();
         }
     }
 
@@ -366,6 +367,10 @@ public class GameViewImpl
         case "Add 5 Random Ladders":
                 listener.onRandomLadderClick();
                 break;
+            case "Add 5 Random S&L":
+                listener.onRandomSnakeClick();
+                listener.onRandomLadderClick();
+                break;
             case "Move Up":
                 listener.onSnakeMove(0, 0);
                 break;
@@ -390,6 +395,18 @@ public class GameViewImpl
                 break;
             case "Load Game":
                 listener.onLoadClick();
+                break;
+            case "1":
+                diceView.moveSelectedPiece("1");
+                break;
+            case "2":
+                diceView.moveSelectedPiece("2");
+                break;
+            case "3":
+                diceView.moveSelectedPiece("3");
+                break;
+            case "4":
+                diceView.moveSelectedPiece("4");
                 break;
             default:
                 break;

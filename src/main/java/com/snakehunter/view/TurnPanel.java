@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -26,11 +27,14 @@ public class TurnPanel
     private final String stageLabelString = "Stage: ";
     private final String playerturnString = " turn: ";
     private final String humanGuardString = "Guards left: ";
+    private static final String PIECE = "Piece";
 
     private final String[] humanButtons = {"Roll Dice", "Place Guard"};
+    private final String[] pieceButtons = {"1", "2", "3", "4"};
     private final String[] snakeButtons = {"Move Up", "Move Down", "Move Left", "Move Right"};
 
     private final List<JButton> hButtons = new ArrayList<>();
+    private LinkedList<JLabel> jLabels = new LinkedList<>();
     private final List<JButton> sButtons = new ArrayList<>();
 
     private ActionListener listener;
@@ -49,29 +53,40 @@ public class TurnPanel
         setSize(150, 400);
 
         JButton saveGameButton = new JButton(saveGameString);
-        saveGameButton.setPreferredSize(new Dimension(150, 50));
+        saveGameButton.setPreferredSize(new Dimension(150, 25));
         saveGameButton.addActionListener(this);
         add(saveGameButton);
 
         stageNoLabel = new JLabel((stageLabelString + gameModel.getGameStage()));
-        stageNoLabel.setPreferredSize(new Dimension(150, 25));
+        stageNoLabel.setPreferredSize(new Dimension(150, 20));
         add(stageNoLabel);
 
         sb.append(String.format("Turn No: "));
         //gameModel.getNumOfTurns()
         turnNoLabel = new JLabel();
-        turnNoLabel.setPreferredSize(new Dimension(150, 25));
+        turnNoLabel.setPreferredSize(new Dimension(150, 20));
         turnNoLabel.setText(sb.toString());
         add(turnNoLabel);
 
         guardLabel = new JLabel();
-        guardLabel.setPreferredSize(new Dimension(150, 25));
+        guardLabel.setPreferredSize(new Dimension(150, 20));
         guardLabel.setText(humanGuardString + gameModel.getRemainingGuards());
         add(guardLabel);
 
         turntakerLabel = new JLabel(playerturnString + gameModel.getCurrentPlayer());
-        turntakerLabel.setPreferredSize(new Dimension(150, 25));
+        turntakerLabel.setPreferredSize(new Dimension(150, 20));
         add(turntakerLabel);
+
+        JLabel paralyzeLabel = new JLabel("Piece Paralysed Turn");
+        turntakerLabel.setPreferredSize(new Dimension(150, 20));
+        add(paralyzeLabel);
+
+        for (int i = 0; i < gameModel.getHumanList().size(); i++) {
+            JLabel jLabel = new JLabel(PIECE + " " + (i + 1) + ": " + gameModel.getHumanList().get(i).getParalyzeTurns());
+            jLabel.setPreferredSize(new Dimension(150, 15));
+            jLabels.add(jLabel);
+            add(jLabel);
+        }
 
     }
 
@@ -89,6 +104,11 @@ public class TurnPanel
             showHumanButtons();
         }
         turntakerLabel.setText(s + playerturnString + gameModel.getCurrentPlayer().getName());
+
+        for (int i = 0; i < jLabels.size(); i++) {
+            JLabel jLabel = jLabels.get(i);
+            jLabel.setText(PIECE + " " + (i + 1) + ": " + gameModel.getHumanList().get(i).getParalyzeTurns());
+        }
     }
 
     public void updateGuardNo() {
@@ -116,7 +136,18 @@ public class TurnPanel
         for (String buttonStr : humanButtons) {
             JButton button = new JButton(buttonStr);
             hButtons.add(button);
-            button.setPreferredSize(new Dimension(150, 50));
+            button.setPreferredSize(new Dimension(150, 35));
+            button.addActionListener(this);
+            add(button);
+        }
+
+    }
+
+    void showPieceButtons() {
+        for (String pieceButton : pieceButtons) {
+            JButton button = new JButton(pieceButton);
+            hButtons.add(button);
+            button.setPreferredSize(new Dimension(50, 30));
             button.addActionListener(this);
             add(button);
         }
@@ -134,13 +165,14 @@ public class TurnPanel
         for (String buttonStr : snakeButtons) {
             JButton button = new JButton(buttonStr);
             sButtons.add(button);
-            button.setPreferredSize(new Dimension(150, 50));
+            button.setPreferredSize(new Dimension(150, 35));
             button.addActionListener(this);
             add(button);
         }
     }
 
     //endregion
+
     //region getters
     public JLabel getTurnNoLabel() {
         return turnNoLabel;

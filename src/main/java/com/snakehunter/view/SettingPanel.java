@@ -16,8 +16,10 @@ public class SettingPanel
         implements ActionListener {
 
     private final String[] buttons =
-            {"Add Snake", "Add 5 Random Snakes", "Add Ladder", "Add 5 Random Ladders", "Add Humans", "Start",
+            {"Add 5 Random S&L", "Add Snake", "Add 5 Random Snakes", "Add Ladder", "Add 5 Random Ladders", "Start",
                     "Load Game"};
+    /*{"Add Snake", "Add 5 Random Snakes", "Add Ladder", "Add 5 Random Ladders", "Add Humans", "Start",
+            "Load Game"};*/
 
     private ActionListener listener;
 
