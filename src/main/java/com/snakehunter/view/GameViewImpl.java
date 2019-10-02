@@ -45,7 +45,7 @@ public class GameViewImpl
 
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(645, 520);
+        setSize(650, 560);
 
         Container contentPane = getContentPane();
 
@@ -61,7 +61,7 @@ public class GameViewImpl
         settingPanel.setLocation(450, 20);
         contentPane.add(settingPanel);
 
-        turnPanel = new TurnPanel(this, gameModel);
+        turnPanel = new TurnPanel(this, gameModel, this.getBackground());
         turnPanel.setLocation(450, 20);
         turnPanel.setVisible(false);
         contentPane.add(turnPanel);
@@ -371,17 +371,17 @@ public class GameViewImpl
                 listener.onRandomSnakeClick();
                 listener.onRandomLadderClick();
                 break;
-            case "Move Up":
-                listener.onSnakeMove(0, 0);
+            case "Up":
+                listener.onSnakeMove(turnPanel.getJListSelectItem(), 0);
                 break;
-            case "Move Down":
-                listener.onSnakeMove(0, 1);
+            case "Down":
+                listener.onSnakeMove(turnPanel.getJListSelectItem(), 1);
                 break;
-            case "Move Left":
-                listener.onSnakeMove(0, 2);
+            case "Left":
+                listener.onSnakeMove(turnPanel.getJListSelectItem(), 2);
                 break;
-            case "Move Right":
-                listener.onSnakeMove(0, 3);
+            case "Right":
+                listener.onSnakeMove(turnPanel.getJListSelectItem(), 3);
                 break;
             case "Roll Dice":
                 //listener.onDiceShow();
@@ -417,6 +417,11 @@ public class GameViewImpl
     public void setOnViewEventListener(ViewEventListener listener) {
         this.listener = listener;
         diceView.setOnViewEventListener(listener);
+    }
+
+    @Override
+    public BoardView getBoardView() {
+        return boardView;
     }
 
 }

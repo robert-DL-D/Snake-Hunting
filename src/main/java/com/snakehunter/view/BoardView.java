@@ -110,7 +110,7 @@ public class BoardView
                     }
                 }
 
-                if (localSquares[i][9-j].isGuarded()){
+                if (localSquares[i][9 - j].isGuarded()) {
                     graphics.setColor(guardColor);
                 }
 
@@ -124,9 +124,7 @@ public class BoardView
 //            graphics.drawString("" + (i + 1), getX(i + 1), getY(i + 1) + 20);
 //        }
 
-        for (Ladder ladder : ladderList) {
-            drawLadder(graphics, ladder);
-        }
+        drawLadder(graphics, gameModel.getLadderList());
 
         drawHumans(graphics, gameModel.getHumanList());
 
@@ -197,82 +195,84 @@ public class BoardView
         }
     }
 
-    private void drawLadder(Graphics g, Ladder ladder) {
+    private void drawLadder(Graphics g, List<Ladder> ladderList) {
 
-        int bottomX = getX(ladder.getPosition()) + 10;
-        int bottomY = getY(ladder.getPosition()) + 10;
-        int topX = getX(ladder.getConnectedPosition()) + 10;
-        int topY = getY(ladder.getConnectedPosition()) + 10;
+        for (Ladder ladder : ladderList) {
+
+            int bottomX = getX(ladder.getPosition()) + 10;
+            int bottomY = getY(ladder.getPosition()) + 10;
+            int topX = getX(ladder.getConnectedPosition()) + 10;
+            int topY = getY(ladder.getConnectedPosition()) + 10;
 
 //        g.setColor(Color.red);
 //        g.drawLine(bottomX, bottomY, topX, topY);
 
-        g.setColor(ladderColor);
+            g.setColor(ladderColor);
 
-        double dx = topX - bottomX;
-        double dy = topY - bottomY;
+            double dx = topX - bottomX;
+            double dy = topY - bottomY;
 
-        double rawdX = dx;
-        double rawdY = dy;
+            double rawdX = dx;
+            double rawdY = dy;
 
-        double dist = Math.sqrt(dx * dx + dy * dy);
+            double dist = Math.sqrt(dx * dx + dy * dy);
 
-        dx /= dist;
-        dy /= dist;
+            dx /= dist;
+            dy /= dist;
 
-        int ladderWidth = 5;
-        int rungMin = 3;
-        int rungMax = 40;
-        int rungSpacing = 10;
-        //
-        //int rungNo = int(constrain(dist/rungSpacing, rungMin, rungMax));
-        int rungNo = (int) Math.min(rungMax, Math.max((int) dist / rungSpacing, rungMin));
+            int ladderWidth = 5;
+            int rungMin = 3;
+            int rungMax = 40;
+            int rungSpacing = 10;
+            //
+            //int rungNo = int(constrain(dist/rungSpacing, rungMin, rungMax));
+            int rungNo = (int) Math.min(rungMax, Math.max((int) dist / rungSpacing, rungMin));
 
-        int firstxpoint = 0;
-        int firstypoint = 0;
-        int thirdxpoint = 0;
-        int thirdypoint = 0;
-        int secondxpoint = 0;
-        int secondypoint = 0;
-        int fourthxpoint = 0;
-        int fourthypoint = 0;
+            int firstxpoint = 0;
+            int firstypoint = 0;
+            int thirdxpoint = 0;
+            int thirdypoint = 0;
+            int secondxpoint = 0;
+            int secondypoint = 0;
+            int fourthxpoint = 0;
+            int fourthypoint = 0;
 
-        for (int i = 0; i < rungNo; i++) {
-            double xpoint = bottomX + rawdX / rungNo * i;
+            for (int i = 0; i < rungNo; i++) {
+                double xpoint = bottomX + rawdX / rungNo * i;
 
-            double ypoint = bottomY + rawdY / rungNo * i;
+                double ypoint = bottomY + rawdY / rungNo * i;
 
-            if (i == 0) {
-                firstxpoint = (int) (xpoint + ladderWidth * dy);
-                firstypoint = (int) (ypoint - ladderWidth * dx);
-                thirdxpoint = (int) (xpoint - ladderWidth * dy);
-                thirdypoint = (int) (ypoint + ladderWidth * dx);
-            } else if (i == rungNo - 1) {
-                secondxpoint = (int) (xpoint + ladderWidth * dy);
-                secondypoint = (int) (ypoint - ladderWidth * dx);
-                fourthxpoint = (int) (xpoint - ladderWidth * dy);
-                fourthypoint = (int) (ypoint + ladderWidth * dx);
+                if (i == 0) {
+                    firstxpoint = (int) (xpoint + ladderWidth * dy);
+                    firstypoint = (int) (ypoint - ladderWidth * dx);
+                    thirdxpoint = (int) (xpoint - ladderWidth * dy);
+                    thirdypoint = (int) (ypoint + ladderWidth * dx);
+                } else if (i == rungNo - 1) {
+                    secondxpoint = (int) (xpoint + ladderWidth * dy);
+                    secondypoint = (int) (ypoint - ladderWidth * dx);
+                    fourthxpoint = (int) (xpoint - ladderWidth * dy);
+                    fourthypoint = (int) (ypoint + ladderWidth * dx);
 
-            } else {
-                g.drawLine((int) (xpoint + ladderWidth * dy), (int) (ypoint - ladderWidth * dx), (int) (xpoint - ladderWidth * dy), (int) (ypoint + ladderWidth * dx));
+                } else {
+                    g.drawLine((int) (xpoint + ladderWidth * dy), (int) (ypoint - ladderWidth * dx), (int) (xpoint - ladderWidth * dy), (int) (ypoint + ladderWidth * dx));
+                }
             }
+
+            g.drawLine(firstxpoint, firstypoint, secondxpoint, secondypoint);
+            g.drawLine(thirdxpoint, thirdypoint, fourthxpoint, fourthypoint);
+
+            Polygon p = new Polygon();
+            p.addPoint(firstxpoint, firstypoint);
+            p.addPoint(secondxpoint, secondypoint);
+            p.addPoint(fourthxpoint, fourthypoint);
+            p.addPoint(thirdxpoint, thirdypoint);
+
+            Color temp = new Color(ladderColor.getRed(), ladderColor.getGreen(), ladderColor.getBlue(), 64);
+
+            g.setColor(temp);
+            g.drawPolygon(p);
+            g.fillPolygon(p);
         }
-
-        g.drawLine(firstxpoint, firstypoint, secondxpoint, secondypoint);
-        g.drawLine(thirdxpoint, thirdypoint, fourthxpoint, fourthypoint);
-
-        Polygon p = new Polygon();
-        p.addPoint(firstxpoint, firstypoint);
-        p.addPoint(secondxpoint, secondypoint);
-        p.addPoint(fourthxpoint, fourthypoint);
-        p.addPoint(thirdxpoint, thirdypoint);
-
-        Color temp = new Color(ladderColor.getRed(), ladderColor.getGreen(), ladderColor.getBlue(), 64);
-
-        g.setColor(temp);
-        g.drawPolygon(p);
-        g.fillPolygon(p);
-
     }
 
     private void drawHumans(Graphics g, List<Human> humanList) {
@@ -294,15 +294,15 @@ public class BoardView
 
             g.fillOval(getX(humanPosition) - xOffset, getY(humanPosition) - yOffset, 20, 20);
 
-            if (humanList.get(i - 1).getParalyzeTurns() > 0){
-                if (humanList.get(i - 1).getParalyzeTurns() >= 3){
+            if (humanList.get(i - 1).getParalyzeTurns() > 0) {
+                if (humanList.get(i - 1).getParalyzeTurns() >= 3) {
                     g.setColor(paralyse1Color);
-                } else if (humanList.get(i -1).getParalyzeTurns() >= 2){
+                } else if (humanList.get(i - 1).getParalyzeTurns() >= 2) {
                     g.setColor(paralyse2Color);
                 } else {
                     g.setColor(paralyse3Color);
                 }
-                g.fillOval(getX(humanPosition) - xOffset, getY(humanPosition) - yOffset , 20, 20);
+                g.fillOval(getX(humanPosition) - xOffset, getY(humanPosition) - yOffset, 20, 20);
             }
 
             g.setColor(Color.BLACK);

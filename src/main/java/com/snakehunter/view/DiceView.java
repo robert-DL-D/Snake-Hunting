@@ -10,7 +10,6 @@ import java.util.Random;
 
 import javax.swing.JOptionPane;
 
-
 /**
  * @author WeiYi Yu
  * @date 2019-08-24
@@ -94,7 +93,7 @@ public class DiceView
         if (isEnabled()) {
             setEnabled(false);
             lastNum = 1;
-            if (Main.isDebugMode()){
+            if (Main.isDebugMode()) {
                 int i;
                 String s = JOptionPane.showInputDialog("DEBUG - input dice number");
                 try {
@@ -103,14 +102,14 @@ public class DiceView
                     try {
                         i = Integer.parseInt(s1);
                         listener.onDiceRolled(i - 1, lastNum);
-                    } catch (Exception e){
+                    } catch (Exception e) {
                         JOptionPane.showMessageDialog(this, "Invalid player number");
                     }
-                } catch (Exception e){
-                    JOptionPane.showMessageDialog(this,"Invalid dice number");
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, "Invalid dice number");
                 }
                 setEnabled(true);
-            }else {
+            } else {
 
                 new Thread(() -> {
                     int num;
@@ -142,6 +141,7 @@ public class DiceView
     }
 
     void moveSelectedPiece(String selectedPiece) {
+
         int playerIndex;
 
         boolean validPlayerChosen = false;

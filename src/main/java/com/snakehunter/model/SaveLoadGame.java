@@ -136,7 +136,6 @@ public class SaveLoadGame {
     }
 
     public void loadGame() {
-
         JFileChooser jFileChooser = new JFileChooser(FOLDER_PATH);
         jFileChooser.showOpenDialog(null);
         file = jFileChooser.getSelectedFile();
@@ -253,6 +252,18 @@ public class SaveLoadGame {
     }
 
     private void setSnakePos(String[] stringArray) {
+
+        for (Square[] squares : gameModel.getSquares()) {
+            for (Square square : squares) {
+                if (square.getPieceList() != null) {
+                    square.getPieceList().clear();
+                }
+
+            }
+        }
+
+        gameModel.getSnakeList().clear();
+
         for (int i = 0; i < 5; i++) {
             Snake snake = new Snake(Integer.parseInt(stringArray[i * 2 + 2]), Integer.parseInt(stringArray[i * 2 + 1]));
             gameModel.addSnake(snake);
@@ -260,6 +271,8 @@ public class SaveLoadGame {
     }
 
     private void setLadderPos(String[] stringArray) {
+        gameModel.getLadderList().clear();
+
         for (int i = 0; i < 5; i++) {
             Ladder ladder =
                     new Ladder(Integer.parseInt(stringArray[i * 2 + 1]), Integer.parseInt(stringArray[i * 2 + 2]));

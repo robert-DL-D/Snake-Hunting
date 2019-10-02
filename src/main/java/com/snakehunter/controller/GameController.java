@@ -160,15 +160,19 @@ public class GameController
 
     @Override
     public void onDiceRolled(int player, int num) {
-        if (player >= 0) {
-            gameModel.movePlayer(player, num);
-        }
-        if (num != 6) {
-            gameModel.nextTurn();
-            gameView.updateTurnNo(gameModel.getNumOfTurns());
-            gameView.hideDicePanel();
+        if (gameModel.getHumanList().get(player).getParalyzeTurns() != 0) {
+            JOptionPane.showMessageDialog(new JFrame(), "The selected piece is paralyzed, select another human piece.");
         } else {
-            JOptionPane.showMessageDialog(new JFrame(), "Human rolled a 6, they can roll again!");
+            if (player >= 0) {
+                gameModel.movePlayer(player, num);
+            }
+            if (num != 6) {
+                gameModel.nextTurn();
+                gameView.updateTurnNo(gameModel.getNumOfTurns());
+                gameView.hideDicePanel();
+            } else {
+                JOptionPane.showMessageDialog(new JFrame(), "Human rolled a 6, they can roll again!");
+            }
         }
     }
 

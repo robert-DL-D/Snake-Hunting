@@ -14,8 +14,6 @@ import com.snakehunter.model.piece.Snake;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 /**
  * @author WeiYi Yu
  * @date 2019-09-02
@@ -178,10 +176,6 @@ public class GameModelImpl
     @Override
     public void movePlayer(int index, int steps) {
 
-        while (humanPlayer.getPiece(index).getParalyzeTurns() != 0) {
-            index = Integer.parseInt(JOptionPane.showInputDialog("The selected piece is paralyzed, select another human piece.")) - 1;
-        }
-
         try {
             humanPlayer.getPiece(index).move(squares, steps);
         } catch (MaxPositionExceedException e) {
@@ -193,11 +187,13 @@ public class GameModelImpl
     @Override
     public String moveSnake(int index, int steps) {
         try {
-            return snakePlayer.getPiece(0).move(squares, steps);
+            return snakePlayer.getPiece(index).move(squares, steps);
         } catch (SnakeMoveOutOfBoundsException e) {
             e.printStackTrace();
         } catch (SnakeMoveToGuardedSquareException e1) {
             e1.printStackTrace();
+        } catch (NullPointerException nullEx) {
+            return "Please select a snake";
         }
         return null;
     }
