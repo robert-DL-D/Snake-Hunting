@@ -23,6 +23,11 @@ public class Snake
     private static final int RIGHT = 3;
 
     @Override
+    public Square moveKnight(Square[][] squares, Square newSquare) {
+        return null;
+    }
+
+    @Override
     public String move(Square[][] squares, int steps) throws SnakeMoveOutOfBoundsException, SnakeMoveToGuardedSquareException {
         String message;
         Square currSquare = getSquare(squares, getPosition());
