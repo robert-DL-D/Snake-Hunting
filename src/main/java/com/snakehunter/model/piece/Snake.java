@@ -65,6 +65,7 @@ public class Snake
         int tailCol = tail.getColumn();
         int newHeadPosition, newTailPosition;
         Square newHeadSquare, newTailSquare;
+        int intialLength = getLength();
 
         if (headRow + 1 > 9) {
             throw new SnakeMoveOutOfBoundsException();
@@ -83,9 +84,8 @@ public class Snake
                 newHeadSquare.addPiece(this);
 
                 //move tail up
-                newTailSquare = squares[tailCol][tailRow + 1];
-                newTailPosition = newTailSquare.getSquareNo();
-                setConnectedPosition(newTailPosition);
+                setConnectedPosition(getPosition() - intialLength);
+                newTailSquare = getSquare(squares, getConnectedPosition());
                 return true;
             }
         }
@@ -100,6 +100,7 @@ public class Snake
         int tailCol = tail.getColumn();
         int newHeadPosition, newTailPosition;
         Square newHeadSquare, newTailSquare;
+        int intialLength = getLength();
 
         if (tailRow - 1 < 0) {
             throw new SnakeMoveOutOfBoundsException();
@@ -120,10 +121,8 @@ public class Snake
 
 
                 //move tail down
-                newTailSquare = squares[tailCol][tailRow - 1];
-                newTailPosition = newTailSquare.getSquareNo();
-                setConnectedPosition(newTailPosition);
-
+                setConnectedPosition(getPosition() - intialLength);
+                newTailSquare = getSquare(squares, getConnectedPosition());
                 return true;
             }
         }
@@ -138,6 +137,7 @@ public class Snake
         int tailCol = tail.getColumn();
         int newHeadPosition, newTailPosition;
         Square newHeadSquare, newTailSquare;
+        int intialLength = getLength();
 
         if ( (headCol + 1 > 9) || (tailCol + 1 > 9) ) {
             throw new SnakeMoveOutOfBoundsException();
@@ -156,10 +156,8 @@ public class Snake
                 newHeadSquare.addPiece(this);
 
                 //move tail right
-                newTailSquare = squares[tailCol + 1][tailRow];
-                newTailPosition = newTailSquare.getSquareNo();
-                setConnectedPosition(newTailPosition);
-
+                setConnectedPosition(getPosition() - intialLength);
+                newTailSquare = getSquare(squares, getConnectedPosition());
                 return true;
             }
         }
@@ -174,6 +172,7 @@ public class Snake
         int tailCol = tail.getColumn();
         int newHeadPosition, newTailPosition;
         Square newHeadSquare, newTailSquare;
+        int intialLength = getLength();
 
         if ( (headCol - 1 < 0) || (tailCol - 1 < 0) ) {
             throw new SnakeMoveOutOfBoundsException();
@@ -192,10 +191,8 @@ public class Snake
                 newHeadSquare.addPiece(this);
 
                 //move tail left
-                newTailSquare = squares[tailCol - 1][tailRow];
-                newTailPosition = newTailSquare.getSquareNo();
-                setConnectedPosition(newTailPosition);
-
+                setConnectedPosition(getPosition() - intialLength);
+                newTailSquare = getSquare(squares, getConnectedPosition());
                 return true;
             }
         }

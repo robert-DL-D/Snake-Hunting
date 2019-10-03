@@ -108,6 +108,12 @@ public class Human
         return stringBuilder.append(message).toString();
     }
 
+    @Override
+    public Square moveKnight(Square[][] squares, Square newSquare) {
+        return null;
+    }
+
+
     //region private methods
     void paralyze() {
         paralyzedTurns = PARALYZE_TURNS;
@@ -131,5 +137,12 @@ public class Human
     // Method for testing
     List<Ladder> getLadderClimbedList() {
         return ladderClimbedList;
+    }
+
+
+
+    public ArrayList<Square> getValidMoves(){
+        ArrayList<Square> validSquares = new ArrayList<>();
+        return validSquares;
     }
 }
