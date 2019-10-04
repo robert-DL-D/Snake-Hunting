@@ -44,6 +44,8 @@ public class GameContract {
 
         void updateGuardNo();
 
+        void updateParalyzedTurn();
+
         void hideSettingPanel();
 
         void showSettingPanel();
@@ -91,7 +93,6 @@ public class GameContract {
         void onNumOfHumansEntered(int numOfHumans);
 
         void onFinalStage();
-
 
     }
 

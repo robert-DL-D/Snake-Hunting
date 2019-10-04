@@ -94,20 +94,17 @@ public class DiceView
             setEnabled(false);
             lastNum = 1;
             if (Main.isDebugMode()) {
-                int i;
-                String s = JOptionPane.showInputDialog("DEBUG - input dice number");
-                try {
-                    lastNum = Integer.parseInt(s);
-                    String s1 = JOptionPane.showInputDialog("DEBUG - input player number");
+                new Thread(() -> {
+                    String s = JOptionPane.showInputDialog("DEBUG - input dice number");
                     try {
-                        i = Integer.parseInt(s1);
-                        listener.onDiceRolled(i - 1, lastNum);
+                        lastNum = Integer.parseInt(s);
                     } catch (Exception e) {
-                        JOptionPane.showMessageDialog(this, "Invalid player number");
+                        JOptionPane.showMessageDialog(this, "Invalid dice number");
                     }
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(this, "Invalid dice number");
-                }
+                    System.out.println(lastNum);
+                    storedValue = lastNum;
+                }).start();
+
                 setEnabled(true);
             } else {
 

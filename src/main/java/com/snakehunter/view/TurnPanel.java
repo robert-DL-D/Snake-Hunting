@@ -33,6 +33,8 @@ public class TurnPanel
     private static final String PIECES_PARALYSED_TURN = "Pieces Paralysed Turn";
     private static final String PIECE = "Piece";
 
+    private boolean showPieceButtons = false;
+
     private final String[] humanButtons = {"Roll Dice", "Place Guard"};
     private final String[] pieceButtons = {"1", "2", "3", "4"};
     //private final String[] snakeButtons = {"Move Up", "Move Down", "Move Left", "Move Right"};
@@ -40,6 +42,7 @@ public class TurnPanel
     private final String[] longSnakeButtons = {"Left", "Right"};
 
     private final List<JButton> hButtons = new ArrayList<>();
+    private final List<JButton> pButtons = new ArrayList<>();
     private LinkedList<JLabel> jLabels = new LinkedList<>();
     private final List<JButton> sButtons = new ArrayList<>();
 
@@ -50,9 +53,8 @@ public class TurnPanel
     private JLabel stageNoLabel;
     private JLabel turntakerLabel;
     private JLabel guardLabel;
+    private JList<String> snakeJList;
     private StringBuilder sb = new StringBuilder();
-
-    private JList snakeJList;
 
     public TurnPanel(ActionListener listener, GameModel gameModel, Color background) {
         this.listener = listener;
@@ -96,7 +98,7 @@ public class TurnPanel
             add(jLabel);
         }
 
-        snakeJList = new JList();
+        snakeJList = new JList<>();
         snakeJList.setBackground(background);
         snakeJList.setBorder(new LineBorder(Color.BLACK));
 
@@ -117,14 +119,16 @@ public class TurnPanel
         }
         turntakerLabel.setText(s + playerturnString + gameModel.getCurrentPlayer().getName());
 
-        // FIXME paralysed turn doesn't update when human rolled a six and land on a snake's head
-        for (int i = 0; i < jLabels.size(); i++) {
-            jLabels.get(i).setText(PIECE + " " + (i + 1) + ": " + gameModel.getHumanList().get(i).getParalyzeTurns());
-        }
     }
 
     public void updateGuardNo() {
         guardLabel.setText(humanGuardString + gameModel.getRemainingGuards());
+    }
+
+    void updateParalyzedTurn() {
+        for (int i = 0; i < jLabels.size(); i++) {
+            jLabels.get(i).setText(PIECE + " " + (i + 1) + ": " + gameModel.getHumanList().get(i).getParalyzeTurns());
+        }
     }
 
     @Override
@@ -156,17 +160,45 @@ public class TurnPanel
             button.addActionListener(this);
             add(button);
         }
-
     }
 
-    void showPieceButtons() {
-        for (String pieceButton : pieceButtons) {
-            JButton button = new JButton(pieceButton);
-            hButtons.add(button);
+    public void addPieceButtons() {
+        for (String pieceString : pieceButtons) {
+            JButton button = new JButton(pieceString);
+            pButtons.add(button);
             button.setPreferredSize(new Dimension(50, 30));
             button.addActionListener(this);
             add(button);
         }
+
+        showPieceButtons = true;
+    }
+
+    private void removePieceButtons() {
+        for (JButton b : pButtons) {
+            remove(b);
+        }
+        repaint();
+        pButtons.clear();
+        showPieceButtons = false;
+    }
+
+    public void showPieceButtons() {
+        for (JButton b : pButtons) {
+            b.setVisible(true);
+        }
+        showPieceButtons = true;
+    }
+
+    public void hidePieceButtons() {
+        for (JButton b : pButtons) {
+            b.setVisible(false);
+        }
+        showPieceButtons = false;
+    }
+
+    public boolean getShowPieceButtons() {
+        return showPieceButtons;
     }
 
     private void showSnakeButtons() {
@@ -176,18 +208,19 @@ public class TurnPanel
         for (JButton b : sButtons) {
             remove(b);
         }
+
+        removePieceButtons();
         repaint();
         hButtons.clear();
 
         List<Snake> snakeList = gameModel.getSnakeList();
-        String[] temp = new String[snakeList.size()];
+        String[] snakePosArray = new String[snakeList.size()];
         for (int i = 0; i < snakeList.size(); i++) {
             Snake snake = snakeList.get(i);
-            temp[i] = ("Snake " + (i + 1) + ": " + snake.getPosition() + " " + snake.getConnectedPosition());
-
+            snakePosArray[i] = ("Snake " + (i + 1) + ": " + snake.getPosition() + " " + snake.getConnectedPosition());
         }
 
-        snakeJList.setListData(temp);
+        snakeJList.setListData(snakePosArray);
 
         add(snakeJList);
 
@@ -219,8 +252,12 @@ public class TurnPanel
 
     //region getters
 
-    public int getJListSelectItem() {
+    int getJListSelectItem() {
         return snakeJList.getSelectedIndex();
+    }
+
+    public List<JButton> getpButtons() {
+        return pButtons;
     }
 
     public JLabel getTurnNoLabel() {

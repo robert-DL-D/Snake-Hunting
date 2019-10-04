@@ -71,7 +71,6 @@ public class GameViewImpl
         gameOverPanel.setVisible(false);
         contentPane.add(gameOverPanel);
 
-
         setVisible(true);
     }
 
@@ -96,7 +95,6 @@ public class GameViewImpl
 //            }
         } else {
             diceView.roll();
-            turnPanel.showPieceButtons();
         }
     }
 
@@ -207,6 +205,11 @@ public class GameViewImpl
     }
 
     @Override
+    public void updateParalyzedTurn() {
+        turnPanel.updateParalyzedTurn();
+    }
+
+    @Override
     public void updateStage(GameStage s) {
         turnPanel.updateStage(s);
     }
@@ -232,7 +235,7 @@ public class GameViewImpl
     }
 
     @Override
-    public void showSettingPanel(){
+    public void showSettingPanel() {
         settingPanel.setVisible(true);
     }
 
@@ -243,17 +246,17 @@ public class GameViewImpl
 
     @Override
     public void showGameOverPanel(Player p) {
-    gameOverPanel.setVisible(true);
-    gameOverPanel.updateWinner(p);
+        gameOverPanel.setVisible(true);
+        gameOverPanel.updateWinner(p);
     }
 
     @Override
-    public void showGuardPlacer(){
+    public void showGuardPlacer() {
         try {
             int squareNo = Integer.parseInt(JOptionPane.showInputDialog("Enter square number to place guard on:"));
             gameModel.addGuard(squareNo);
 
-        } catch (Exception e){
+        } catch (Exception e) {
             showErrorDialog("Enter a valid square number");
         }
 
@@ -286,6 +289,7 @@ public class GameViewImpl
         gameModel.nextTurn();
         turnPanel.updateGuardNo();
         turnPanel.updateTurnNo(gameModel.getNumOfTurns());
+        turnPanel.updateParalyzedTurn();
         turnPanel.updateStage(gameModel.getGameStage());
         turnPanel.repaint();
         System.out.println("test");
@@ -301,9 +305,8 @@ public class GameViewImpl
         //diceView.setVisible(true);
     }
 
-
     @Override
-    public void onGameOver(Player winner){
+    public void onGameOver(Player winner) {
         hideDicePanel();
         hideTurnPanel();
         showGameOverPanel(winner);
@@ -323,16 +326,14 @@ public class GameViewImpl
         listener.onFinalStage();
     }
 
-
     @Override
     public void onNumOfHumansEnteredError() {
         showErrorDialog("Please enter a number between 2 ~ 4.");
     }
     //endregion
 
-
     //region Getters
-    public TurnPanel getTurnPanel(){
+    public TurnPanel getTurnPanel() {
         return turnPanel;
     }
     //endregion
@@ -356,15 +357,15 @@ public class GameViewImpl
             case "Start":
                 try {
                     listener.onStartClick();
-                } catch (GameNotReadyException gnre){
+                } catch (GameNotReadyException gnre) {
                     JOptionPane.showMessageDialog(this, "Game not yet ready: " + gnre.getMessage());
                 }
 
                 break;
-        case "Add 5 Random Snakes":
+            case "Add 5 Random Snakes":
                 listener.onRandomSnakeClick();
                 break;
-        case "Add 5 Random Ladders":
+            case "Add 5 Random Ladders":
                 listener.onRandomLadderClick();
                 break;
             case "Add 5 Random S&L":

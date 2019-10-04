@@ -115,8 +115,6 @@ public class GameController
             gameView.updateStage(gameModel.getGameStage());
             gameView.updateTurnNo(gameModel.getNumOfTurns());
 
-            System.out.println("DEBUG: The first snake is at " + gameModel.getSnakeList().get(0).getPosition() + " " + gameModel.getSnakeList().get(0).getConnectedPosition());
-
         } else {
 
             //gameView.showErrorDialog("Make sure you add snakes, ladders and humans before start the game.");
@@ -138,13 +136,17 @@ public class GameController
 
     @Override
     public void onDiceClick() {
-
         gameView.showDicePanel();
         if (gameModel.getGameStage().equals(GameStage.INITIAL)) {
             return;
         }
         gameView.rollTheDice();
 
+        if (gameView.getTurnPanel().getpButtons().isEmpty()) {
+            gameView.getTurnPanel().addPieceButtons();
+        } else if (!gameView.getTurnPanel().getShowPieceButtons()) {
+            gameView.getTurnPanel().showPieceButtons();
+        }
     }
 
     @Override
@@ -169,9 +171,13 @@ public class GameController
             if (num != 6) {
                 gameModel.nextTurn();
                 gameView.updateTurnNo(gameModel.getNumOfTurns());
+                gameView.updateParalyzedTurn();
                 gameView.hideDicePanel();
             } else {
                 JOptionPane.showMessageDialog(new JFrame(), "Human rolled a 6, they can roll again!");
+                gameView.getTurnPanel().hidePieceButtons();
+                gameView.updateParalyzedTurn();
+
             }
         }
     }

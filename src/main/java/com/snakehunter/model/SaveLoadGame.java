@@ -196,10 +196,13 @@ public class SaveLoadGame {
                 JOptionPane.showMessageDialog(new JFrame(), "File not found", "File not found", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            if (file.getName().contains(saveFileNameTemplate)) {
-                JOptionPane.showMessageDialog(new JFrame(), "Incorrect save file for current players", "Incorrect save file", JOptionPane.WARNING_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(new JFrame(), "Not a valid save file", "Invalid save file", JOptionPane.WARNING_MESSAGE);
+            try {
+                if (file.getName().contains(saveFileNameTemplate)) {
+                    JOptionPane.showMessageDialog(new JFrame(), "Incorrect save file for current players", "Incorrect save file", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(new JFrame(), "Not a valid save file", "Invalid save file", JOptionPane.WARNING_MESSAGE);
+                }
+            } catch (NullPointerException nullEx) {
             }
         }
     }
@@ -234,7 +237,6 @@ public class SaveLoadGame {
         } catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(new JFrame(), "No save file found in folder", "No save file found", JOptionPane.WARNING_MESSAGE);
         } catch (NullPointerException nullEx) {
-            JOptionPane.showMessageDialog(new JFrame(), nullEx.toString(), "NullPointerException", JOptionPane.WARNING_MESSAGE);
         }
     }
 
