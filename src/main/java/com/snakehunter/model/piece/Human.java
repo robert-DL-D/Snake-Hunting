@@ -113,7 +113,6 @@ public class Human
         return null;
     }
 
-
     //region private methods
     void paralyze() {
         paralyzedTurns = PARALYZE_TURNS;

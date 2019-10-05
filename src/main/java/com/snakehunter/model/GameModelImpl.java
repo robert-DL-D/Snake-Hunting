@@ -187,6 +187,12 @@ public class GameModelImpl
     @Override
     public void movePlayer(int index, Square destSquare) {
         Square newSquare = humanPlayer.getPiece(index).moveKnight(squares, destSquare);
+
+        Snake snake = newSquare.getSnake();
+        if (snake != null && snake.getConnectedPosition() == newSquare.getSquareNo()) {
+            newSquare.removePiece(snake);
+            getSquare(snake.getPosition()).removePiece(snake);
+        }
     }
 
     @Override
