@@ -185,6 +185,11 @@ public class GameModelImpl
     }
 
     @Override
+    public void movePlayer(int index, Square destSquare) {
+        Square newSquare = humanPlayer.getPiece(index).moveKnight(squares, destSquare);
+    }
+
+    @Override
     public String moveSnake(int index, int steps) {
         try {
             return snakePlayer.getPiece(index).move(squares, steps);

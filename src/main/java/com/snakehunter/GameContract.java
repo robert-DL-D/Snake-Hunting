@@ -119,6 +119,8 @@ public class GameContract {
 
         void movePlayer(int index, int steps);
 
+        void movePlayer(int index, Square destSquare);
+
         String moveSnake(int index, int steps);
 
         void setOnDataChangedListener(DataChangedListener listener);
