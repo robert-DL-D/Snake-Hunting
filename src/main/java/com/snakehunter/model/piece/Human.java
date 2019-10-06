@@ -112,24 +112,31 @@ public class Human
     public Square moveKnight(Square[][] squares, Square newSquare) {
         ArrayList<Square> validSquares = getValidMoves(squares);
 
+
+        if (isLandOnSnakeTail(newSquare)) {
+            killSnake(squares);
+        }
         return null;
     }
 
 
-    public ArrayList<Square> getValidMoves(Square[][] squares){
+    public ArrayList<Square> getValidMoves(Square[][] squares) {
         ArrayList<Square> validSquares = new ArrayList<>();
 
         Square currSquare = getSquare(squares, getPosition());
         int currCol = currSquare.getColumn();
         int currRow = currSquare.getRow();
 
-        Square[] potentialKnightMoves = {squares[currCol-1][currRow+2], squares[currCol+1][currRow+2], squares[currCol+2][currRow+1], squares[currCol+2][currRow-1], squares[currCol+1][currRow-2], squares[currCol-1][currRow-2], squares[currCol-2][currRow-1], squares[currCol-2][currRow+1]};
+        Square[] potentialKnightMoves = {squares[currCol - 1][currRow + 2], squares[currCol + 1][currRow + 2],
+                squares[currCol + 2][currRow + 1], squares[currCol + 2][currRow - 1], squares[currCol + 1][currRow - 2],
+                squares[currCol - 1][currRow - 2], squares[currCol - 2][currRow - 1],
+                squares[currCol - 2][currRow + 1]};
 
-        for(int i = 0; i < potentialKnightMoves.length; i++){
+        for (int i = 0; i < potentialKnightMoves.length; i++) {
             int newCol = potentialKnightMoves[i].getColumn();
             int newRow = potentialKnightMoves[i].getRow();
 
-            if( (newCol >= 0 && newCol <=9) && (newRow >= 0 && newRow <= 9)){
+            if ((newCol >= 0 && newCol <= 9) && (newRow >= 0 && newRow <= 9)) {
                 validSquares.add(potentialKnightMoves[i]);
             }
         }
@@ -151,6 +158,19 @@ public class Human
         }
 
         ladderClimbedList.add(ladder);
+    }
+
+    private boolean isLandOnSnakeTail(Square square) {
+        Snake snake = square.getSnake();
+        return snake != null && snake.getConnectedPosition() == square.getSquareNo();
+    }
+
+    private void killSnake(Square[][] squares) {
+        Square currentSquare = getSquare(squares, getPosition());
+        Snake snake = currentSquare.getSnake();
+        Square snakeHeadSquare = getSquare(squares, snake.getPosition());
+        currentSquare.removePiece(snake);
+        snakeHeadSquare.removePiece(snake);
     }
     //endregion
 
