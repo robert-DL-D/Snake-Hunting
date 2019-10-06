@@ -110,8 +110,6 @@ public class Human
 
     @Override
     public Square moveKnight(Square[][] squares, Square newSquare) {
-        ArrayList<Square> validSquares = getValidMoves(squares);
-
 
         if (isLandOnSnakeTail(newSquare)) {
             killSnake(squares);
@@ -120,6 +118,16 @@ public class Human
     }
 
 
+    public String[] getValidKnightMoves(Square[][] squares){
+        List<Square> squareList = getValidMoves(squares);
+
+        String[] squareNoList = new String[squareList.size()];
+        for(int i =0; i < squareList.size(); i++){
+            squareNoList[i] = "Square " + squareList.get(i).getSquareNo();
+        }
+        return squareNoList;
+    }
+
     public ArrayList<Square> getValidMoves(Square[][] squares) {
         ArrayList<Square> validSquares = new ArrayList<>();
 
@@ -127,19 +135,38 @@ public class Human
         int currCol = currSquare.getColumn();
         int currRow = currSquare.getRow();
 
-        Square[] potentialKnightMoves = {squares[currCol - 1][currRow + 2], squares[currCol + 1][currRow + 2],
-                squares[currCol + 2][currRow + 1], squares[currCol + 2][currRow - 1], squares[currCol + 1][currRow - 2],
-                squares[currCol - 1][currRow - 2], squares[currCol - 2][currRow - 1],
-                squares[currCol - 2][currRow + 1]};
+        int[][] knightCoords = {
+                {-1, 2},
+                {1, 2},
+                {2, 1},
+                {2, -1},
+                {1, -2},
+                {-1, -2},
+                {-2, -1},
+                {-2, 1}
+        };
 
-        for (int i = 0; i < potentialKnightMoves.length; i++) {
-            int newCol = potentialKnightMoves[i].getColumn();
-            int newRow = potentialKnightMoves[i].getRow();
-
-            if ((newCol >= 0 && newCol <= 9) && (newRow >= 0 && newRow <= 9)) {
-                validSquares.add(potentialKnightMoves[i]);
+        for(int i=0; i < knightCoords.length; i++){
+            if (currCol + knightCoords[i][0] <= 9 && currCol + knightCoords[i][0] >=0 && currRow +  knightCoords[i][1]<= 9 && currRow + knightCoords[i][1] >= 0){
+                validSquares.add(squares[currCol + knightCoords[i][0]][currRow + knightCoords[i][1]]);
             }
         }
+
+//        Square[] potentialKnightMoves = {squares[currCol - 1][currRow + 2], squares[currCol + 1][currRow + 2],
+//                squares[currCol + 2][currRow + 1], squares[currCol + 2][currRow - 1], squares[currCol + 1][currRow - 2],
+//                squares[currCol - 1][currRow - 2], squares[currCol - 2][currRow - 1],
+//                squares[currCol - 2][currRow + 1]};
+//
+//
+//
+//        for (int i = 0; i < potentialKnightMoves.length; i++) {
+//            int newCol = potentialKnightMoves[i].getColumn();
+//            int newRow = potentialKnightMoves[i].getRow();
+//
+//            if ((newCol >= 0 && newCol <= 9) && (newRow >= 0 && newRow <= 9)) {
+//                validSquares.add(potentialKnightMoves[i]);
+//            }
+//        }
 
         return validSquares;
 

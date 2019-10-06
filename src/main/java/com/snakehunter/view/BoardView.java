@@ -115,8 +115,6 @@ public class BoardView
                 }
 
                 graphics.fillRect(i * 40 + 20, j * 40 + 20, 40, 40);
-                graphics.setColor(boardNumberColor);
-                graphics.drawString(Integer.toString(localSquares[i][9 - j].getSquareNo()), i * 40 + 20, j * 40 + 40);
             }
         }
 
@@ -129,6 +127,13 @@ public class BoardView
         drawHumans(graphics, gameModel.getHumanList());
 
         drawSnake(graphics, gameModel.getSnakeList());
+
+        for (int i = 0; i < localSquares.length; i++) {
+            for (int j = 0; j < localSquares[0].length; j++) {
+                graphics.setColor(boardNumberColor);
+                graphics.drawString(Integer.toString(localSquares[i][9 - j].getSquareNo()), i * 40 + 20, j * 40 + 30);
+            }
+        }
     }
 
     protected void drawSnake(Graphics g, List<Snake> snakeList) {

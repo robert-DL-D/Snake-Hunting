@@ -409,6 +409,10 @@ public class GameViewImpl
             case "4":
                 diceView.moveSelectedPiece("4");
                 break;
+        case "Show Valid Moves":
+                turnPanel.showValidMoves(turnPanel.getHumanListItem());
+                //listener.onKnightClick(turnPanel.getHumanListItem());
+                break;
             default:
                 break;
         }
@@ -419,6 +423,7 @@ public class GameViewImpl
         this.listener = listener;
         diceView.setOnViewEventListener(listener);
     }
+
 
     @Override
     public BoardView getBoardView() {

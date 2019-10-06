@@ -57,6 +57,7 @@ public class GameContract {
         TurnPanel getTurnPanel();
 
         void setOnViewEventListener(ViewEventListener listener);
+
     }
 
     public interface ViewEventListener {
@@ -94,6 +95,7 @@ public class GameContract {
 
         void onFinalStage();
 
+        void onKnightClick(int humanPiece);
     }
 
     public interface GameModel {

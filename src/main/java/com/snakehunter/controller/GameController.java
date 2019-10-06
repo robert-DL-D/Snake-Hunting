@@ -109,7 +109,7 @@ public class GameController
             gameView.hideGameOverPanel();
             gameView.hideSettingPanel();
             gameView.showTurnPanel();
-            gameModel.setGameStage(GameStage.SECOND);
+            gameModel.setGameStage(GameStage.FINAL);
             gameModel.nextTurn();
             gameView.updateGuardNo();
             gameView.updateStage(gameModel.getGameStage());
@@ -203,6 +203,11 @@ public class GameController
         gameModel.setNumOfTurns(1);
         gameView.updateStage(GameStage.FINAL);
         gameView.updateTurnNo(gameModel.getNumOfTurns());
+    }
+
+    @Override
+    public void onKnightClick(int humanPiece) {
+        
     }
 
     @Override

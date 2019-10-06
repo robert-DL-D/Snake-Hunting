@@ -15,6 +15,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
@@ -36,6 +37,7 @@ public class TurnPanel
     private boolean showPieceButtons = false;
 
     private final String[] humanButtons = {"Roll Dice", "Place Guard"};
+    private final String[] humanFinalButtons = {"Show Valid Moves"};
     private final String[] pieceButtons = {"1", "2", "3", "4"};
     //private final String[] snakeButtons = {"Move Up", "Move Down", "Move Left", "Move Right"};
     private final String[] wideSnakeButtons = {"Up", "Down"};
@@ -46,6 +48,7 @@ public class TurnPanel
     private LinkedList<JLabel> jLabels = new LinkedList<>();
     private final List<JButton> sButtons = new ArrayList<>();
 
+
     private ActionListener listener;
 
     private GameModel gameModel;
@@ -53,7 +56,10 @@ public class TurnPanel
     private JLabel stageNoLabel;
     private JLabel turntakerLabel;
     private JLabel guardLabel;
+    private JLabel knightLabel = new JLabel("Choose a human to move:");
     private JList<String> snakeJList;
+    private JList<String> humanJList;
+    private JList<String> validMovesList;
     private StringBuilder sb = new StringBuilder();
 
     public TurnPanel(ActionListener listener, GameModel gameModel, Color background) {
@@ -102,6 +108,14 @@ public class TurnPanel
         snakeJList.setBackground(background);
         snakeJList.setBorder(new LineBorder(Color.BLACK));
 
+        humanJList = new JList<>();
+        humanJList.setBackground(background);
+        humanJList.setBorder(new LineBorder(Color.BLACK));
+
+        validMovesList = new JList<>();
+        validMovesList.setBackground(background);
+        validMovesList.setBorder(new LineBorder(Color.BLACK));
+
     }
 
     //region functionality
@@ -118,7 +132,6 @@ public class TurnPanel
             showHumanButtons();
         }
         turntakerLabel.setText(s + playerturnString + gameModel.getCurrentPlayer().getName());
-
     }
 
     public void updateGuardNo() {
@@ -153,13 +166,28 @@ public class TurnPanel
 
         repaint();
         sButtons.clear();
-        for (String buttonStr : humanButtons) {
-            JButton button = new JButton(buttonStr);
-            hButtons.add(button);
-            button.setPreferredSize(new Dimension(150, 35));
-            button.addActionListener(this);
-            add(button);
+
+        if (gameModel.getGameStage() == GameStage.SECOND){
+            for (String buttonStr : humanButtons) {
+                JButton button = new JButton(buttonStr);
+                hButtons.add(button);
+                button.setPreferredSize(new Dimension(150, 35));
+                button.addActionListener(this);
+                add(button);
+            }
+        } else {
+            showHumanKnightButtons();
+            for (String buttonStr : humanFinalButtons){
+                JButton button = new JButton(buttonStr);
+                hButtons.add(button);
+                button.setPreferredSize(new Dimension(150, 35));
+                button.addActionListener(this);
+                add(button);
+            }
+            add(validMovesList);
+
         }
+
     }
 
     public void addPieceButtons() {
@@ -248,12 +276,26 @@ public class TurnPanel
 
     }
 
+    private void showHumanKnightButtons(){
+        add(knightLabel);
+        String[] humanPieces = new String[gameModel.getHumanList().size()];
+        for(int i=0; i < humanPieces.length; i++){
+            humanPieces[i] = ("Human " + (i + 1) + " @ pos " + gameModel.getHumanList().get(i).getPosition());
+        }
+        humanJList.setListData(humanPieces);
+        add(humanJList);
+    }
+
     //endregion
 
     //region getters
 
     int getJListSelectItem() {
         return snakeJList.getSelectedIndex();
+    }
+
+    int getHumanListItem(){
+        return humanJList.getSelectedIndex();
     }
 
     public List<JButton> getpButtons() {
@@ -274,6 +316,17 @@ public class TurnPanel
 
     public JLabel getGuardLabel() {
         return guardLabel;
+    }
+
+    public void showValidMoves(int humanPiece) {
+        if (humanPiece <= gameModel.getHumanList().size() && humanPiece >= 0){
+            String[] test = gameModel.getHumanList().get(humanPiece).getValidKnightMoves(gameModel.getSquares());
+            validMovesList.setListData(test);
+            add(new JButton("Move Piece"));
+        } else {
+            JOptionPane.showMessageDialog(this, "please select a piece to move");
+        }
+
     }
     //end region
 }

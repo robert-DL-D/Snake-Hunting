@@ -13,7 +13,6 @@ public interface Movable {
     // return a message describes the movement
     String move(Square[][] squares, int steps) throws SnakeMoveOutOfBoundsException,
             SnakeMoveToGuardedSquareException, MaxPositionExceedException;
-
     Square moveKnight(Square[][] squares, Square newSquare);
 }
 
