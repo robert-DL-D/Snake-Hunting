@@ -289,7 +289,6 @@ public class GameViewImpl
         gameModel.nextTurn();
         turnPanel.updateGuardNo();
         turnPanel.updateTurnNo(gameModel.getNumOfTurns());
-        turnPanel.updateParalyzedTurn();
         turnPanel.updateStage(gameModel.getGameStage());
         turnPanel.repaint();
         System.out.println("test");
