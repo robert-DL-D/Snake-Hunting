@@ -140,8 +140,6 @@ public class GameModelImpl
 
     @Override
     public void nextTurn() {
-
-        System.out.println(numOfTurns);
         if (numOfTurns % 2 == 0) {
             for (Human h : getHumanList()) {
                 h.isParalyzed();
@@ -152,6 +150,7 @@ public class GameModelImpl
         if (numOfTurns >= getGameStage().getMaxTurns()) {
             listener.onGameOver(snakePlayer);
         }
+
         if (getGameStage() == GameStage.SECOND) {
             for (Human h : getHumanList()) {
                 System.out.println(h);
@@ -187,12 +186,6 @@ public class GameModelImpl
     @Override
     public void movePlayer(int index, Square destSquare) {
         Square newSquare = humanPlayer.getPiece(index).moveKnight(squares, destSquare);
-
-        Snake snake = newSquare.getSnake();
-        if (snake != null && snake.getConnectedPosition() == newSquare.getSquareNo()) {
-            newSquare.removePiece(snake);
-            getSquare(snake.getPosition()).removePiece(snake);
-        }
     }
 
     @Override
