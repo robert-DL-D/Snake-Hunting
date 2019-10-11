@@ -294,6 +294,11 @@ public class GameViewImpl
     }
 
     @Override
+    public void onHumanMoved(String message) {
+        showInfoDialog(message);
+    }
+
+    @Override
     public void onExceedMaxNumOfGuards() {
         showErrorDialog("Cannot place more than 3 guards.");
     }

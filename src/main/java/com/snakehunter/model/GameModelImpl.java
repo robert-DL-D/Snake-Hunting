@@ -51,7 +51,6 @@ public class GameModelImpl
     @Override
     public void addSnake(Snake snake) {
         String errorMessage = validateSnake(snake);
-        System.out.println(errorMessage);
         if (errorMessage != null && listener != null) {
             listener.onAddSnakeFailed(errorMessage);
             return;
@@ -180,7 +179,8 @@ public class GameModelImpl
     @Override
     public int movePlayer(int index, int steps) {
         try {
-            humanPlayer.getPiece(index).move(squares, steps);
+            String movementMsg = humanPlayer.getPiece(index).move(squares, steps);
+            listener.onHumanMoved(movementMsg);
         } catch (MaxPositionExceedException e) {
             listener.onExceedMaxPosition();
         } catch (LadderClimbedThresholdException e) {

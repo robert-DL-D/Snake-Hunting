@@ -155,6 +155,8 @@ public class GameContract {
 
         void onGuardAdded(int position);
 
+        void onHumanMoved(String message);
+
         void onExceedMaxNumOfGuards();
 
         void onExceedMaxPosition();
