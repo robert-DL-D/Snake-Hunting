@@ -372,16 +372,16 @@ public class GameViewImpl
                 listener.onRandomLadderClick();
                 break;
             case "Up":
-                listener.onSnakeMove(turnPanel.getJListSelectItem(), 0);
+                listener.onSnakeMove(turnPanel.getSnakeJListSelectedItem(), 0);
                 break;
             case "Down":
-                listener.onSnakeMove(turnPanel.getJListSelectItem(), 1);
+                listener.onSnakeMove(turnPanel.getSnakeJListSelectedItem(), 1);
                 break;
             case "Left":
-                listener.onSnakeMove(turnPanel.getJListSelectItem(), 2);
+                listener.onSnakeMove(turnPanel.getSnakeJListSelectedItem(), 2);
                 break;
             case "Right":
-                listener.onSnakeMove(turnPanel.getJListSelectItem(), 3);
+                listener.onSnakeMove(turnPanel.getSnakeJListSelectedItem(), 3);
                 break;
             case "Roll Dice":
                 //listener.onDiceShow();
@@ -408,7 +408,7 @@ public class GameViewImpl
             case "4":
                 diceView.moveSelectedPiece("4");
                 break;
-        case "Show Valid Moves":
+            case "Show Valid Moves":
                 turnPanel.showValidMoves(turnPanel.getHumanListItem());
                 //listener.onKnightClick(turnPanel.getHumanListItem());
                 break;
@@ -422,7 +422,6 @@ public class GameViewImpl
         this.listener = listener;
         diceView.setOnViewEventListener(listener);
     }
-
 
     @Override
     public BoardView getBoardView() {

@@ -2,7 +2,6 @@ package com.snakehunter.view;
 
 import com.snakehunter.GameContract.GameModel;
 import com.snakehunter.GameStage;
-import com.snakehunter.model.piece.Snake;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -33,11 +32,11 @@ public class TurnPanel
     private final String humanGuardString = "Guards left: ";
     private static final String PIECES_PARALYSED_TURN = "Pieces Paralysed Turn";
     private static final String PIECE = "Piece";
+    private static final String SHOW_VALID_MOVES = "Show Valid Moves";
 
     private boolean showPieceButtons = false;
 
     private final String[] humanButtons = {"Roll Dice", "Place Guard"};
-    private final String[] humanFinalButtons = {"Show Valid Moves"};
     private final String[] pieceButtons = {"1", "2", "3", "4"};
     //private final String[] snakeButtons = {"Move Up", "Move Down", "Move Left", "Move Right"};
     private final String[] wideSnakeButtons = {"Up", "Down"};
@@ -45,8 +44,9 @@ public class TurnPanel
 
     private final List<JButton> hButtons = new ArrayList<>();
     private final List<JButton> pButtons = new ArrayList<>();
-    private LinkedList<JLabel> paralyzedLabels = new LinkedList<>();
+    private LinkedList<JLabel> piecesParalyzedLabels = new LinkedList<>();
     private final List<JButton> sButtons = new ArrayList<>();
+    private LinkedList<JButton> humanKnightMoveButtons = new LinkedList<>();
 
     private ActionListener listener;
 
@@ -58,8 +58,9 @@ public class TurnPanel
     private JLabel knightLabel = new JLabel("Choose a human to move:");
     private JList<String> snakeJList;
     private JList<String> humanJList;
-    private JList<String> validMovesList;
+    //private JList<String> validMovesList;
     private StringBuilder sb = new StringBuilder();
+    private JLabel paralyzeLabel;
 
     public TurnPanel(ActionListener listener, GameModel gameModel, Color background) {
         this.listener = listener;
@@ -92,14 +93,15 @@ public class TurnPanel
         turntakerLabel.setPreferredSize(new Dimension(150, 20));
         add(turntakerLabel);
 
-        JLabel paralyzeLabel = new JLabel(PIECES_PARALYSED_TURN);
+        paralyzeLabel = new JLabel(PIECES_PARALYSED_TURN);
         turntakerLabel.setPreferredSize(new Dimension(150, 20));
         add(paralyzeLabel);
 
         for (int i = 0; i < gameModel.getHumanList().size(); i++) {
-            JLabel jLabel = new JLabel(PIECE + " " + (i + 1) + ": " + gameModel.getHumanList().get(i).getParalyzeTurns());
+            JLabel jLabel =
+                    new JLabel(PIECE + " " + (i + 1) + ": " + gameModel.getHumanList().get(i).getParalyzeTurns());
             jLabel.setPreferredSize(new Dimension(150, 15));
-            paralyzedLabels.add(jLabel);
+            piecesParalyzedLabels.add(jLabel);
             add(jLabel);
         }
 
@@ -111,9 +113,9 @@ public class TurnPanel
         humanJList.setBackground(background);
         humanJList.setBorder(new LineBorder(Color.BLACK));
 
-        validMovesList = new JList<>();
+        /*validMovesList = new JList<>();
         validMovesList.setBackground(background);
-        validMovesList.setBorder(new LineBorder(Color.BLACK));
+        validMovesList.setBorder(new LineBorder(Color.BLACK));*/
 
     }
 
@@ -121,7 +123,8 @@ public class TurnPanel
 
     public void updateTurnNo(int turnNo) {
         sb = new StringBuilder();
-        sb.append(String.format(turnNoString, (int) Math.ceil(turnNo / 2.0), (int) Math.ceil(gameModel.getGameStage().getMaxTurns() / 2.0)));
+        sb.append(String.format(turnNoString, (int) Math.ceil(turnNo / 2.0),
+                (int) Math.ceil(gameModel.getGameStage().getMaxTurns() / 2.0)));
         turnNoLabel.setText(sb.toString());
         String s = "Human's";
         if (gameModel.getCurrentPlayer().isSnake()) {
@@ -136,12 +139,25 @@ public class TurnPanel
     }
 
     public void updateGuardNo() {
-        guardLabel.setText(humanGuardString + gameModel.getRemainingGuards());
+        if (gameModel.getGameStage().equals(GameStage.SECOND)) {
+            guardLabel.setText(humanGuardString + gameModel.getRemainingGuards());
+        } else {
+            remove(guardLabel);
+        }
     }
 
     void updateParalyzedTurn() {
-        for (int i = 0; i < paralyzedLabels.size(); i++) {
-            paralyzedLabels.get(i).setText(PIECE + " " + (i + 1) + ": " + gameModel.getHumanList().get(i).getParalyzeTurns());
+        if (gameModel.getGameStage().equals(GameStage.SECOND)) {
+
+            for (int i = 0; i < piecesParalyzedLabels.size(); i++) {
+                piecesParalyzedLabels.get(i).setText(
+                        PIECE + " " + (i + 1) + ": " + gameModel.getHumanList().get(i).getParalyzeTurns());
+            }
+        } else {
+            remove(paralyzeLabel);
+            for (JLabel piecesParalyzedLabel : piecesParalyzedLabels) {
+                remove(piecesParalyzedLabel);
+            }
         }
     }
 
@@ -177,15 +193,15 @@ public class TurnPanel
                 add(button);
             }
         } else {
-            showHumanKnightButtons();
-            for (String buttonStr : humanFinalButtons) {
-                JButton button = new JButton(buttonStr);
-                hButtons.add(button);
-                button.setPreferredSize(new Dimension(150, 35));
-                button.addActionListener(this);
-                add(button);
-            }
-            add(validMovesList);
+            showHumanKnightJList();
+
+            JButton button = new JButton(SHOW_VALID_MOVES);
+            hButtons.add(button);
+            button.setPreferredSize(new Dimension(150, 35));
+            button.addActionListener(this);
+            add(button);
+
+            //add(validMovesList);
 
         }
 
@@ -242,11 +258,9 @@ public class TurnPanel
         repaint();
         hButtons.clear();
 
-        List<Snake> snakeList = gameModel.getSnakeList();
-        String[] snakePosArray = new String[snakeList.size()];
-        for (int i = 0; i < snakeList.size(); i++) {
-            Snake snake = snakeList.get(i);
-            snakePosArray[i] = ("Snake " + (i + 1) + ": " + snake.getPosition() + " " + snake.getConnectedPosition());
+        String[] snakePosArray = new String[gameModel.getSnakeList().size()];
+        for (int i = 0; i < gameModel.getSnakeList().size(); i++) {
+            snakePosArray[i] = ("Snake " + (i + 1) + ": " + gameModel.getSnakeList().get(i).getPosition() + " " + gameModel.getSnakeList().get(i).getConnectedPosition());
         }
 
         snakeJList.setListData(snakePosArray);
@@ -277,11 +291,13 @@ public class TurnPanel
 
     }
 
-    private void showHumanKnightButtons() {
+    private void showHumanKnightJList() {
         add(knightLabel);
         String[] humanPieces = new String[gameModel.getHumanList().size()];
         for (int i = 0; i < humanPieces.length; i++) {
-            humanPieces[i] = ("Human " + (i + 1) + " @ pos " + gameModel.getHumanList().get(i).getPosition());
+            if (gameModel.getHumanList().get(i).getPosition() != 100) {
+                humanPieces[i] = ("Human " + (i + 1) + " @ pos " + gameModel.getHumanList().get(i).getPosition());
+            }
         }
         humanJList.setListData(humanPieces);
         add(humanJList);
@@ -291,7 +307,7 @@ public class TurnPanel
 
     //region getters
 
-    int getJListSelectItem() {
+    int getSnakeJListSelectedItem() {
         return snakeJList.getSelectedIndex();
     }
 
@@ -321,9 +337,26 @@ public class TurnPanel
 
     public void showValidMoves(int humanPiece) {
         if (humanPiece <= gameModel.getHumanList().size() && humanPiece >= 0) {
-            String[] test = gameModel.getHumanList().get(humanPiece).getValidKnightMoves(gameModel.getSquares());
-            validMovesList.setListData(test);
-            add(new JButton("Move Piece"));
+
+            for (JButton humanKnightMoveButton : humanKnightMoveButtons) {
+                remove(humanKnightMoveButton);
+            }
+            humanKnightMoveButtons.clear();
+
+            for (String validKnightMove : gameModel.getHumanList().get(humanPiece).getValidKnightMoves(gameModel.getSquares())) {
+                JButton humanKnighButton = new JButton(validKnightMove);
+                humanKnightMoveButtons.add(humanKnighButton);
+                humanKnighButton.setPreferredSize(new Dimension(100, 30));
+                humanKnighButton.addActionListener(this);
+                add(humanKnighButton);
+
+            }
+            revalidate();
+            repaint();
+
+            //String[] test = gameModel.getHumanList().get(humanPiece).getValidKnightMoves(gameModel.getSquares());
+            //validMovesList.setListData(test);
+            //add(new JButton("Move Piece"));
         } else {
             JOptionPane.showMessageDialog(this, "please select a piece to move");
         }

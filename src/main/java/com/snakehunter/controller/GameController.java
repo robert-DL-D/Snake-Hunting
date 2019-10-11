@@ -6,6 +6,8 @@ import com.snakehunter.GameContract.ViewEventListener;
 import com.snakehunter.GameStage;
 import com.snakehunter.model.GameModelImpl;
 import com.snakehunter.model.SaveLoadGame;
+import com.snakehunter.model.Square;
+import com.snakehunter.model.piece.Human;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Snake;
 
@@ -114,7 +116,6 @@ public class GameController
             gameView.updateGuardNo();
             gameView.updateStage(gameModel.getGameStage());
             gameView.updateTurnNo(gameModel.getNumOfTurns());
-
         } else {
 
             //gameView.showErrorDialog("Make sure you add snakes, ladders and humans before start the game.");
@@ -163,7 +164,8 @@ public class GameController
     @Override
     public void onDiceRolled(int player, int num) {
         if (gameModel.getHumanList().get(player).getParalyzeTurns() != 0) {
-            JOptionPane.showMessageDialog(new JFrame(), "The selected piece is paralyzed, select another human piece.");
+            JOptionPane.showMessageDialog(new JFrame(),
+                    "The selected piece is paralyzed, select another human piece.");
         } else {
             if (player >= 0) {
                 gameModel.movePlayer(player, num);
@@ -171,7 +173,6 @@ public class GameController
             if (num != 6) {
                 gameModel.nextTurn();
                 gameView.updateTurnNo(gameModel.getNumOfTurns());
-                gameView.updateParalyzedTurn();
                 gameView.hideDicePanel();
             } else {
                 JOptionPane.showMessageDialog(new JFrame(), "Human rolled a 6, they can roll again!");
@@ -201,13 +202,27 @@ public class GameController
     public void onFinalStage() {
         gameModel.setGameStage(GameStage.FINAL);
         gameModel.setNumOfTurns(1);
+
+        for (Human human : gameModel.getHumanList()) {
+            human.setParalyzedTurns(0);
+        }
+
+        for (Square[] squareArray : gameModel.getSquares()) {
+            for (Square square : squareArray) {
+                if (square.isGuarded()) {
+                    square.setGuarded(false);
+                }
+            }
+        }
+
         gameView.updateStage(GameStage.FINAL);
         gameView.updateTurnNo(gameModel.getNumOfTurns());
+        gameView.getTurnPanel().updateGuardNo();
     }
 
     @Override
     public void onKnightClick(int humanPiece) {
-        
+
     }
 
     @Override
