@@ -6,8 +6,6 @@ import com.snakehunter.GameContract.ViewEventListener;
 import com.snakehunter.GameStage;
 import com.snakehunter.model.GameModelImpl;
 import com.snakehunter.model.SaveLoadGame;
-import com.snakehunter.model.Square;
-import com.snakehunter.model.piece.Human;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Snake;
 
@@ -142,7 +140,6 @@ public class GameController
     @Override
     public void onPlaceGuard() {
         gameView.showGuardPlacer();
-        gameView.hideDicePanel();
     }
 
     @Override
@@ -163,36 +160,20 @@ public class GameController
     }
 
     @Override
-    public String onSnakeMove(int snake, int steps) {
-        String s = gameModel.moveSnake(snake, steps);
-        System.out.println(s);
-        if (s != null) {
-            gameView.showErrorDialog(s);
-            return s;
-        } else {
-            gameModel.nextTurn();
-            gameView.updateTurnNo(gameModel.getNumOfTurns());
-            return null;
+    public void onSnakeMove(int snake, int steps) {
+        String errorMsg = gameModel.moveSnake(snake, steps);
+        if (errorMsg != null) {
+            gameView.showErrorDialog(errorMsg);
+            return;
         }
 
+        gameModel.nextTurn();
     }
 
     @Override
     public void onFinalStage() {
         gameModel.setGameStage(GameStage.FINAL);
         gameModel.setNumOfTurns(1);
-
-        for (Human human : gameModel.getHumanList()) {
-            human.setParalyzedTurns(0);
-        }
-
-        for (Square[] squareArray : gameModel.getSquares()) {
-            for (Square square : squareArray) {
-                if (square.isGuarded()) {
-                    square.setGuarded(false);
-                }
-            }
-        }
 
         gameView.updateStage(GameStage.FINAL);
         gameView.updateTurnNo(gameModel.getNumOfTurns());

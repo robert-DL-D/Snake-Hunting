@@ -260,11 +260,9 @@ public class GameViewImpl
         try {
             int squareNo = Integer.parseInt(JOptionPane.showInputDialog("Enter square number to place guard on:"));
             gameModel.addGuard(squareNo);
-
         } catch (Exception e) {
             showErrorDialog("Enter a valid square number");
         }
-
     }
     //endregion
 
@@ -291,11 +289,8 @@ public class GameViewImpl
 
     @Override
     public void onGuardAdded(int position) {
+        // FIXME: try to remove this from the view
         gameModel.nextTurn();
-        turnPanel.updateGuardNo();
-        turnPanel.updateTurnNo(gameModel.getNumOfTurns());
-        turnPanel.updateStage(gameModel.getGameStage());
-        turnPanel.repaint();
     }
 
     @Override

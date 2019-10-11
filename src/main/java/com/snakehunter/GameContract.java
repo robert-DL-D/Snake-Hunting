@@ -89,7 +89,7 @@ public class GameContract {
 
         void onDiceRolled(int player, int num);
 
-        String onSnakeMove(int snake, int steps);
+        void onSnakeMove(int snake, int steps);
 
         void onNumOfHumansEntered(int numOfHumans);
 
@@ -132,6 +132,8 @@ public class GameContract {
         int getNumOfTurns();
 
         int getRemainingGuards();
+
+        void resetGameModel();
 
         // Test only
         void setNumOfGuards(int num);

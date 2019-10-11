@@ -407,6 +407,23 @@ public class GameModelImpl
         return MAX_GUARDS - numOfGuards;
     }
 
+    @Override
+    public void resetGameModel() {
+        setNumOfTurns(1);
+
+        for (Human human : getHumanList()) {
+            human.setParalyzedTurns(0);
+        }
+
+        for (Square[] squareArray : squares) {
+            for (Square square : squareArray) {
+                if (square.isGuarded()) {
+                    square.setGuarded(false);
+                }
+            }
+        }
+    }
+
     public List<Snake> getSnakeList() {
         return snakePlayer.getPieceList();
     }
