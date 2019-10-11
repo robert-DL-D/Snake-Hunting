@@ -153,7 +153,6 @@ public class GameModelImpl
 
         if (getGameStage() == GameStage.SECOND) {
             for (Human h : getHumanList()) {
-                System.out.println(h);
                 if (h.getPosition() > 99) {
                     listener.onFinalStage();
                 }

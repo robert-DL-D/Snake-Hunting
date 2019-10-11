@@ -13,9 +13,6 @@ import com.snakehunter.model.piece.Snake;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
 /**
  * @author WeiYi Yu
  * @date 2019-08-25
@@ -99,7 +96,6 @@ public class GameController
 
     @Override
     public void onStartClick() throws GameNotReadyException {
-
         if (gameModel.getSnakeList().size() < 5) {
             throw new GameNotReadyException("Less than 5 snakes placed on board");
         } else if (gameModel.getHumanList().size() < 4) {
@@ -107,19 +103,12 @@ public class GameController
         } else if (gameModel.getLadderList().size() < 5) {
             throw new GameNotReadyException("Less than 5 ladders placed on board");
         }
-        if (gameModel.isGameReady()) {
-            gameView.hideGameOverPanel();
-            gameView.hideSettingPanel();
-            gameView.showTurnPanel();
-            gameModel.setGameStage(GameStage.FINAL);
-            gameModel.nextTurn();
-            gameView.updateGuardNo();
-            gameView.updateStage(gameModel.getGameStage());
-            gameView.updateTurnNo(gameModel.getNumOfTurns());
-        } else {
 
-            //gameView.showErrorDialog("Make sure you add snakes, ladders and humans before start the game.");
-        }
+        gameView.hideGameOverPanel();
+        gameView.hideSettingPanel();
+        gameView.showTurnPanel();
+        gameModel.setGameStage(GameStage.SECOND);
+        gameModel.nextTurn();
     }
 
     @Override
@@ -151,11 +140,6 @@ public class GameController
     }
 
     @Override
-    public void onDiceShow() {
-        gameView.showDicePanel();
-    }
-
-    @Override
     public void onPlaceGuard() {
         gameView.showGuardPlacer();
         gameView.hideDicePanel();
@@ -164,23 +148,18 @@ public class GameController
     @Override
     public void onDiceRolled(int player, int num) {
         if (gameModel.getHumanList().get(player).getParalyzeTurns() != 0) {
-            JOptionPane.showMessageDialog(new JFrame(),
-                    "The selected piece is paralyzed, select another human piece.");
-        } else {
-            if (player >= 0) {
-                gameModel.movePlayer(player, num);
-            }
-            if (num != 6) {
-                gameModel.nextTurn();
-                gameView.updateTurnNo(gameModel.getNumOfTurns());
-                gameView.hideDicePanel();
-            } else {
-                JOptionPane.showMessageDialog(new JFrame(), "Human rolled a 6, they can roll again!");
-                gameView.getTurnPanel().hidePieceButtons();
-                gameView.updateParalyzedTurn();
-
-            }
+            gameView.showInfoDialog("The selected piece is paralyzed, select another human piece.");
+            return;
         }
+
+        gameModel.movePlayer(player, num);
+
+        if (num == 6) {
+            gameView.showInfoDialog("Human rolled a 6, they can roll again!");
+            return;
+        }
+
+        gameModel.nextTurn();
     }
 
     @Override

@@ -28,6 +28,8 @@ public class GameContract {
 
         void showErrorDialog(String message);
 
+        void showInfoDialog(String message);
+
         void hideDicePanel();
 
         void showDicePanel();
@@ -82,8 +84,6 @@ public class GameContract {
         void onRandomLadderClick();
 
         void onDiceClick();
-
-        void onDiceShow();
 
         void onPlaceGuard();
 

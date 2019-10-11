@@ -28,7 +28,7 @@ import javax.swing.JTextField;
 public class GameViewImpl
         extends JFrame
         implements GameContract.GameView,
-        ActionListener {
+                   ActionListener {
 
     private GameModel gameModel;
 
@@ -81,7 +81,8 @@ public class GameViewImpl
             diceView.roll();
 //            int num = 0;
 //            try {
-//                num = Integer.parseInt(JOptionPane.showInputDialog("Enter 0 to throw dice. Enter 1 - 6 for Testing."));
+//                num = Integer.parseInt(JOptionPane.showInputDialog("Enter 0 to throw dice. Enter 1 - 6 for Testing
+//                ."));
 //            } catch (NumberFormatException e) {
 //                showErrorDialog("PLease enters a valid number!");
 //                return;
@@ -113,7 +114,7 @@ public class GameViewImpl
         pane.add(tailField);
 
         int option = JOptionPane.showConfirmDialog(this, pane, "Add Snake", JOptionPane.OK_CANCEL_OPTION,
-                JOptionPane.INFORMATION_MESSAGE);
+                                                   JOptionPane.INFORMATION_MESSAGE);
 
         if (option == JOptionPane.OK_OPTION) {
             String headInput = headField.getText();
@@ -144,7 +145,7 @@ public class GameViewImpl
         pane.add(baseField);
 
         int option = JOptionPane.showConfirmDialog(this, pane, "Add Ladder", JOptionPane.OK_CANCEL_OPTION,
-                JOptionPane.INFORMATION_MESSAGE);
+                                                   JOptionPane.INFORMATION_MESSAGE);
 
         if (option == JOptionPane.OK_OPTION) {
             String topInput = topField.getText();
@@ -188,6 +189,11 @@ public class GameViewImpl
     @Override
     public void showErrorDialog(String message) {
         JOptionPane.showMessageDialog(this, message, "Alert", JOptionPane.ERROR_MESSAGE);
+    }
+
+    @Override
+    public void showInfoDialog(String message) {
+        JOptionPane.showMessageDialog(this, message, "Alert", JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override
@@ -241,7 +247,6 @@ public class GameViewImpl
 
     @Override
     public void hideGameOverPanel() {
-        gameOverPanel.setVisible(false);
     }
 
     @Override
@@ -291,7 +296,6 @@ public class GameViewImpl
         turnPanel.updateTurnNo(gameModel.getNumOfTurns());
         turnPanel.updateStage(gameModel.getGameStage());
         turnPanel.repaint();
-        System.out.println("test");
     }
 
     @Override
@@ -301,7 +305,17 @@ public class GameViewImpl
 
     @Override
     public void onNextTurn(Player player) {
-        //diceView.setVisible(true);
+        updateGuardNo();
+        updateStage(gameModel.getGameStage());
+        updateTurnNo(gameModel.getNumOfTurns());
+
+        if (player.isSnake()) {
+            hideDicePanel();
+            getTurnPanel().hidePieceButtons();
+            updateParalyzedTurn();
+        } else {
+
+        }
     }
 
     @Override
@@ -344,76 +358,76 @@ public class GameViewImpl
         }
 
         switch (e.getActionCommand()) {
-            case "Add Snake":
-                listener.onAddSnakeClick();
-                break;
-            case "Add Ladder":
-                listener.onAddLadderClick();
-                break;
-            case "Add Humans":
-                listener.onAddHumansClick();
-                break;
-            case "Start":
-                try {
-                    listener.onStartClick();
-                } catch (GameNotReadyException gnre) {
-                    JOptionPane.showMessageDialog(this, "Game not yet ready: " + gnre.getMessage());
-                }
+        case "Add Snake":
+            listener.onAddSnakeClick();
+            break;
+        case "Add Ladder":
+            listener.onAddLadderClick();
+            break;
+        case "Add Humans":
+            listener.onAddHumansClick();
+            break;
+        case "Start":
+            try {
+                listener.onStartClick();
+            } catch (GameNotReadyException gnre) {
+                JOptionPane.showMessageDialog(this, "Game not yet ready: " + gnre.getMessage());
+            }
 
-                break;
-            case "Add 5 Random Snakes":
-                listener.onRandomSnakeClick();
-                break;
-            case "Add 5 Random Ladders":
-                listener.onRandomLadderClick();
-                break;
-            case "Add 5 Random S&L":
-                listener.onRandomSnakeClick();
-                listener.onRandomLadderClick();
-                break;
-            case "Up":
-                listener.onSnakeMove(turnPanel.getSnakeJListSelectedItem(), 0);
-                break;
-            case "Down":
-                listener.onSnakeMove(turnPanel.getSnakeJListSelectedItem(), 1);
-                break;
-            case "Left":
-                listener.onSnakeMove(turnPanel.getSnakeJListSelectedItem(), 2);
-                break;
-            case "Right":
-                listener.onSnakeMove(turnPanel.getSnakeJListSelectedItem(), 3);
-                break;
-            case "Roll Dice":
-                //listener.onDiceShow();
-                listener.onDiceClick();
-                break;
-            case "Place Guard":
-                listener.onPlaceGuard();
-                break;
-            case "Save Game":
-                listener.onSaveClick();
-                break;
-            case "Load Game":
-                listener.onLoadClick();
-                break;
-            case "1":
-                diceView.moveSelectedPiece("1");
-                break;
-            case "2":
-                diceView.moveSelectedPiece("2");
-                break;
-            case "3":
-                diceView.moveSelectedPiece("3");
-                break;
-            case "4":
-                diceView.moveSelectedPiece("4");
-                break;
-            case "Show Valid Moves":
-                turnPanel.showValidMoves(turnPanel.getHumanListItem());
-                //listener.onKnightClick(turnPanel.getHumanListItem());
-                break;
-            default:
-                break;
+            break;
+        case "Add 5 Random Snakes":
+            listener.onRandomSnakeClick();
+            break;
+        case "Add 5 Random Ladders":
+            listener.onRandomLadderClick();
+            break;
+        case "Add 5 Random S&L":
+            listener.onRandomSnakeClick();
+            listener.onRandomLadderClick();
+            break;
+        case "Up":
+            listener.onSnakeMove(turnPanel.getSnakeJListSelectedItem(), 0);
+            break;
+        case "Down":
+            listener.onSnakeMove(turnPanel.getSnakeJListSelectedItem(), 1);
+            break;
+        case "Left":
+            listener.onSnakeMove(turnPanel.getSnakeJListSelectedItem(), 2);
+            break;
+        case "Right":
+            listener.onSnakeMove(turnPanel.getSnakeJListSelectedItem(), 3);
+            break;
+        case "Roll Dice":
+            //listener.onDiceShow();
+            listener.onDiceClick();
+            break;
+        case "Place Guard":
+            listener.onPlaceGuard();
+            break;
+        case "Save Game":
+            listener.onSaveClick();
+            break;
+        case "Load Game":
+            listener.onLoadClick();
+            break;
+        case "1":
+            diceView.moveSelectedPiece("1");
+            break;
+        case "2":
+            diceView.moveSelectedPiece("2");
+            break;
+        case "3":
+            diceView.moveSelectedPiece("3");
+            break;
+        case "4":
+            diceView.moveSelectedPiece("4");
+            break;
+        case "Show Valid Moves":
+            turnPanel.showValidMoves(turnPanel.getHumanListItem());
+            //listener.onKnightClick(turnPanel.getHumanListItem());
+            break;
+        default:
+            break;
         }
     }
 
