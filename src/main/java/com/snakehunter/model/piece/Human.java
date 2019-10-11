@@ -2,6 +2,7 @@ package com.snakehunter.model.piece;
 
 import com.snakehunter.model.Square;
 import com.snakehunter.model.exceptions.LadderClimbedException;
+import com.snakehunter.model.exceptions.LadderClimbedThresholdException;
 import com.snakehunter.model.exceptions.MaxClimbNumExceedException;
 import com.snakehunter.model.exceptions.MaxPositionExceedException;
 
@@ -17,6 +18,7 @@ public class Human
         implements Movable {
 
     private static final int PARALYZE_TURNS = 3;
+    private static final int NUM_OF_LADDER_CLIMBED_THRESHOLD = 3;
 
     private int paralyzedTurns = 0;
     private List<Ladder> ladderClimbedList;
@@ -55,7 +57,8 @@ public class Human
      * @return Message about this movement
      */
     @Override
-    public String move(Square[][] squares, int steps) throws MaxPositionExceedException {
+    public String move(Square[][] squares, int steps) throws MaxPositionExceedException,
+            LadderClimbedThresholdException {
         StringBuilder stringBuilder = new StringBuilder();
 
         Square currentSquare = getSquare(squares, getPosition());
@@ -64,6 +67,17 @@ public class Human
         int newPosition = getPosition() + steps;
         if (newPosition > 100) {
             throw new MaxPositionExceedException();
+        } else if (newPosition == 100) {
+            if (ladderClimbedList.size() >= NUM_OF_LADDER_CLIMBED_THRESHOLD) {
+                setPosition(100);
+                currentSquare.removePiece(this);
+                getSquare(squares, 100).addPiece(this);
+                return "Lands on Square 100! Enter Final stage";
+            } else {
+                setPosition(1);
+                getSquare(squares, 1).addPiece(this);
+                throw new LadderClimbedThresholdException();
+            }
         }
 
         // Remove piece from current square
@@ -118,11 +132,11 @@ public class Human
     }
 
 
-    public String[] getValidKnightMoves(Square[][] squares){
+    public String[] getValidKnightMoves(Square[][] squares) {
         List<Square> squareList = getValidMoves(squares);
 
         String[] squareNoList = new String[squareList.size()];
-        for(int i =0; i < squareList.size(); i++){
+        for (int i = 0; i < squareList.size(); i++) {
             squareNoList[i] = "Square " + squareList.get(i).getSquareNo();
         }
         return squareNoList;
@@ -146,14 +160,16 @@ public class Human
                 {-2, 1}
         };
 
-        for(int i=0; i < knightCoords.length; i++){
-            if (currCol + knightCoords[i][0] <= 9 && currCol + knightCoords[i][0] >=0 && currRow +  knightCoords[i][1]<= 9 && currRow + knightCoords[i][1] >= 0){
+        for (int i = 0; i < knightCoords.length; i++) {
+            if (currCol + knightCoords[i][0] <= 9 && currCol + knightCoords[i][0] >= 0 &&
+                    currRow + knightCoords[i][1] <= 9 && currRow + knightCoords[i][1] >= 0) {
                 validSquares.add(squares[currCol + knightCoords[i][0]][currRow + knightCoords[i][1]]);
             }
         }
 
 //        Square[] potentialKnightMoves = {squares[currCol - 1][currRow + 2], squares[currCol + 1][currRow + 2],
-//                squares[currCol + 2][currRow + 1], squares[currCol + 2][currRow - 1], squares[currCol + 1][currRow - 2],
+//                squares[currCol + 2][currRow + 1], squares[currCol + 2][currRow - 1], squares[currCol + 1][currRow
+//                - 2],
 //                squares[currCol - 1][currRow - 2], squares[currCol - 2][currRow - 1],
 //                squares[currCol - 2][currRow + 1]};
 //

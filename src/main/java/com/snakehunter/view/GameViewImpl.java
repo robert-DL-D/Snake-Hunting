@@ -299,6 +299,16 @@ public class GameViewImpl
     }
 
     @Override
+    public void onExceedMaxPosition() {
+        showErrorDialog("Exceed max square! Stay at the same square.");
+    }
+
+    @Override
+    public void onLadderClimbedThresholdException() {
+        showErrorDialog("Haven't climbed 3 ladders yet, go back to Square 1.");
+    }
+
+    @Override
     public void onNextTurn(Player player) {
         updateGuardNo();
         updateStage(gameModel.getGameStage());

@@ -119,7 +119,7 @@ public class GameContract {
 
         void nextTurn();
 
-        void movePlayer(int index, int steps);
+        int movePlayer(int index, int steps);
 
         void movePlayer(int index, Square destSquare);
 
@@ -159,6 +159,10 @@ public class GameContract {
         void onGuardAdded(int position);
 
         void onExceedMaxNumOfGuards();
+
+        void onExceedMaxPosition();
+
+        void onLadderClimbedThresholdException();
 
         void onNextTurn(Player player);
 

@@ -149,9 +149,12 @@ public class GameController
             return;
         }
 
-        gameModel.movePlayer(player, num);
+        int newPosition = gameModel.movePlayer(player, num);
 
-        if (num == 6) {
+        if (newPosition == 100) {
+            gameModel.setGameStage(GameStage.FINAL);
+            gameModel.resetGameModel();
+        } else if (num == 6) {
             gameView.showInfoDialog("Human rolled a 6, they can roll again!");
             return;
         }
