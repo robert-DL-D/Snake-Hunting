@@ -136,7 +136,7 @@ public class BoardView
         }
     }
 
-    protected void drawSnake(Graphics g, List<Snake> snakeList) {
+    private void drawSnake(Graphics g, List<Snake> snakeList) {
 
         for (int j = 01; j <= snakeList.size(); j++) {
 

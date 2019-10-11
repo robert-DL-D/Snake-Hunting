@@ -174,16 +174,6 @@ public class GameController
     }
 
     @Override
-    public void onFinalStage() {
-        gameModel.setGameStage(GameStage.FINAL);
-        gameModel.setNumOfTurns(1);
-
-        gameView.updateStage(GameStage.FINAL);
-        gameView.updateTurnNo(gameModel.getNumOfTurns());
-        gameView.getTurnPanel().updateGuardNo();
-    }
-
-    @Override
     public void onKnightClick(int humanPiece) {
 
     }

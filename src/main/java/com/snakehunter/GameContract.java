@@ -6,7 +6,6 @@ import com.snakehunter.model.piece.Human;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Player;
 import com.snakehunter.model.piece.Snake;
-import com.snakehunter.view.BoardView;
 import com.snakehunter.view.TurnPanel;
 
 import java.util.List;
@@ -93,8 +92,6 @@ public class GameContract {
 
         void onNumOfHumansEntered(int numOfHumans);
 
-        void onFinalStage();
-
         void onKnightClick(int humanPiece);
     }
 
@@ -168,14 +165,6 @@ public class GameContract {
 
         void onGameOver(Player winner);
 
-        void onPlayerMoved(Player player, int destPosition);
-
         void onNumOfHumansEnteredError();
-
-        void onSnakeMoved();
-
-        void onFinalStage();
-
-        BoardView getBoardView();
     }
 }

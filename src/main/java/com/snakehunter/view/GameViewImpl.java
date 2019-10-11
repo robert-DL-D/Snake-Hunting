@@ -331,20 +331,6 @@ public class GameViewImpl
     }
 
     @Override
-    public void onPlayerMoved(Player player, int destPosition) {
-    }
-
-    @Override
-    public void onSnakeMoved() {
-        boardView.drawSnake(boardView.getGraphics(), gameModel.getSnakeList());
-    }
-
-    @Override
-    public void onFinalStage() {
-        listener.onFinalStage();
-    }
-
-    @Override
     public void onNumOfHumansEnteredError() {
         showErrorDialog("Please enter a number between 2 ~ 4.");
     }
@@ -441,10 +427,4 @@ public class GameViewImpl
         this.listener = listener;
         diceView.setOnViewEventListener(listener);
     }
-
-    @Override
-    public BoardView getBoardView() {
-        return boardView;
-    }
-
 }
