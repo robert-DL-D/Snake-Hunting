@@ -105,7 +105,7 @@ public class GameController
         gameView.hideGameOverPanel();
         gameView.hideSettingPanel();
         gameView.showTurnPanel();
-        gameModel.setGameStage(GameStage.SECOND);
+        gameModel.setGameStage(GameStage.FINAL);
         gameModel.nextTurn();
     }
 
@@ -176,6 +176,12 @@ public class GameController
     @Override
     public void onKnightClick(int humanPiece) {
 
+    }
+
+    @Override
+    public void onMoveKnight(int humanPiece, int squareNo){
+        System.out.println(humanPiece + " " + squareNo);
+        gameModel.movePlayer(humanPiece, gameModel.getSquare(squareNo));
     }
 
     @Override

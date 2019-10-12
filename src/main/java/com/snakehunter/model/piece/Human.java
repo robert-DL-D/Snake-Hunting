@@ -137,7 +137,7 @@ public class Human
 
         String[] squareNoList = new String[squareList.size()];
         for (int i = 0; i < squareList.size(); i++) {
-            squareNoList[i] = "Square " + squareList.get(i).getSquareNo();
+            squareNoList[i] = Integer.toString(squareList.get(i).getSquareNo());
         }
         return squareNoList;
     }

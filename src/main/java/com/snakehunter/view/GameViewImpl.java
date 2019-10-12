@@ -422,6 +422,11 @@ public class GameViewImpl
             turnPanel.showValidMoves(turnPanel.getHumanListItem());
             //listener.onKnightClick(turnPanel.getHumanListItem());
             break;
+
+        case "Move Human":
+            System.out.println("test2");
+            listener.onMoveKnight(turnPanel.getHumanListItem(), turnPanel.getMovesSquareItem());
+            break;
         default:
             break;
         }

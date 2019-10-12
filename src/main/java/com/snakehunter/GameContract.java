@@ -93,6 +93,8 @@ public class GameContract {
         void onNumOfHumansEntered(int numOfHumans);
 
         void onKnightClick(int humanPiece);
+
+        void onMoveKnight(int movesSquareItem, int humanListItem);
     }
 
     public interface GameModel {

@@ -42,6 +42,8 @@ public class TurnPanel
     private final String[] wideSnakeButtons = {"Up", "Down"};
     private final String[] longSnakeButtons = {"Left", "Right"};
 
+    private final String moveKnightButton = "Move Human";
+
     private final List<JButton> hButtons = new ArrayList<>();
     private final List<JButton> pButtons = new ArrayList<>();
     private LinkedList<JLabel> piecesParalyzedLabels = new LinkedList<>();
@@ -58,7 +60,8 @@ public class TurnPanel
     private JLabel knightLabel = new JLabel("Choose a human to move:");
     private JList<String> snakeJList;
     private JList<String> humanJList;
-    //private JList<String> validMovesList;
+
+    private JList<String> validMovesList;
     private StringBuilder sb = new StringBuilder();
     private JLabel paralyzeLabel;
 
@@ -348,9 +351,26 @@ public class TurnPanel
                 humanKnightMoveButtons.add(humanKnighButton);
                 humanKnighButton.setPreferredSize(new Dimension(100, 30));
                 humanKnighButton.addActionListener(this);
-                add(humanKnighButton);
-
+                //add(humanKnighButton);
             }
+
+            String[] validMoves = new String[gameModel.getHumanList().get(humanPiece).getValidKnightMoves(gameModel.getSquares()).length];
+
+            for(int i=0; i < validMoves.length; i++){
+                validMoves[i] = gameModel.getHumanList().get(humanPiece).getValidKnightMoves(gameModel.getSquares())[i];
+            }
+
+
+            validMovesList = new JList<>();
+
+            validMovesList.setListData(validMoves);
+            add(validMovesList);
+
+            JButton moveKnightBut = new JButton(moveKnightButton);
+            moveKnightBut.setPreferredSize(new Dimension(150, 25));
+            moveKnightBut.addActionListener(this);
+            add(moveKnightBut);
+
             revalidate();
             repaint();
 
@@ -360,6 +380,17 @@ public class TurnPanel
         } else {
             JOptionPane.showMessageDialog(this, "please select a piece to move");
         }
+
+    }
+
+    public int getMovesSquareItem() {
+        try {
+            return Integer.parseInt(validMovesList.getSelectedValue());
+        } catch (Exception e){
+            System.out.println("test");
+            return -10;
+        }
+
 
     }
     //end region
