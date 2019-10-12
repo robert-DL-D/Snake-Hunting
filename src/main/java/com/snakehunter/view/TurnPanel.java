@@ -226,6 +226,8 @@ public class TurnPanel
         for (JButton b : pButtons) {
             remove(b);
         }
+
+        
         repaint();
         pButtons.clear();
         showPieceButtons = false;
@@ -250,12 +252,14 @@ public class TurnPanel
     }
 
     private void showSnakeButtons() {
+
         for (JButton b : hButtons) {
             remove(b);
         }
         for (JButton b : sButtons) {
             remove(b);
         }
+
 
         removePieceButtons();
         repaint();

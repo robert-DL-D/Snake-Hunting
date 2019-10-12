@@ -128,6 +128,14 @@ public class Human
         if (isLandOnSnakeTail(newSquare)) {
             killSnake(squares);
         }
+
+        try {
+            move(squares, newSquare.getSquareNo() - this.getPosition());
+            return newSquare;
+        } catch (Exception e){
+            System.out.println("haven't handled this");
+        }
+
         return null;
     }
 
