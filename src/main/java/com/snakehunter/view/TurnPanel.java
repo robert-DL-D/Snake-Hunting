@@ -318,6 +318,17 @@ public class TurnPanel
         return humanJList.getSelectedIndex();
     }
 
+//    int getSquareListItem(){
+//
+//        int value = -1;
+//        try {
+//            value = Integer.parseInt(validMovesList.getSelectedValue());
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
+//        return value;
+//    }
+
     public List<JButton> getpButtons() {
         return pButtons;
     }
