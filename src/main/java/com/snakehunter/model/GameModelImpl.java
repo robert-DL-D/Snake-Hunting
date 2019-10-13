@@ -160,19 +160,33 @@ public class GameModelImpl
             }
         }
 
+
+
         if (listener != null) {
             listener.onNextTurn(getCurrentPlayer());
         }
 
         // TODO: Move this to new final stage human movement
-//        if (getGameStage() == GameStage.FINAL) {
-//            if (getHumanList().size() < 4) {
-//                listener.onGameOver(snakePlayer);
-//            }
-//            if (numOfTurns >= getGameStage().getMaxTurns()) {
-//                listener.onGameOver(humanPlayer);
-//            }
-//        }
+        if (getGameStage() == GameStage.FINAL) {
+
+
+            if (getHumanList().size() < 4) {
+                listener.onGameOver(snakePlayer);
+            }
+            if (numOfTurns >= getGameStage().getMaxTurns()) {
+                listener.onGameOver(humanPlayer);
+            }
+
+            boolean allSnakesDead = true;
+            for(Snake s : snakePlayer.getPieceList()){
+                if (!s.isSnakeDead()){
+                    allSnakesDead = false;
+                }
+            }
+            if (allSnakesDead){
+                listener.onGameOver(humanPlayer);
+            }
+        }
     }
 
 

@@ -28,6 +28,7 @@ public class BoardView
     private static final Color boardColor2 = new Color(49, 62, 87);
 
     private static final Color snakeHeadHereColor = new Color(255, 90, 90);
+    private static final Color snakeTailHereColor = new Color (150, 70, 70);
 
     private static final Color ladderBaseHereColor = new Color(81, 140, 97);
 
@@ -104,7 +105,12 @@ public class BoardView
 
                 if (localSquares[i][9 - j].getPieceList().size() != 0) {
                     if (localSquares[i][9 - j].getSnake() != null) {
-                        graphics.setColor(snakeHeadHereColor);
+                        if (localSquares[i][9-j].getSnake().getPosition() == localSquares[i][9-j].getSquareNo()){
+                            graphics.setColor(snakeHeadHereColor);
+                        } else {
+                            graphics.setColor(snakeTailHereColor);
+                        }
+
                     } else if (localSquares[i][9 - j].getLadder() != null) {
                         graphics.setColor(ladderBaseHereColor);
                     }
@@ -137,64 +143,65 @@ public class BoardView
     }
 
     private void drawSnake(Graphics g, List<Snake> snakeList) {
-
         for (int j = 01; j <= snakeList.size(); j++) {
+            if (!snakeList.get(j- 1).isSnakeDead()) {
+                int headX = getX(snakeList.get(j - 1).getPosition());
+                int headY = getY(snakeList.get(j - 1).getPosition());
+                int tailX = getX(snakeList.get(j - 1).getConnectedPosition());
+                int tailY = getY(snakeList.get(j - 1).getConnectedPosition());
 
-            int headX = getX(snakeList.get(j - 1).getPosition());
-            int headY = getY(snakeList.get(j - 1).getPosition());
-            int tailX = getX(snakeList.get(j - 1).getConnectedPosition());
-            int tailY = getY(snakeList.get(j - 1).getConnectedPosition());
+                int steps =
+                        (int) Math.sqrt((tailY - headY) * (tailY - headY) + (tailX - headX) * (tailX - headX)) / 150 *
+                                18 +
+                                24;
 
-            int steps =
-                    (int) Math.sqrt((tailY - headY) * (tailY - headY) + (tailX - headX) * (tailX - headX)) / 150 * 18 +
-                            24;
+                double xstep = (double) (tailX - headX) / (steps + 1);
+                double ystep = (double) (tailY - headY) / (steps + 1);
 
-            double xstep = (double) (tailX - headX) / (steps + 1);
-            double ystep = (double) (tailY - headY) / (steps + 1);
+                double inc;
+                double x = headX, y = headY;
 
-            double inc;
-            double x = headX, y = headY;
-
-            boolean odd = true;
-            for (int i = 0; i < steps + 1; i++) {
-                if ((i % 12) % 12 == 0) {
-                    inc = 0;
-                } else if ((i % 12) % 11 == 0) {
-                    inc = 10 * factor;
-                } else if ((i % 12) % 10 == 0) {
-                    inc = 13 * factor;
-                } else if ((i % 12) % 9 == 0) {
-                    inc = 15 * factor;
-                } else if ((i % 12) % 8 == 0) {
-                    inc = 13 * factor;
-                } else if ((i % 12) % 7 == 0) {
-                    inc = 10 * factor;
-                } else if ((i % 12) % 6 == 0) {
-                    inc = 0 * factor;
-                } else if ((i % 12) % 5 == 0) {
-                    inc = -10 * factor;
-                } else if ((i % 12) % 4 == 0) {
-                    inc = -13 * factor;
-                } else if ((i % 12) % 3 == 0) {
-                    inc = -15 * factor;
-                } else if ((i % 12) % 2 == 0) {
-                    inc = -13 * factor;
-                } else {
-                    inc = -10 * factor;
-                }
-                x += xstep;
-                y += ystep;
-                if (odd) {
-                    g.setColor(snakeColor1);
-                    odd = false;
-                } else {
-                    g.setColor(snakeColor2);
-                    odd = true;
-                }
-                if (tailX > headX) {
-                    g.fillOval((int) (x + inc), (int) (y - inc), 20 - 10 * i / steps, 20 - 10 * i / steps);
-                } else {
-                    g.fillOval((int) (x - inc), (int) (y - inc), 20 - 10 * i / steps, 20 - 10 * i / steps);
+                boolean odd = true;
+                for (int i = 0; i < steps + 1; i++) {
+                    if ((i % 12) % 12 == 0) {
+                        inc = 0;
+                    } else if ((i % 12) % 11 == 0) {
+                        inc = 10 * factor;
+                    } else if ((i % 12) % 10 == 0) {
+                        inc = 13 * factor;
+                    } else if ((i % 12) % 9 == 0) {
+                        inc = 15 * factor;
+                    } else if ((i % 12) % 8 == 0) {
+                        inc = 13 * factor;
+                    } else if ((i % 12) % 7 == 0) {
+                        inc = 10 * factor;
+                    } else if ((i % 12) % 6 == 0) {
+                        inc = 0 * factor;
+                    } else if ((i % 12) % 5 == 0) {
+                        inc = -10 * factor;
+                    } else if ((i % 12) % 4 == 0) {
+                        inc = -13 * factor;
+                    } else if ((i % 12) % 3 == 0) {
+                        inc = -15 * factor;
+                    } else if ((i % 12) % 2 == 0) {
+                        inc = -13 * factor;
+                    } else {
+                        inc = -10 * factor;
+                    }
+                    x += xstep;
+                    y += ystep;
+                    if (odd) {
+                        g.setColor(snakeColor1);
+                        odd = false;
+                    } else {
+                        g.setColor(snakeColor2);
+                        odd = true;
+                    }
+                    if (tailX > headX) {
+                        g.fillOval((int) (x + inc), (int) (y - inc), 20 - 10 * i / steps, 20 - 10 * i / steps);
+                    } else {
+                        g.fillOval((int) (x - inc), (int) (y - inc), 20 - 10 * i / steps, 20 - 10 * i / steps);
+                    }
                 }
             }
         }

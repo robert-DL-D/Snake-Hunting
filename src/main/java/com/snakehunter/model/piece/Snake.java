@@ -20,6 +20,15 @@ public class Snake
     private static final int DOWN = 1;
     private static final int LEFT = 2;
     private static final int RIGHT = 3;
+    private boolean isSnakeDead = false;
+
+    public void killSnake(){
+        isSnakeDead = true;
+    }
+
+    public boolean isSnakeDead(){
+        return isSnakeDead;
+    }
 
     @Override
     public String move(Square[][] squares, int steps) throws SnakeMoveOutOfBoundsException, SnakeMoveToGuardedSquareException {

@@ -228,6 +228,7 @@ public class Human
     private void killSnake(Square[][] squares) {
         Square currentSquare = getSquare(squares, getPosition());
         Snake snake = currentSquare.getSnake();
+        snake.killSnake();
         Square snakeHeadSquare = getSquare(squares, snake.getPosition());
         currentSquare.removePiece(snake);
         snakeHeadSquare.removePiece(snake);
