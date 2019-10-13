@@ -204,7 +204,7 @@ public class GameModelImpl
     public String moveSnake(int index, int steps) {
         try {
             String temp = snakePlayer.getPiece(index).move(squares, steps);
-            nextTurn();
+            //nextTurn();
             return temp;
         } catch (SnakeMoveOutOfBoundsException e) {
             e.printStackTrace();
