@@ -425,7 +425,12 @@ public class GameViewImpl
 
         case "Move Human":
             System.out.println("test2");
-            listener.onMoveKnight(turnPanel.getHumanListItem(), turnPanel.getMovesSquareItem());
+            if (turnPanel.getMovesSquareItem() >= 0){
+                listener.onMoveKnight(turnPanel.getHumanListItem(), turnPanel.getMovesSquareItem());
+            } else {
+                JOptionPane.showMessageDialog(this, "Please select a square to move to");
+            }
+
             break;
         default:
             break;

@@ -86,6 +86,7 @@ public class Snake
             } else {
                 //move head up
                 currSquare.removePiece(this);
+                tail.removePiece(this);
                 newHeadPosition = newHeadSquare.getSquareNo();
                 setPosition(newHeadPosition);
                 newHeadSquare = getSquare(squares, getPosition());
@@ -94,6 +95,7 @@ public class Snake
                 //move tail up
                 setConnectedPosition(getPosition() - intialLength);
                 newTailSquare = getSquare(squares, getConnectedPosition());
+                newTailSquare.addPiece(this);
                 return true;
             }
         }
@@ -119,6 +121,7 @@ public class Snake
             } else {
                 //move head down
                 currSquare.removePiece(this);
+                tail.removePiece(this);
                 newHeadPosition = newHeadSquare.getSquareNo();
                 setPosition(newHeadPosition);
                 newHeadSquare = getSquare(squares, getPosition());
@@ -127,6 +130,7 @@ public class Snake
                 //move tail down
                 setConnectedPosition(getPosition() - intialLength);
                 newTailSquare = getSquare(squares, getConnectedPosition());
+                newTailSquare.addPiece(this);
                 return true;
             }
         }
@@ -151,6 +155,7 @@ public class Snake
             } else {
                 //move head right
                 currSquare.removePiece(this);
+                tail.removePiece(this);
                 newHeadPosition = newHeadSquare.getSquareNo();
                 setPosition(newHeadPosition);
                 newHeadSquare = getSquare(squares, getPosition());
@@ -163,6 +168,7 @@ public class Snake
                     setConnectedPosition(getPosition() - intialLength);
                 }
                 newTailSquare = getSquare(squares, getConnectedPosition());
+                newTailSquare.addPiece(this);
                 return true;
             }
         }
@@ -187,6 +193,7 @@ public class Snake
             } else {
                 //move head left
                 currSquare.removePiece(this);
+                tail.removePiece(this);
                 newHeadPosition = newHeadSquare.getSquareNo();
                 setPosition(newHeadPosition);
                 newHeadSquare = getSquare(squares, getPosition());
@@ -195,6 +202,7 @@ public class Snake
                 //move tail left
                 setConnectedPosition(getPosition() - intialLength);
                 newTailSquare = getSquare(squares, getConnectedPosition());
+                newTailSquare.addPiece(this);
                 return true;
             }
         }

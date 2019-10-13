@@ -66,6 +66,9 @@ public class GameModelImpl
         snakePlayer.addPiece(snake);
         square.addPiece(snake);
 
+        Square tailSquare = getSquare(snake.getConnectedPosition());
+        tailSquare.addPiece(snake);
+
         if (listener != null) {
             listener.onSnakeAdded(snake);
         }

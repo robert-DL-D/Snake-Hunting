@@ -134,9 +134,9 @@ public class Human
 
         //Check if Snake is on new Square
         if (isLandOnSnakeTail(newSquare)) {
+            System.out.println("killing snake");
             killSnake(squares);
         }
-
 
 //        try {
 //            move(squares, newSquare.getSquareNo() - getPosition());
@@ -221,6 +221,7 @@ public class Human
 
     private boolean isLandOnSnakeTail(Square square) {
         Snake snake = square.getSnake();
+        System.out.println(snake != null && snake.getConnectedPosition() == square.getSquareNo());
         return snake != null && snake.getConnectedPosition() == square.getSquareNo();
     }
 
