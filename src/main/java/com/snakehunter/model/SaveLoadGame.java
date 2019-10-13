@@ -32,6 +32,8 @@ public class SaveLoadGame {
     private static final String FOLDER_PATH = "src/main/java/com/snakehunter/file";
 
     private boolean loadedGame = false;
+    private boolean savedGame = false;
+    private File saveFile;
 
     private String humanName;
     private String snakeName;
@@ -43,14 +45,15 @@ public class SaveLoadGame {
         StringBuilder stringBuilder = new StringBuilder();
         try {
 
-            if (!loadedGame) {
+            if (savedGame) {
+                file = saveFile;
+            } else if (!loadedGame) {
                 while (file.exists()) {
                     saveNumber++;
                     saveFileName = saveFileNameTemplate + saveNumber;
                     file = new File("src/main/java/com/snakehunter/file/" + saveFileName + ".txt");
                 }
             }
-
             FileWriter fileWriter = new FileWriter(file, false);
 
             fileWriter.write("humanName" + DELIMITER + gameModel.getHumanPlayer().getName());
@@ -126,7 +129,9 @@ public class SaveLoadGame {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        JOptionPane.showMessageDialog(new JFrame(), "Game Saved Successfully\n" + "Your save file is " + saveFileNameTemplate + saveNumber, "Game Saved", JOptionPane.INFORMATION_MESSAGE);
+        savedGame = true;
+        saveFile = file;
+        JOptionPane.showMessageDialog(new JFrame(), "Game Saved Successfully\n" + "Your save file is " + file.getName(), "Game Saved", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void writing(StringBuilder stringBuilder, FileWriter fileWriter) throws IOException {
@@ -190,6 +195,7 @@ public class SaveLoadGame {
                     }
                 }
                 loadedGame = true;
+                saveFile = file;
                 gameView.hideSettingPanel();
                 gameView.showTurnPanel();
             } catch (FileNotFoundException e) {
@@ -267,8 +273,24 @@ public class SaveLoadGame {
         gameModel.getSnakeList().clear();
 
         for (int i = 0; i < 5; i++) {
-            Snake snake = new Snake(Integer.parseInt(stringArray[i * 2 + 2]), Integer.parseInt(stringArray[i * 2 + 1]));
-            gameModel.addSnake(snake);
+            gameModel.addSnake(new Snake(Integer.parseInt(stringArray[i * 2 + 2]), Integer.parseInt(stringArray[i * 2 + 1])));
+
+            if (gameModel.getSnakeList().size() != i + 1) {
+                for (int j = 3; j < gameModel.getSquares().length * gameModel.getSquares()[0].length; j++) {
+                    if (gameModel.getSquare(j).getPieceList().isEmpty()
+                            && gameModel.getSquare(j - 1).getPieceList().isEmpty()) {
+                        Snake snake = new Snake(j, j - 1);
+
+                        gameModel.addSnake(snake);
+                        gameModel.getSquare(j).getPieceList().remove(snake);
+
+                        snake.setPosition(Integer.parseInt(stringArray[i * 2 + 2]));
+                        snake.setConnectedPosition(Integer.parseInt(stringArray[i * 2 + 1]));
+                        gameModel.getSquare(Integer.parseInt(stringArray[i * 2 + 2])).addPiece(snake);
+                        break;
+                    }
+                }
+            }
         }
     }
 
