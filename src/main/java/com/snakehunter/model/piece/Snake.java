@@ -157,7 +157,11 @@ public class Snake
                 newHeadSquare.addPiece(this);
 
                 //move tail right
-                setConnectedPosition(getPosition() - intialLength);
+                if(getPosition() - intialLength < 1){
+                    setConnectedPosition(1);
+                } else {
+                    setConnectedPosition(getPosition() - intialLength);
+                }
                 newTailSquare = getSquare(squares, getConnectedPosition());
                 return true;
             }
