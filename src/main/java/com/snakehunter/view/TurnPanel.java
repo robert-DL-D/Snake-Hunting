@@ -95,6 +95,9 @@ public class TurnPanel
         guardLabel.setText(humanGuardString + gameModel.getRemainingGuards());
         add(guardLabel);
 
+        moveKnightBut.setPreferredSize(new Dimension(150, 25));
+        moveKnightBut.addActionListener(this);
+
         turntakerLabel = new JLabel(playerturnString + gameModel.getCurrentPlayer());
         turntakerLabel.setPreferredSize(new Dimension(150, 20));
         add(turntakerLabel);
@@ -403,8 +406,6 @@ public class TurnPanel
             add(validMovesList);
             moveKnightBut.setEnabled(true);
             moveKnightBut.setVisible(true);
-            moveKnightBut.setPreferredSize(new Dimension(150, 25));
-            moveKnightBut.addActionListener(this);
             add(moveKnightBut);
 
             revalidate();
