@@ -214,6 +214,7 @@ public class TurnPanel
     }
 
     public void hideKnightUI(){
+
         humanJList.setEnabled(false);
         humanJList.setVisible(false);
         moveKnightBut.setEnabled(false);

@@ -170,7 +170,7 @@ public class GameController
             return;
         }
 
-        gameModel.nextTurn();
+        //gameModel.nextTurn();
     }
 
     @Override

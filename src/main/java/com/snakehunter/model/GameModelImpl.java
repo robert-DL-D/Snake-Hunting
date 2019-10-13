@@ -203,7 +203,9 @@ public class GameModelImpl
     @Override
     public String moveSnake(int index, int steps) {
         try {
-            return snakePlayer.getPiece(index).move(squares, steps);
+            String temp = snakePlayer.getPiece(index).move(squares, steps);
+            nextTurn();
+            return temp;
         } catch (SnakeMoveOutOfBoundsException e) {
             e.printStackTrace();
         } catch (SnakeMoveToGuardedSquareException e1) {
