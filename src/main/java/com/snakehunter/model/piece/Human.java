@@ -124,19 +124,19 @@ public class Human
 
     @Override
     public Square moveKnight(Square[][] squares, Square newSquare) {
+        //remove this human piece from its previous square
+        Square currSquare = getSquare(squares, getPosition());
+        currSquare.removePiece(this);
 
+        //add this human piece to its new square
+        newSquare.addPiece(this);
+        setPosition(newSquare.getSquareNo());
+
+        //Check if Snake is on new Square
         if (isLandOnSnakeTail(newSquare)) {
             killSnake(squares);
         }
-
-        try {
-            move(squares, newSquare.getSquareNo() - this.getPosition());
-            return newSquare;
-        } catch (Exception e){
-            System.out.println("haven't handled this");
-        }
-
-        return null;
+        return newSquare;
     }
 
 
@@ -180,8 +180,6 @@ public class Human
 //                - 2],
 //                squares[currCol - 1][currRow - 2], squares[currCol - 2][currRow - 1],
 //                squares[currCol - 2][currRow + 1]};
-//
-//
 //
 //        for (int i = 0; i < potentialKnightMoves.length; i++) {
 //            int newCol = potentialKnightMoves[i].getColumn();
