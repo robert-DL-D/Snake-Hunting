@@ -43,6 +43,9 @@ public class TurnPanel
     private final String[] longSnakeButtons = {"Left", "Right"};
 
     private final String moveKnightButton = "Move Human";
+    private final JButton moveKnightBut = new JButton(moveKnightButton);
+
+    private final JList<String> validMovesList = new JList<>();
 
     private final List<JButton> hButtons = new ArrayList<>();
     private final List<JButton> pButtons = new ArrayList<>();
@@ -61,7 +64,7 @@ public class TurnPanel
     private JList<String> snakeJList;
     private JList<String> humanJList;
 
-    private JList<String> validMovesList;
+    //private JList<String> validMovesList;
     private StringBuilder sb = new StringBuilder();
     private JLabel paralyzeLabel;
 
@@ -210,6 +213,17 @@ public class TurnPanel
 
     }
 
+    public void hideKnightUI(){
+        humanJList.setEnabled(false);
+        humanJList.setVisible(false);
+        moveKnightBut.setEnabled(false);
+        moveKnightBut.setVisible(false);
+        validMovesList.setEnabled(false);
+        validMovesList.setVisible(false);
+        knightLabel.setEnabled(false);
+        knightLabel.setVisible(false);
+    }
+
     public void addPieceButtons() {
         for (String pieceString : pieceButtons) {
             JButton button = new JButton(pieceString);
@@ -227,7 +241,7 @@ public class TurnPanel
             remove(b);
         }
 
-        
+
         repaint();
         pButtons.clear();
         showPieceButtons = false;
@@ -260,6 +274,7 @@ public class TurnPanel
             remove(b);
         }
 
+        hideKnightUI();
 
         removePieceButtons();
         repaint();
@@ -299,6 +314,10 @@ public class TurnPanel
     }
 
     private void showHumanKnightJList() {
+        humanJList.setEnabled(true);
+        humanJList.setVisible(true);
+        knightLabel.setEnabled(true);
+        knightLabel.setVisible(true);
         add(knightLabel);
         String[] humanPieces = new String[gameModel.getHumanList().size()];
         for (int i = 0; i < humanPieces.length; i++) {
@@ -376,12 +395,13 @@ public class TurnPanel
             }
 
 
-            validMovesList = new JList<>();
+            validMovesList.setEnabled(true);
+            validMovesList.setVisible(true);
 
             validMovesList.setListData(validMoves);
             add(validMovesList);
-
-            JButton moveKnightBut = new JButton(moveKnightButton);
+            moveKnightBut.setEnabled(true);
+            moveKnightBut.setVisible(true);
             moveKnightBut.setPreferredSize(new Dimension(150, 25));
             moveKnightBut.addActionListener(this);
             add(moveKnightBut);

@@ -194,8 +194,6 @@ public class GameModelImpl
      */
     @Override
     public void movePlayer(int index, Square destSquare) {
-        System.out.println("wtf is going on");
-
         Square newSquare = humanPlayer.getPiece(index).moveKnight(squares, destSquare);
         if (newSquare!= null){
             nextTurn();
