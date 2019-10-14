@@ -430,6 +430,9 @@ public class GameViewImpl
             } else {
                 JOptionPane.showMessageDialog(this, "Please select a square to move to");
             }
+            break;
+
+        case "Play Again":
 
             break;
         default:

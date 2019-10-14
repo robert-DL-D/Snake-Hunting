@@ -37,6 +37,10 @@ public class Player<T> {
         return pieceList.get(index);
     }
 
+    public void removePiece(T t){
+        pieceList.remove(t);
+    }
+
     public String getName() {
         return name;
     }

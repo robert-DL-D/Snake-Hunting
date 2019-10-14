@@ -20,6 +20,15 @@ public class Snake
     private static final int DOWN = 1;
     private static final int LEFT = 2;
     private static final int RIGHT = 3;
+    private boolean isSnakeDead = false;
+
+    public void killSnake(){
+        isSnakeDead = true;
+    }
+
+    public boolean isSnakeDead(){
+        return isSnakeDead;
+    }
 
     @Override
     public String move(Square[][] squares, int steps) throws SnakeMoveOutOfBoundsException, SnakeMoveToGuardedSquareException {
@@ -67,6 +76,7 @@ public class Snake
         return null;
     }
 
+
     public boolean moveUp(Square[][] squares, Square currSquare) throws SnakeMoveOutOfBoundsException, SnakeMoveToGuardedSquareException {
         int headRow = currSquare.getRow();
         int headCol = currSquare.getColumn();
@@ -96,6 +106,14 @@ public class Snake
                 setConnectedPosition(getPosition() - intialLength);
                 newTailSquare = getSquare(squares, getConnectedPosition());
                 newTailSquare.addPiece(this);
+
+                for(Piece p : newHeadSquare.getPieceList()){
+                    if (p instanceof Human){
+                        ((Human) p).killHuman();
+                    }
+                }
+
+
                 return true;
             }
         }
@@ -134,6 +152,11 @@ public class Snake
                 }
                 newTailSquare = getSquare(squares, getConnectedPosition());
                 newTailSquare.addPiece(this);
+                for(Piece p : newHeadSquare.getPieceList()){
+                    if (p instanceof Human){
+                        ((Human) p).killHuman();
+                    }
+                }
                 return true;
             }
         }
@@ -172,6 +195,11 @@ public class Snake
                 }
                 newTailSquare = getSquare(squares, getConnectedPosition());
                 newTailSquare.addPiece(this);
+                for(Piece p : newHeadSquare.getPieceList()){
+                    if (p instanceof Human){
+                        ((Human) p).killHuman();
+                    }
+                }
                 return true;
             }
         }
@@ -206,6 +234,11 @@ public class Snake
                 setConnectedPosition(getPosition() - intialLength);
                 newTailSquare = getSquare(squares, getConnectedPosition());
                 newTailSquare.addPiece(this);
+                for(Piece p : newHeadSquare.getPieceList()){
+                    if (p instanceof Human){
+                        ((Human) p).killHuman();
+                    }
+                }
                 return true;
             }
         }

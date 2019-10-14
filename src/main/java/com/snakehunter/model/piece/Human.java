@@ -19,6 +19,7 @@ public class Human
 
     private static final int PARALYZE_TURNS = 3;
     private static final int NUM_OF_LADDER_CLIMBED_THRESHOLD = 3;
+    private boolean isDead = false;
 
     private int paralyzedTurns = 0;
     private List<Ladder> ladderClimbedList;
@@ -27,6 +28,14 @@ public class Human
         super(position);
 
         ladderClimbedList = new ArrayList<>();
+    }
+
+    public boolean isDead(){
+        return isDead;
+    }
+
+    public void killHuman(){
+        isDead = true;
     }
 
     public boolean isParalyzed() {
@@ -124,29 +133,28 @@ public class Human
 
     @Override
     public Square moveKnight(Square[][] squares, Square newSquare) {
-        //remove this human piece from its previous square
-        Square currSquare = getSquare(squares, getPosition());
-        currSquare.removePiece(this);
-
-        //add this human piece to its new square
-        newSquare.addPiece(this);
-        setPosition(newSquare.getSquareNo());
+//        //remove this human piece from its previous square
+//        Square currSquare = getSquare(squares, getPosition());
+//        currSquare.removePiece(this);
+//
+//        //add this human piece to its new square
+//        newSquare.addPiece(this);
+//        setPosition(newSquare.getSquareNo());
 
         //Check if Snake is on new Square
         if (isLandOnSnakeTail(newSquare)) {
             System.out.println("killing snake");
             killSnake(squares);
         }
+        try {
+            move(squares, newSquare.getSquareNo() - getPosition());
+            return getSquare(squares, getPosition());
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
 
-//        try {
-//            move(squares, newSquare.getSquareNo() - getPosition());
-//            return getSquare(squares, getPosition());
-//        } catch (Exception e){
-//            System.out.println(e.getMessage());
-//            return null;
-//        }
-
-        return newSquare;
+        //return newSquare;
     }
 
 
@@ -228,6 +236,7 @@ public class Human
     private void killSnake(Square[][] squares) {
         Square currentSquare = getSquare(squares, getPosition());
         Snake snake = currentSquare.getSnake();
+        snake.killSnake();
         Square snakeHeadSquare = getSquare(squares, snake.getPosition());
         currentSquare.removePiece(snake);
         snakeHeadSquare.removePiece(snake);
