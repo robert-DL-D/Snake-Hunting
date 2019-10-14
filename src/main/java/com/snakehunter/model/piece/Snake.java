@@ -112,8 +112,6 @@ public class Snake
                         ((Human) p).killHuman();
                     }
                 }
-
-
                 return true;
             }
         }
@@ -231,7 +229,11 @@ public class Snake
                 newHeadSquare.addPiece(this);
 
                 //move tail left
-                setConnectedPosition(getPosition() - intialLength);
+                if(getPosition() - intialLength < 1){
+                    setConnectedPosition(1);
+                } else {
+                    setConnectedPosition(getPosition() - intialLength);
+                }
                 newTailSquare = getSquare(squares, getConnectedPosition());
                 newTailSquare.addPiece(this);
                 for(Piece p : newHeadSquare.getPieceList()){
