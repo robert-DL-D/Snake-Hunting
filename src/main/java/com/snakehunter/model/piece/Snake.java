@@ -76,6 +76,7 @@ public class Snake
         return null;
     }
 
+
     public boolean moveUp(Square[][] squares, Square currSquare) throws SnakeMoveOutOfBoundsException, SnakeMoveToGuardedSquareException {
         int headRow = currSquare.getRow();
         int headCol = currSquare.getColumn();
@@ -105,6 +106,14 @@ public class Snake
                 setConnectedPosition(getPosition() - intialLength);
                 newTailSquare = getSquare(squares, getConnectedPosition());
                 newTailSquare.addPiece(this);
+
+                for(Piece p : newHeadSquare.getPieceList()){
+                    if (p instanceof Human){
+                        ((Human) p).killHuman();
+                    }
+                }
+
+
                 return true;
             }
         }
@@ -140,6 +149,11 @@ public class Snake
                 setConnectedPosition(getPosition() - intialLength);
                 newTailSquare = getSquare(squares, getConnectedPosition());
                 newTailSquare.addPiece(this);
+                for(Piece p : newHeadSquare.getPieceList()){
+                    if (p instanceof Human){
+                        ((Human) p).killHuman();
+                    }
+                }
                 return true;
             }
         }
@@ -178,6 +192,11 @@ public class Snake
                 }
                 newTailSquare = getSquare(squares, getConnectedPosition());
                 newTailSquare.addPiece(this);
+                for(Piece p : newHeadSquare.getPieceList()){
+                    if (p instanceof Human){
+                        ((Human) p).killHuman();
+                    }
+                }
                 return true;
             }
         }
@@ -212,6 +231,11 @@ public class Snake
                 setConnectedPosition(getPosition() - intialLength);
                 newTailSquare = getSquare(squares, getConnectedPosition());
                 newTailSquare.addPiece(this);
+                for(Piece p : newHeadSquare.getPieceList()){
+                    if (p instanceof Human){
+                        ((Human) p).killHuman();
+                    }
+                }
                 return true;
             }
         }

@@ -48,7 +48,7 @@ public class GameOverPanel
     }
 
     public void updateWinner(Player winner){
-        winnerLabel.setText(String.format(winnerText, winner.getName().toString()));
+        winnerLabel.setText(String.format(winnerText, "'" + winner.getName().toString() + "'"));
     }
 
     @Override

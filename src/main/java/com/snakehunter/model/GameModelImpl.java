@@ -146,6 +146,13 @@ public class GameModelImpl
     public void nextTurn() {
         numOfTurns++;
 
+        for(int i=0; i < snakePlayer.getPieceList().size(); i++){
+            if (snakePlayer.getPieceList().get(i).isSnakeDead()){
+                snakePlayer.removePiece(snakePlayer.getPieceList().get(i));
+
+            }
+        }
+
         if (numOfTurns >= getGameStage().getMaxTurns()) {
             listener.onGameOver(snakePlayer);
             return;
@@ -169,10 +176,12 @@ public class GameModelImpl
         // TODO: Move this to new final stage human movement
         if (getGameStage() == GameStage.FINAL) {
 
-
-            if (getHumanList().size() < 4) {
-                listener.onGameOver(snakePlayer);
+            for(Human h : humanPlayer.getPieceList()){
+                if (h.isDead()){
+                    listener.onGameOver(snakePlayer);
+                }
             }
+
             if (numOfTurns >= getGameStage().getMaxTurns()) {
                 listener.onGameOver(humanPlayer);
             }

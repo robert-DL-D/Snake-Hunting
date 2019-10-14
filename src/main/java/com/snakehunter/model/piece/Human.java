@@ -19,6 +19,7 @@ public class Human
 
     private static final int PARALYZE_TURNS = 3;
     private static final int NUM_OF_LADDER_CLIMBED_THRESHOLD = 3;
+    private boolean isDead = false;
 
     private int paralyzedTurns = 0;
     private List<Ladder> ladderClimbedList;
@@ -27,6 +28,14 @@ public class Human
         super(position);
 
         ladderClimbedList = new ArrayList<>();
+    }
+
+    public boolean isDead(){
+        return isDead;
+    }
+
+    public void killHuman(){
+        isDead = true;
     }
 
     public boolean isParalyzed() {

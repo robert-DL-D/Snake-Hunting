@@ -291,35 +291,38 @@ public class BoardView
         Color[] color = new Color[]{piece1Color, piece2Color, piece3Color, piece4Color};
 
         for (int i = 1; i <= humanList.size(); i++) {
-            g.setColor(color[i - 1]);
-            int humanPosition = humanList.get(i - 1).getPosition();
-            int xOffset = 10;
-            int yOffset = 10;
+            if (!humanList.get(i - 1).isDead()) {
 
-            if (i % 2 == 0) {
-                xOffset = -xOffset;
-            }
+                g.setColor(color[i - 1]);
+                int humanPosition = humanList.get(i - 1).getPosition();
+                int xOffset = 10;
+                int yOffset = 10;
 
-            if (i > 2) {
-                yOffset = -yOffset;
-            }
-
-            g.fillOval(getX(humanPosition) - xOffset, getY(humanPosition) - yOffset, 20, 20);
-
-            if (humanList.get(i - 1).getParalyzeTurns() > 0) {
-                if (humanList.get(i - 1).getParalyzeTurns() >= 3) {
-                    g.setColor(paralyse1Color);
-                } else if (humanList.get(i - 1).getParalyzeTurns() >= 2) {
-                    g.setColor(paralyse2Color);
-                } else {
-                    g.setColor(paralyse3Color);
+                if (i % 2 == 0) {
+                    xOffset = -xOffset;
                 }
-                g.fillOval(getX(humanPosition) - xOffset, getY(humanPosition) - yOffset, 20, 20);
-            }
 
-            g.setColor(Color.BLACK);
-            g.drawString(String.valueOf(i), getX(humanPosition) - (xOffset - 5),
-                    getY(humanPosition) + (-yOffset + 15));
+                if (i > 2) {
+                    yOffset = -yOffset;
+                }
+
+                g.fillOval(getX(humanPosition) - xOffset, getY(humanPosition) - yOffset, 20, 20);
+
+                if (humanList.get(i - 1).getParalyzeTurns() > 0) {
+                    if (humanList.get(i - 1).getParalyzeTurns() >= 3) {
+                        g.setColor(paralyse1Color);
+                    } else if (humanList.get(i - 1).getParalyzeTurns() >= 2) {
+                        g.setColor(paralyse2Color);
+                    } else {
+                        g.setColor(paralyse3Color);
+                    }
+                    g.fillOval(getX(humanPosition) - xOffset, getY(humanPosition) - yOffset, 20, 20);
+                }
+
+                g.setColor(Color.BLACK);
+                g.drawString(String.valueOf(i), getX(humanPosition) - (xOffset - 5),
+                             getY(humanPosition) + (-yOffset + 15));
+            }
         }
     }
 
