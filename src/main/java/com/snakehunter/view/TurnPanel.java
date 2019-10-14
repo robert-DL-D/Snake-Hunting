@@ -25,6 +25,7 @@ import javax.swing.border.LineBorder;
 public class TurnPanel
         extends JPanel
         implements ActionListener {
+    private static final String loadGameString = "Load Game";
     private static final String saveGameString = "Save Game";
     private final String turnNoString = "Turn No: %s/%s";
     private final String stageLabelString = "Stage: ";
@@ -63,16 +64,23 @@ public class TurnPanel
     private JLabel knightLabel = new JLabel("Choose a human to move:");
     private JList<String> snakeJList;
     private JList<String> humanJList;
+    private JLabel paralyzeLabel;
+    private Color background;
 
     //private JList<String> validMovesList;
     private StringBuilder sb = new StringBuilder();
-    private JLabel paralyzeLabel;
 
     public TurnPanel(ActionListener listener, GameModel gameModel, Color background) {
         this.listener = listener;
         this.gameModel = gameModel;
+        this.background = background;
 
-        setSize(160, 475);
+        setSize(160, 520);
+
+        JButton loadGameButton = new JButton(loadGameString);
+        loadGameButton.setPreferredSize(new Dimension(150, 25));
+        loadGameButton.addActionListener(this);
+        add(loadGameButton);
 
         JButton saveGameButton = new JButton(saveGameString);
         saveGameButton.setPreferredSize(new Dimension(150, 25));
@@ -206,7 +214,7 @@ public class TurnPanel
 
             JButton button = new JButton(SHOW_VALID_MOVES);
             hButtons.add(button);
-            button.setPreferredSize(new Dimension(150, 35));
+            button.setPreferredSize(new Dimension(150, 25));
             button.addActionListener(this);
             add(button);
 
@@ -398,6 +406,8 @@ public class TurnPanel
                 validMoves[i] = gameModel.getHumanList().get(humanPiece).getValidKnightMoves(gameModel.getSquares())[i];
             }
 
+            validMovesList.setBackground(background);
+            validMovesList.setBorder(new LineBorder(Color.BLACK));
 
             validMovesList.setEnabled(true);
             validMovesList.setVisible(true);

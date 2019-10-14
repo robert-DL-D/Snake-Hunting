@@ -45,7 +45,7 @@ public class GameViewImpl
 
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(650, 560);
+        setSize(650, 600);
 
         Container contentPane = getContentPane();
 

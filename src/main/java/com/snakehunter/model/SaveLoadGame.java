@@ -266,7 +266,6 @@ public class SaveLoadGame {
                 if (square.getPieceList() != null) {
                     square.getPieceList().clear();
                 }
-
             }
         }
 
@@ -330,6 +329,7 @@ public class SaveLoadGame {
                 gameModel.addGuard(guardPos);
             }
         }
+        gameView.updateGuardNo();
     }
 
     private void setTurnNumber(String s) {
