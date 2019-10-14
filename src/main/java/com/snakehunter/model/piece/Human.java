@@ -142,12 +142,13 @@ public class Human
 //        setPosition(newSquare.getSquareNo());
 
         //Check if Snake is on new Square
-        if (isLandOnSnakeTail(newSquare)) {
-            System.out.println("killing snake");
-            killSnake(squares);
-        }
+
         try {
             move(squares, newSquare.getSquareNo() - getPosition());
+            if (isLandOnSnakeTail(getSquare(squares, getPosition()))) {
+                System.out.println("killing snake");
+                killSnake(squares);
+            }
             return getSquare(squares, getPosition());
         } catch (Exception e){
             System.out.println(e.getMessage());
@@ -183,7 +184,11 @@ public class Human
                 {1, -2},
                 {-1, -2},
                 {-2, -1},
-                {-2, 1}
+                {-2, 1},
+                {-1, -1},
+                {1, 1},
+                {-1, 1},
+                {1, -1}
         };
 
         for (int i = 0; i < knightCoords.length; i++) {
