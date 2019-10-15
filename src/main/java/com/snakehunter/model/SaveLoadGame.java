@@ -45,8 +45,6 @@ public class SaveLoadGame {
     }
 
     public void saveGame() {
-        StringBuilder stringBuilder = new StringBuilder();
-
         try {
             if (saveFile != null) {
                 file = saveFile;
@@ -57,6 +55,7 @@ public class SaveLoadGame {
                     file = new File("src/main/java/com/snakehunter/file/" + saveFileName + ".txt");
                 }
             }
+
             FileWriter fileWriter = new FileWriter(file, false);
 
             fileWriter.write("humanName" + DELIMITER + gameModel.getHumanPlayer().getName());
@@ -67,6 +66,8 @@ public class SaveLoadGame {
 
             fileWriter.write("stage" + DELIMITER + gameModel.getGameStage());
             fileWriter.write(System.lineSeparator());
+
+            StringBuilder stringBuilder = new StringBuilder();
 
             stringBuilder.append("snakePos");
             for (Snake snakeInList : gameModel.getSnakeList()) {
@@ -96,31 +97,25 @@ public class SaveLoadGame {
             writing(stringBuilder, fileWriter);
 
             stringBuilder.append("snakeGuardPos");
-            String[] snakeGuardPos = new String[SNAKE_GUARD_LIMIT];
             Square[][] twoDSquareArray = gameModel.getSquares();
             if (gameModel.getRemainingGuards() == SNAKE_GUARD_LIMIT) {
                 for (int i = 0; i < SNAKE_GUARD_LIMIT; i++) {
                     stringBuilder.append(DELIMITER).append(NOT_PLACED_SNAKE_GUARD_POSITION);
                 }
             } else {
+                int loopCounter = 0;
+
                 for (Square[] squareArray : twoDSquareArray) {
                     for (Square square : squareArray) {
                         if (square.isGuarded()) {
-                            for (int i = 0; i < snakeGuardPos.length; i++) {
-                                if (snakeGuardPos[i] == null) {
-                                    snakeGuardPos[i] = String.valueOf(square.getSquareNo());
-                                    break;
-                                }
-                            }
+                            stringBuilder.append(DELIMITER).append(square.getSquareNo());
+                            loopCounter++;
                         }
                     }
                 }
-            }
-            for (int i = 0; i < snakeGuardPos.length; i++) {
-                if (snakeGuardPos[i] != null) {
-                    stringBuilder.append(DELIMITER).append(snakeGuardPos[i]);
-                } else {
-                    stringBuilder.append(DELIMITER).append("-1");
+
+                for (int i = loopCounter; i < SNAKE_GUARD_LIMIT; i++) {
+                    stringBuilder.append(DELIMITER).append(NOT_PLACED_SNAKE_GUARD_POSITION);
                 }
             }
             writing(stringBuilder, fileWriter);
@@ -214,6 +209,7 @@ public class SaveLoadGame {
                     JOptionPane.showMessageDialog(new JFrame(), "Not a valid save file", "Invalid save file", JOptionPane.WARNING_MESSAGE);
                 }
             } catch (NullPointerException nullEx) {
+                // Empty catch for when cancelling the window
             }
         }
     }
