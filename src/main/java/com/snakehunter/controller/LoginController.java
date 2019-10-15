@@ -52,13 +52,6 @@ public class LoginController {
             }
         });
 
-        loginView.getNewPasswordTxtF().addActionListener(e -> {
-            try {
-                createNewAccount();
-            } catch (InvalidDetailException ex) {
-            }
-        });
-
         loginView.getNewAccountButton().addActionListener(e -> {
             try {
                 createNewAccount();
@@ -130,9 +123,9 @@ public class LoginController {
 
     private void createNewAccount() throws InvalidDetailException {
 
-        if (loginView.getNewUsernameTxtF().getText().length() != 0 && loginView.getNewPasswordTxtF().getPassword().length != 0) {
+        if (loginView.getUsernameTxtF().getText().length() != 0 && loginView.getPasswordTxtF().getPassword().length != 0) {
 
-            String newUsername = loginView.getNewUsernameTxtF().getText().toUpperCase();
+            String newUsername = loginView.getUsernameTxtF().getText().toUpperCase();
 
             // Write to file immediately if there are no record
             if (usernamePassword.size() == 0) {
@@ -146,7 +139,7 @@ public class LoginController {
 
                 Map.Entry<String, String> entry = iterator.next();
                 if (entry.getKey().equals(newUsername)) {
-                    throw new InvalidDetailException(loginView.getNewAccountMessages(), "Username already exists");
+                    throw new InvalidDetailException(loginView.getLoginMessages(), "Username already exists");
                 } else if (!iterator.hasNext()) {
                     writeToFile();
                     setPlayerUsername(newUsername);
@@ -154,14 +147,13 @@ public class LoginController {
                 }
             }
         } else {
-            throw new InvalidDetailException(loginView.getNewAccountMessages(), "Please fill in username or password");
+            throw new InvalidDetailException(loginView.getLoginMessages(), "Please fill in username or password");
         }
     }
 
     private void writeToFile() {
-
-        String newUsername = loginView.getNewUsernameTxtF().getText().toUpperCase();
-        String newHashedPassword = hashPassword(loginView.getNewPasswordTxtF().getPassword());
+        String newUsername = loginView.getUsernameTxtF().getText().toUpperCase();
+        String newHashedPassword = hashPassword(loginView.getPasswordTxtF().getPassword());
 
         try {
             FileWriter fileWriter = new FileWriter(file, true);
@@ -194,8 +186,6 @@ public class LoginController {
 
         loginView.getUsernameTxtF().setText("");
         loginView.getPasswordTxtF().setText("");
-        loginView.getNewUsernameTxtF().setText("");
-        loginView.getNewPasswordTxtF().setText("");
     }
 
     private String hashPassword(char[] password) {
