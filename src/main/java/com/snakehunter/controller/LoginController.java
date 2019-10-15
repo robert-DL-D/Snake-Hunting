@@ -232,6 +232,7 @@ public class LoginController {
         ((GameModelImpl) gameModel).getSnakePlayer().setName(playersUsername[1]);
     }
 
+    // For JUnit test only
     public boolean getIsLoginSuccess() {
         return loginSuccess;
     }

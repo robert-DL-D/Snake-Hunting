@@ -27,12 +27,12 @@ public class LoginView {
     private JLabel passwordLabel;
     private JTextField usernameTxtF;
     private JPasswordField passwordTxtF;
+    private JPanel buttonPanel;
     private JButton loginButton;
     private JButton newAccountButton;
     private JLabel humanPlayerLabel;
     private JLabel snakePlayerLabel;
     private JLabel loginMessages;
-    private JPanel buttonPanel;
 
     public LoginView() {
         jFrame.setContentPane(mainPanel);

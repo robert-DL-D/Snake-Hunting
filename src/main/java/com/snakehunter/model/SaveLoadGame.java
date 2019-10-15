@@ -20,20 +20,23 @@ import javax.swing.JOptionPane;
 
 public class SaveLoadGame {
 
+    private static final int SNAKE_GUARD_LIMIT = 3;
+    private static final int SNAKE_LIMIT = 5;
+    private static final int LADDER_LIMIT = 5;
+    private static final int NUM_OF_HUMANS = 4;
+    private static final int NOT_PLACED_SNAKE_GUARD_POSITION = -1;
+    private static final int FIRST_VALID_SNAKE_PLACEMENT_SQUARE = 3;
+
     private GameModelImpl gameModel;
     private GameContract.GameView gameView;
 
     private static final String DELIMITER = ":";
-
     private static final String saveFileNameTemplate = "savefile";
     private int saveNumber = 1;
     private String saveFileName = saveFileNameTemplate + saveNumber;
     private File file = new File("src/main/java/com/snakehunter/file/" + saveFileName + ".txt");
     private static final String FOLDER_PATH = "src/main/java/com/snakehunter/file";
-
-    private boolean loadedGame = false;
-    private boolean savedGame = false;
-    private File saveFile;
+    private File saveFile = null;
 
     private String humanName;
     private String snakeName;
@@ -43,11 +46,11 @@ public class SaveLoadGame {
 
     public void saveGame() {
         StringBuilder stringBuilder = new StringBuilder();
-        try {
 
-            if (savedGame) {
+        try {
+            if (saveFile != null) {
                 file = saveFile;
-            } else if (!loadedGame) {
+            } else {
                 while (file.exists()) {
                     saveNumber++;
                     saveFileName = saveFileNameTemplate + saveNumber;
@@ -93,11 +96,11 @@ public class SaveLoadGame {
             writing(stringBuilder, fileWriter);
 
             stringBuilder.append("snakeGuardPos");
-            String[] snakeGuardPos = new String[3];
+            String[] snakeGuardPos = new String[SNAKE_GUARD_LIMIT];
             Square[][] twoDSquareArray = gameModel.getSquares();
-            if (gameModel.getRemainingGuards() == 3) {
-                for (int i = 0; i < 3; i++) {
-                    stringBuilder.append(DELIMITER).append("-1");
+            if (gameModel.getRemainingGuards() == SNAKE_GUARD_LIMIT) {
+                for (int i = 0; i < SNAKE_GUARD_LIMIT; i++) {
+                    stringBuilder.append(DELIMITER).append(NOT_PLACED_SNAKE_GUARD_POSITION);
                 }
             } else {
                 for (Square[] squareArray : twoDSquareArray) {
@@ -129,7 +132,7 @@ public class SaveLoadGame {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        savedGame = true;
+
         saveFile = file;
         JOptionPane.showMessageDialog(new JFrame(), "Game Saved Successfully\n" + "Your save file is " + file.getName(), "Game Saved", JOptionPane.INFORMATION_MESSAGE);
     }
@@ -189,12 +192,14 @@ public class SaveLoadGame {
                             case "turnNumber":
                                 setTurnNumber(stringArray[1]);
                                 break;
+                            default:
+                                break;
                         }
                     } catch (IOException e) {
                         JOptionPane.showMessageDialog(new JFrame(), e.toString(), "IOException", JOptionPane.ERROR_MESSAGE);
                     }
                 }
-                loadedGame = true;
+
                 saveFile = file;
                 gameView.hideSettingPanel();
                 gameView.showTurnPanel();
@@ -271,11 +276,11 @@ public class SaveLoadGame {
 
         gameModel.getSnakeList().clear();
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < SNAKE_LIMIT; i++) {
             gameModel.addSnake(new Snake(Integer.parseInt(stringArray[i * 2 + 2]), Integer.parseInt(stringArray[i * 2 + 1])));
 
             if (gameModel.getSnakeList().size() != i + 1) {
-                for (int j = 3; j < gameModel.getSquares().length * gameModel.getSquares()[0].length; j++) {
+                for (int j = FIRST_VALID_SNAKE_PLACEMENT_SQUARE; j < gameModel.getSquares().length * gameModel.getSquares()[0].length; j++) {
                     if (gameModel.getSquare(j).getPieceList().isEmpty()
                             && gameModel.getSquare(j - 1).getPieceList().isEmpty()) {
                         Snake snake = new Snake(j, j - 1);
@@ -296,7 +301,7 @@ public class SaveLoadGame {
     private void setLadderPos(String[] stringArray) {
         gameModel.getLadderList().clear();
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < LADDER_LIMIT; i++) {
             Ladder ladder =
                     new Ladder(Integer.parseInt(stringArray[i * 2 + 1]), Integer.parseInt(stringArray[i * 2 + 2]));
             gameModel.addLadder(ladder);
@@ -304,9 +309,9 @@ public class SaveLoadGame {
     }
 
     private void setPiecePos(String[] stringArray) {
-        gameModel.initHumans(4);
+        gameModel.initHumans(NUM_OF_HUMANS);
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < NUM_OF_HUMANS; i++) {
 
             gameModel.getHumanList().get(i).setPosition(Integer.parseInt(stringArray[i + 1]));
         }
@@ -314,18 +319,18 @@ public class SaveLoadGame {
 
     private void setParalyzedTurn(String[] stringArray) {
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < NUM_OF_HUMANS; i++) {
             gameModel.getHumanList().get(i).setParalyzedTurns(Integer.parseInt(stringArray[i + 1]));
         }
     }
 
     private void setGuardPos(String[] stringArray) {
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < SNAKE_GUARD_LIMIT; i++) {
 
             int guardPos = Integer.parseInt(stringArray[i + 1]);
 
-            if (guardPos != -1) {
+            if (guardPos != NOT_PLACED_SNAKE_GUARD_POSITION) {
                 gameModel.addGuard(guardPos);
             }
         }
