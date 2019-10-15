@@ -1,6 +1,7 @@
 package com.snakehunter.controller;
 
 import com.snakehunter.GameContract;
+import com.snakehunter.Main;
 import com.snakehunter.model.GameModelImpl;
 import com.snakehunter.model.SaveLoadGame;
 import com.snakehunter.model.exceptions.InvalidDetailException;
@@ -59,11 +60,11 @@ public class LoginController {
             }
         });
 
-//        if (Main.isDebugMode()) {
-//            playersUsername[0] = "testing";
-//            playersUsername[1] = "debug";
-//            startGame(playersUsername);
-//        }
+        if (Main.isDebugMode()) {
+            playersUsername[0] = "testing";
+            playersUsername[1] = "debug";
+            startGame(playersUsername);
+        }
     }
 
     private String instruction() {

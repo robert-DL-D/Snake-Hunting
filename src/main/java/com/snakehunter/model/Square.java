@@ -65,10 +65,10 @@ public class Square {
     public Snake getSnake() {
         for (Piece piece : pieceList) {
             if (piece instanceof Snake) {
-                if (squareNo == piece.getPosition()) {
+                //if (squareNo == piece.getPosition()) {
                     return (Snake) piece;
                 }
-            }
+            //}
         }
 
         return null;

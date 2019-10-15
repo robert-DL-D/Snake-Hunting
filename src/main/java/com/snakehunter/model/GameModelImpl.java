@@ -230,6 +230,9 @@ public class GameModelImpl
     public String moveSnake(int index, int steps) {
         try {
             String temp = snakePlayer.getPiece(index).move(squares, steps);
+            if (gameStage.equals(GameStage.FINAL)) {
+                snakePlayer.getPiece(index).killHuman(snakePlayer.getPiece(index).getSquare(squares, snakePlayer.getPiece(index).getPosition()));
+            }
             //nextTurn();
             return temp;
         } catch (SnakeMoveOutOfBoundsException e) {
