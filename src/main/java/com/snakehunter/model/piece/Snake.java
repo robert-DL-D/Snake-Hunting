@@ -70,6 +70,15 @@ public class Snake
         return null;
     }
 
+    public void eatHuman(Square newHeadSquare) {
+        for (Piece p : newHeadSquare.getPieceList()) {
+            if (p instanceof Human) {
+                ((Human) p).paralyzeHuman(this);
+                p.setPosition(getConnectedPosition());
+            }
+        }
+    }
+
     public void killHuman(Square newHeadSquare) {
         for (Piece p : newHeadSquare.getPieceList()) {
             if (p instanceof Human) {

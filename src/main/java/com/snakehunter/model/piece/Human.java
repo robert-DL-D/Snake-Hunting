@@ -30,11 +30,11 @@ public class Human
         ladderClimbedList = new ArrayList<>();
     }
 
-    public boolean isDead(){
+    public boolean isDead() {
         return isDead;
     }
 
-    public void killHuman(){
+    public void killHuman() {
         isDead = true;
     }
 
@@ -105,11 +105,9 @@ public class Human
         }
 
         String message = "";
-        if (connectorPiece instanceof Snake) {
-            paralyze();
-            message = String.format(" then swallowed by a snake and back to position %1s",
-                                    connectorPiece.getConnectedPosition());
-        } else { // connector piece is a Ladder
+        if (connectorPiece instanceof Snake && destSquare.getSquareNo() == (connectorPiece.getPosition())) {
+            message = paralyzeHuman(connectorPiece);
+        } else if (connectorPiece instanceof Ladder) { // connector piece is a Ladder
             try {
                 addLadderClimbed((Ladder) connectorPiece);
                 message = String.format(" then climb a ladder to position %1s", connectorPiece.getConnectedPosition());
@@ -124,11 +122,17 @@ public class Human
         }
 
         newPosition = connectorPiece.getConnectedPosition();
-        destSquare = getSquare(squares, newPosition);
+        destSquare =
+
+                getSquare(squares, newPosition);
         destSquare.addPiece(this);
+
         setPosition(newPosition);
 
-        return stringBuilder.append(message).toString();
+        return stringBuilder.append(message).
+
+                toString();
+
     }
 
     @Override
@@ -156,7 +160,6 @@ public class Human
 //        }
         return newSquare;
     }
-
 
     public String[] getValidKnightMoves(Square[][] squares) {
         List<Square> squareList = getValidMoves(squares);
@@ -235,6 +238,14 @@ public class Human
         Snake snake = square.getSnake();
         System.out.println(snake != null && snake.getConnectedPosition() == square.getSquareNo());
         return snake != null && snake.getConnectedPosition() == square.getSquareNo();
+    }
+
+    String paralyzeHuman(ConnectorPiece connectorPiece) {
+        String message;
+        paralyze();
+        message = String.format(" then swallowed by a snake and back to position %1s",
+                connectorPiece.getConnectedPosition());
+        return message;
     }
 
     private void killSnake(Square[][] squares) {

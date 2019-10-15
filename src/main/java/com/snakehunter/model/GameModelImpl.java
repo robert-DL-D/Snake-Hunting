@@ -146,8 +146,8 @@ public class GameModelImpl
     public void nextTurn() {
         numOfTurns++;
 
-        for(int i=0; i < snakePlayer.getPieceList().size(); i++){
-            if (snakePlayer.getPieceList().get(i).isSnakeDead()){
+        for (int i = 0; i < snakePlayer.getPieceList().size(); i++) {
+            if (snakePlayer.getPieceList().get(i).isSnakeDead()) {
                 snakePlayer.removePiece(snakePlayer.getPieceList().get(i));
 
             }
@@ -167,8 +167,6 @@ public class GameModelImpl
             }
         }
 
-
-
         if (listener != null) {
             listener.onNextTurn(getCurrentPlayer());
         }
@@ -176,8 +174,8 @@ public class GameModelImpl
         // TODO: Move this to new final stage human movement
         if (getGameStage() == GameStage.FINAL) {
 
-            for(Human h : humanPlayer.getPieceList()){
-                if (h.isDead()){
+            for (Human h : humanPlayer.getPieceList()) {
+                if (h.isDead()) {
                     listener.onGameOver(snakePlayer);
                 }
             }
@@ -187,17 +185,16 @@ public class GameModelImpl
             }
 
             boolean allSnakesDead = true;
-            for(Snake s : snakePlayer.getPieceList()){
-                if (!s.isSnakeDead()){
+            for (Snake s : snakePlayer.getPieceList()) {
+                if (!s.isSnakeDead()) {
                     allSnakesDead = false;
                 }
             }
-            if (allSnakesDead){
+            if (allSnakesDead) {
                 listener.onGameOver(humanPlayer);
             }
         }
     }
-
 
     /**
      * Human movement for Second stage
@@ -221,7 +218,7 @@ public class GameModelImpl
     @Override
     public void movePlayer(int index, Square destSquare) {
         Square newSquare = humanPlayer.getPiece(index).moveKnight(squares, destSquare);
-        if (newSquare!= null){
+        if (newSquare != null) {
             nextTurn();
         }
     }
@@ -230,7 +227,10 @@ public class GameModelImpl
     public String moveSnake(int index, int steps) {
         try {
             String temp = snakePlayer.getPiece(index).move(squares, steps);
-            if (gameStage.equals(GameStage.FINAL)) {
+
+            if (gameStage.equals(GameStage.SECOND)) {
+                snakePlayer.getPiece(index).eatHuman(snakePlayer.getPiece(index).getSquare(squares, snakePlayer.getPiece(index).getPosition()));
+            } else if (gameStage.equals(GameStage.FINAL)) {
                 snakePlayer.getPiece(index).killHuman(snakePlayer.getPiece(index).getSquare(squares, snakePlayer.getPiece(index).getPosition()));
             }
             //nextTurn();
