@@ -65,7 +65,9 @@ public class Square {
     public Snake getSnake() {
         for (Piece piece : pieceList) {
             if (piece instanceof Snake) {
-                return (Snake) piece;
+                if (squareNo == piece.getPosition()) {
+                    return (Snake) piece;
+                }
             }
         }
 

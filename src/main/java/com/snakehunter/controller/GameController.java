@@ -105,7 +105,7 @@ public class GameController
         gameView.hideGameOverPanel();
         gameView.hideSettingPanel();
         gameView.showTurnPanel();
-        gameModel.setGameStage(GameStage.FINAL);
+        gameModel.setGameStage(GameStage.SECOND);
         gameModel.nextTurn();
     }
 
