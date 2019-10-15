@@ -54,7 +54,7 @@ public class GameViewImpl
         contentPane.add(boardView);
 
         diceView = new DiceView();
-        diceView.setLocation(500, 410);
+        diceView.setLocation(507, 440);
         contentPane.add(diceView);
 
         settingPanel = new SettingPanel(this);
