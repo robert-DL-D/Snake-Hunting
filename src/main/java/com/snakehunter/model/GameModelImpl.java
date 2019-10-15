@@ -160,7 +160,7 @@ public class GameModelImpl
 
         if (gameStage == GameStage.SECOND) {
             Player player = getCurrentPlayer();
-            if (player == humanPlayer) {
+            if (player == snakePlayer) {
                 for (Human h : getHumanList()) {
                     h.isParalyzed();
                 }

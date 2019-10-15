@@ -155,6 +155,7 @@ public class GameController
             gameModel.setGameStage(GameStage.FINAL);
             gameModel.resetGameModel();
         } else if (num == 6) {
+            gameView.getTurnPanel().updateParalyzedTurn();
             gameView.showInfoDialog("Human rolled a 6, they can roll again!");
             return;
         }

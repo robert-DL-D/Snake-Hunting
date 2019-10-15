@@ -39,7 +39,6 @@ public class TurnPanel
 
     private final String[] humanButtons = {"Roll Dice", "Place Guard"};
     private final String[] pieceButtons = {"1", "2", "3", "4"};
-    //private final String[] snakeButtons = {"Move Up", "Move Down", "Move Left", "Move Right"};
     private final String[] wideSnakeButtons = {"Up", "Down"};
     private final String[] longSnakeButtons = {"Left", "Right"};
 
@@ -106,12 +105,8 @@ public class TurnPanel
         moveKnightBut.setPreferredSize(new Dimension(150, 25));
         moveKnightBut.addActionListener(this);
 
-        turntakerLabel = new JLabel(playerturnString + gameModel.getCurrentPlayer());
-        turntakerLabel.setPreferredSize(new Dimension(150, 20));
-        add(turntakerLabel);
-
         paralyzeLabel = new JLabel(PIECES_PARALYSED_TURN);
-        turntakerLabel.setPreferredSize(new Dimension(150, 20));
+        paralyzeLabel.setPreferredSize(new Dimension(150, 20));
         add(paralyzeLabel);
 
         for (int i = 0; i < gameModel.getHumanList().size(); i++) {
@@ -121,6 +116,10 @@ public class TurnPanel
             piecesParalyzedLabels.add(jLabel);
             add(jLabel);
         }
+
+        turntakerLabel = new JLabel(playerturnString + gameModel.getCurrentPlayer());
+        turntakerLabel.setPreferredSize(new Dimension(150, 20));
+        add(turntakerLabel);
 
         snakeJList = new JList<>();
         snakeJList.setBackground(background);
@@ -138,7 +137,7 @@ public class TurnPanel
 
     //region functionality
 
-    public void updateTurnNo(int turnNo) {
+    void updateTurnNo(int turnNo) {
         sb = new StringBuilder();
         sb.append(String.format(turnNoString, (int) Math.ceil(turnNo / 2.0),
                 (int) Math.ceil(gameModel.getGameStage().getMaxTurns() / 2.0)));
@@ -163,14 +162,13 @@ public class TurnPanel
         }
     }
 
-    void updateParalyzedTurn() {
+    public void updateParalyzedTurn() {
         if (gameModel.getGameStage().equals(GameStage.SECOND)) {
-
             for (int i = 0; i < piecesParalyzedLabels.size(); i++) {
                 piecesParalyzedLabels.get(i).setText(
                         PIECE + " " + (i + 1) + ": " + gameModel.getHumanList().get(i).getParalyzeTurns());
             }
-        } else {
+        } else if (gameModel.getGameStage().equals(GameStage.FINAL)) {
             remove(paralyzeLabel);
             for (JLabel piecesParalyzedLabel : piecesParalyzedLabels) {
                 remove(piecesParalyzedLabel);
@@ -224,7 +222,7 @@ public class TurnPanel
 
     }
 
-    public void hideKnightUI(){
+    public void hideKnightUI() {
 
         humanJList.setEnabled(false);
         humanJList.setVisible(false);
@@ -252,7 +250,6 @@ public class TurnPanel
         for (JButton b : pButtons) {
             remove(b);
         }
-
 
         repaint();
         pButtons.clear();
@@ -402,7 +399,7 @@ public class TurnPanel
 
             String[] validMoves = new String[gameModel.getHumanList().get(humanPiece).getValidKnightMoves(gameModel.getSquares()).length];
 
-            for(int i=0; i < validMoves.length; i++){
+            for (int i = 0; i < validMoves.length; i++) {
                 validMoves[i] = gameModel.getHumanList().get(humanPiece).getValidKnightMoves(gameModel.getSquares())[i];
             }
 
@@ -433,11 +430,10 @@ public class TurnPanel
     public int getMovesSquareItem() {
         try {
             return Integer.parseInt(validMovesList.getSelectedValue());
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("test");
             return -10;
         }
-
 
     }
     //end region
