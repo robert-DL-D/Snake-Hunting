@@ -27,7 +27,7 @@ import javax.swing.border.LineBorder;
 public class TurnPanel
         extends JPanel
         implements ActionListener {
-    private static final String loadGameString = "Load Game";
+
     private static final String saveGameString = "Save Game";
     private final String turnNoString = "Turn No: %s/%s";
     private final String stageLabelString = "Stage: ";
@@ -77,11 +77,6 @@ public class TurnPanel
         this.background = background;
 
         setSize(160, 520);
-
-        JButton loadGameButton = new JButton(loadGameString);
-        loadGameButton.setPreferredSize(new Dimension(150, 25));
-        loadGameButton.addActionListener(this);
-        add(loadGameButton);
 
         JButton saveGameButton = new JButton(saveGameString);
         saveGameButton.setPreferredSize(new Dimension(150, 25));

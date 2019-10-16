@@ -86,6 +86,7 @@ public class SaveLoadGame {
             writing(stringBuilder, fileWriter);
 
             List<Human> humanList = gameModel.getHumanList();
+
             stringBuilder.append("piecePos");
             for (Human humanInlist : humanList) {
                 stringBuilder.append(DELIMITER).append(humanInlist.getPosition());
@@ -100,18 +101,18 @@ public class SaveLoadGame {
 
             stringBuilder.append("climbedLadder");
             for (Human humanInlist : humanList) {
+                List<Ladder> ladderClimbedList = humanInlist.getLadderClimbedList();
 
-                if (humanInlist.getLadderClimbedList().size() == 0) {
+                if (ladderClimbedList.size() == 0) {
                     for (int i = 0; i < HUMAN_LADDER_CLIMBED_MINIMUM; i++) {
                         stringBuilder.append(DELIMITER).append(PLACEHOLDER_FOR_NO_LADDER_CLIMBED);
                     }
                 } else {
-                    for (int i = 0; i < humanInlist.getLadderClimbedList().size(); i++) {
-                        Ladder ladder = humanInlist.getLadderClimbedList().get(i);
+                    for (Ladder ladder : ladderClimbedList) {
                         stringBuilder.append(DELIMITER).append(ladder.getPosition());
                     }
 
-                    for (int i = 0; i < HUMAN_LADDER_CLIMBED_MINIMUM - humanInlist.getLadderClimbedList().size(); i++) {
+                    for (int i = 0; i < HUMAN_LADDER_CLIMBED_MINIMUM - ladderClimbedList.size(); i++) {
                         stringBuilder.append(DELIMITER).append(PLACEHOLDER_FOR_NO_LADDER_CLIMBED);
                     }
                 }
