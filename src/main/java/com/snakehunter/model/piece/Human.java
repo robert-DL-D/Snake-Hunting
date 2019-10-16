@@ -58,11 +58,8 @@ public class Human
      * 4. Move to Snake'stail / Ladder'stop if the piece lands on a Snake / Ladder
      * 5. Paralyze the piece if it swallowed by a Snake
      *
-     * @param squares
-     *         board array
-     * @param steps
-     *         number rolled from dice
-     *
+     * @param squares board array
+     * @param steps   number rolled from dice
      * @return Message about this movement
      */
     @Override
@@ -96,7 +93,12 @@ public class Human
 
         // Check if the destSquare has snakes or ladders
         Square destSquare = getSquare(squares, newPosition);
-        ConnectorPiece connectorPiece = destSquare.getSnake() == null ? destSquare.getLadder() : destSquare.getSnake();
+        ConnectorPiece connectorPiece = null;
+        if (destSquare.getSquareNo() == destSquare.getLadder().getPosition()) {
+            connectorPiece = destSquare.getLadder();
+        } else if (destSquare.getSquareNo() == destSquare.getSnake().getPosition()) {
+            connectorPiece = destSquare.getSnake();
+        }
 
         if (connectorPiece == null) {
             setPosition(newPosition);
@@ -263,7 +265,7 @@ public class Human
     }
 
     // Method for testing
-    List<Ladder> getLadderClimbedList() {
+    public List<Ladder> getLadderClimbedList() {
         return ladderClimbedList;
     }
 
