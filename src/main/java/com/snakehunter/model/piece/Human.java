@@ -284,7 +284,6 @@ public class Human
         this.unkillable = unkillable;
     }
 
-    // Method for testing
     public List<Ladder> getLadderClimbedList() {
         return ladderClimbedList;
     }
