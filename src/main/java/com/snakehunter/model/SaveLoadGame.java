@@ -101,7 +101,7 @@ public class SaveLoadGame {
             stringBuilder.append("climbedLadder");
             for (Human humanInlist : humanList) {
 
-                if (humanInlist.getLadderClimbedList().size() == HUMAN_LADDER_CLIMBED_MINIMUM) {
+                if (humanInlist.getLadderClimbedList().size() == 0) {
                     for (int i = 0; i < HUMAN_LADDER_CLIMBED_MINIMUM; i++) {
                         stringBuilder.append(DELIMITER).append(PLACEHOLDER_FOR_NO_LADDER_CLIMBED);
                     }
@@ -162,79 +162,77 @@ public class SaveLoadGame {
 
     public void loadGame() {
         JFileChooser jFileChooser = new JFileChooser(FOLDER_PATH);
-        jFileChooser.showOpenDialog(null);
-        file = jFileChooser.getSelectedFile();
 
-        getPlayerNameInFile(file);
+        if (jFileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            file = jFileChooser.getSelectedFile();
 
-        if (gameModel.getHumanPlayer().getName().equals(humanName) && gameModel.getSnakePlayer().getName().equals(snakeName)) {
-            try {
-                BufferedReader br = new BufferedReader(new FileReader(file));
-                String st;
-                String[] stringArray;
+            getPlayerNameInFile(file);
 
-                while (true) {
-                    try {
-                        if ((st = br.readLine()) == null) {
-                            break;
+            if (gameModel.getHumanPlayer().getName().equals(humanName) && gameModel.getSnakePlayer().getName().equals(snakeName)) {
+                try {
+                    BufferedReader br = new BufferedReader(new FileReader(file));
+                    String st;
+                    String[] stringArray;
+
+                    while (true) {
+                        try {
+                            if ((st = br.readLine()) == null) {
+                                break;
+                            }
+
+                            stringArray = st.split(DELIMITER);
+
+                            switch (stringArray[0]) {
+                                case "humanName":
+                                    gameModel.getHumanPlayer().setName(stringArray[1]);
+                                    break;
+                                case "snakeName":
+                                    gameModel.getSnakePlayer().setName(stringArray[1]);
+                                    break;
+                                case "stage":
+                                    setStage(stringArray[1]);
+                                    break;
+                                case "snakePos":
+                                    setSnakePos(stringArray);
+                                    break;
+                                case "ladderPos":
+                                    setLadderPos(stringArray);
+                                    break;
+                                case "piecePos":
+                                    setPiecePos(stringArray);
+                                    break;
+                                case "pieceParalyzedTurnRemaining":
+                                    setParalyzedTurn(stringArray);
+                                    break;
+                                case "climbedLadder":
+                                    setClimbedLadder(stringArray);
+                                    break;
+                                case "snakeGuardPos":
+                                    setGuardPos(stringArray);
+                                    break;
+                                case "turnNumber":
+                                    setTurnNumber(stringArray[1]);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } catch (IOException e) {
+                            JOptionPane.showMessageDialog(new JFrame(), e.toString(), "IOException", JOptionPane.ERROR_MESSAGE);
                         }
-
-                        stringArray = st.split(DELIMITER);
-
-                        switch (stringArray[0]) {
-                            case "humanName":
-                                gameModel.getHumanPlayer().setName(stringArray[1]);
-                                break;
-                            case "snakeName":
-                                gameModel.getSnakePlayer().setName(stringArray[1]);
-                                break;
-                            case "stage":
-                                setStage(stringArray[1]);
-                                break;
-                            case "snakePos":
-                                setSnakePos(stringArray);
-                                break;
-                            case "ladderPos":
-                                setLadderPos(stringArray);
-                                break;
-                            case "piecePos":
-                                setPiecePos(stringArray);
-                                break;
-                            case "pieceParalyzedTurnRemaining":
-                                setParalyzedTurn(stringArray);
-                                break;
-                            case "climbedLadder":
-                                setClimbedLadder(stringArray);
-                                break;
-                            case "snakeGuardPos":
-                                setGuardPos(stringArray);
-                                break;
-                            case "turnNumber":
-                                setTurnNumber(stringArray[1]);
-                                break;
-                            default:
-                                break;
-                        }
-                    } catch (IOException e) {
-                        JOptionPane.showMessageDialog(new JFrame(), e.toString(), "IOException", JOptionPane.ERROR_MESSAGE);
                     }
-                }
 
-                saveFile = file;
-                gameView.hideSettingPanel();
-                gameView.showTurnPanel();
-            } catch (FileNotFoundException e) {
-                JOptionPane.showMessageDialog(new JFrame(), "File not found", "File not found", JOptionPane.ERROR_MESSAGE);
-            }
-        } else {
-            try {
+                    saveFile = file;
+                    gameView.hideSettingPanel();
+                    gameView.showTurnPanel();
+                } catch (FileNotFoundException e) {
+                    JOptionPane.showMessageDialog(new JFrame(), "File not found", "File not found", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
                 if (file.getName().contains(saveFileNameTemplate)) {
                     JOptionPane.showMessageDialog(new JFrame(), "Incorrect save file for current players", "Incorrect save file", JOptionPane.WARNING_MESSAGE);
                 } else {
                     JOptionPane.showMessageDialog(new JFrame(), "Not a valid save file", "Invalid save file", JOptionPane.WARNING_MESSAGE);
                 }
-            } catch (NullPointerException nullEx) {
-                // Empty catch for when cancelling the window
             }
         }
     }
