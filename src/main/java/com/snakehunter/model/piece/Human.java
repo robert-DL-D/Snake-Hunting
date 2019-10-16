@@ -20,6 +20,7 @@ public class Human
     private static final int PARALYZE_TURNS = 3;
     private static final int NUM_OF_LADDER_CLIMBED_THRESHOLD = 3;
     private boolean isDead = false;
+    private boolean unkillable = false;
     private int paralyzedAtTurn;
 
     private int paralyzedTurns = 0;
@@ -269,6 +270,18 @@ public class Human
 
     public void setParalyzedAtTurn(int paralyzedAtTurn) {
         this.paralyzedAtTurn = paralyzedAtTurn;
+    }
+
+    public void addToLadderClimbedList(Ladder ladder) {
+        ladderClimbedList.add(ladder);
+    }
+
+    public boolean isUnkillable() {
+        return unkillable;
+    }
+
+    public void setUnkillable(boolean unkillable) {
+        this.unkillable = unkillable;
     }
 
     // Method for testing

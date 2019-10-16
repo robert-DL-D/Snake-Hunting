@@ -22,11 +22,11 @@ public class Snake
     private static final int RIGHT = 3;
     private boolean isSnakeDead = false;
 
-    public void killSnake(){
+    public void killSnake() {
         isSnakeDead = true;
     }
 
-    public boolean isSnakeDead(){
+    public boolean isSnakeDead() {
         return isSnakeDead;
     }
 
@@ -82,7 +82,9 @@ public class Snake
     public void killHuman(Square newHeadSquare) {
         for (Piece p : newHeadSquare.getPieceList()) {
             if (p instanceof Human) {
-                ((Human) p).killHuman();
+                if (!((Human) p).isUnkillable()) {
+                    ((Human) p).killHuman();
+                }
             }
         }
     }
@@ -153,7 +155,7 @@ public class Snake
                 newHeadSquare.addPiece(this);
 
                 //move tail
-                if(getPosition() - intialLength < 1){
+                if (getPosition() - intialLength < 1) {
                     setConnectedPosition(1);
                 } else {
                     setConnectedPosition(getPosition() - intialLength);
@@ -196,7 +198,7 @@ public class Snake
                 newHeadSquare.addPiece(this);
 
                 //move tail right
-                if(getPosition() - intialLength < 1){
+                if (getPosition() - intialLength < 1) {
                     setConnectedPosition(1);
                 } else {
                     setConnectedPosition(getPosition() - intialLength);
@@ -239,7 +241,7 @@ public class Snake
                 newHeadSquare.addPiece(this);
 
                 //move tail left
-                if(getPosition() - intialLength < 1){
+                if (getPosition() - intialLength < 1) {
                     setConnectedPosition(1);
                 } else {
                     setConnectedPosition(getPosition() - intialLength);

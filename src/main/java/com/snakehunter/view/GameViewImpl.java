@@ -54,7 +54,7 @@ public class GameViewImpl
         contentPane.add(boardView);
 
         diceView = new DiceView();
-        diceView.setLocation(500, 450);
+        diceView.setLocation(507, 450);
         contentPane.add(diceView);
 
         settingPanel = new SettingPanel(this);
@@ -294,6 +294,11 @@ public class GameViewImpl
     }
 
     @Override
+    public void showClimbedLadder() {
+        turnPanel.showClimbedLadder();
+    }
+
+    @Override
     public void onHumanMoved(String message) {
         showInfoDialog(message);
     }
@@ -400,6 +405,9 @@ public class GameViewImpl
         case "Place Guard":
             listener.onPlaceGuard();
             break;
+            case "Check Climbed Ladder":
+                listener.onCheckClimbedLadder();
+                break;
         case "Save Game":
             listener.onSaveClick();
             break;

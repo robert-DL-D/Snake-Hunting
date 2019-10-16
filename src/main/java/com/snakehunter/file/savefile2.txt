@@ -1,9 +1,0 @@
-humanName:USERNAME
-snakeName:APPLE
-stage:SECOND
-snakePos:25:33:13:21:83:86:24:43:46:65
-ladderPos:89:95:20:44:5:29:23:30:8:11
-piecePos:1:29:1:1
-pieceParalyzedTurnRemaining:0:0:0:0
-snakeGuardPos:-1:-1:-1
-turnNumber:5

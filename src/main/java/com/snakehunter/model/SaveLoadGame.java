@@ -26,6 +26,8 @@ public class SaveLoadGame {
     private static final int NUM_OF_HUMANS = 4;
     private static final int NOT_PLACED_SNAKE_GUARD_POSITION = -1;
     private static final int FIRST_VALID_SNAKE_PLACEMENT_SQUARE = 3;
+    private static final int HUMAN_LADDER_CLIMBED_MINIMUM = 3;
+    private static final int PLACEHOLDER_FOR_NO_LADDER_CLIMBED = -1;
 
     private GameModelImpl gameModel;
     private GameContract.GameView gameView;
@@ -93,6 +95,26 @@ public class SaveLoadGame {
             stringBuilder.append("pieceParalyzedTurnRemaining");
             for (Human humanInlist : humanList) {
                 stringBuilder.append(DELIMITER).append(humanInlist.getParalyzeTurns());
+            }
+            writing(stringBuilder, fileWriter);
+
+            stringBuilder.append("climbedLadder");
+            for (Human humanInlist : humanList) {
+
+                if (humanInlist.getLadderClimbedList().size() == HUMAN_LADDER_CLIMBED_MINIMUM) {
+                    for (int i = 0; i < HUMAN_LADDER_CLIMBED_MINIMUM; i++) {
+                        stringBuilder.append(DELIMITER).append(PLACEHOLDER_FOR_NO_LADDER_CLIMBED);
+                    }
+                } else {
+                    for (int i = 0; i < humanInlist.getLadderClimbedList().size(); i++) {
+                        Ladder ladder = humanInlist.getLadderClimbedList().get(i);
+                        stringBuilder.append(DELIMITER).append(ladder.getPosition());
+                    }
+
+                    for (int i = 0; i < HUMAN_LADDER_CLIMBED_MINIMUM - humanInlist.getLadderClimbedList().size(); i++) {
+                        stringBuilder.append(DELIMITER).append(PLACEHOLDER_FOR_NO_LADDER_CLIMBED);
+                    }
+                }
             }
             writing(stringBuilder, fileWriter);
 
@@ -180,6 +202,9 @@ public class SaveLoadGame {
                                 break;
                             case "pieceParalyzedTurnRemaining":
                                 setParalyzedTurn(stringArray);
+                                break;
+                            case "climbedLadder":
+                                setClimbedLadder(stringArray);
                                 break;
                             case "snakeGuardPos":
                                 setGuardPos(stringArray);
@@ -314,10 +339,27 @@ public class SaveLoadGame {
     }
 
     private void setParalyzedTurn(String[] stringArray) {
-
         for (int i = 0; i < NUM_OF_HUMANS; i++) {
             gameModel.getHumanList().get(i).setParalyzedTurns(Integer.parseInt(stringArray[i + 1]));
         }
+    }
+
+    private void setClimbedLadder(String[] stringArray) {
+        for (int i = 0; i < NUM_OF_HUMANS; i++) {
+            for (int j = 1; j < HUMAN_LADDER_CLIMBED_MINIMUM; j++) {
+                int ladderPosition = Integer.parseInt(stringArray[i * HUMAN_LADDER_CLIMBED_MINIMUM + j]);
+
+                if (ladderPosition != -1) {
+                    for (Ladder ladder : gameModel.getLadderList()) {
+                        if (ladder.getPosition() == ladderPosition) {
+                            gameModel.getHumanList().get(i).addToLadderClimbedList(ladder);
+                        }
+                    }
+                }
+
+            }
+        }
+
     }
 
     private void setGuardPos(String[] stringArray) {

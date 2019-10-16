@@ -143,6 +143,11 @@ public class GameController
     }
 
     @Override
+    public void onCheckClimbedLadder() {
+        gameView.showClimbedLadder();
+    }
+
+    @Override
     public void onDiceRolled(int player, int num) {
         if (gameModel.getHumanList().get(player).getParalyzeTurns() != 0) {
             gameView.showInfoDialog("The selected piece is paralyzed, select another human piece.");
@@ -153,7 +158,9 @@ public class GameController
 
         if (newPosition == 100) {
             gameModel.setGameStage(GameStage.FINAL);
+            gameModel.getHumanList().get(player).setUnkillable(true);
             gameModel.resetGameModel();
+
         } else if (num == 6) {
             gameView.getTurnPanel().updateParalyzedTurn();
             gameView.showInfoDialog("Human rolled a 6, they can roll again!");

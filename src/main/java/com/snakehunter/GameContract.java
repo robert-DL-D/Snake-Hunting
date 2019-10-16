@@ -95,6 +95,8 @@ public class GameContract {
         void onKnightClick(int humanPiece);
 
         void onMoveKnight(int movesSquareItem, int humanListItem);
+
+        void onCheckClimbedLadder();
     }
 
     public interface GameModel {
@@ -170,5 +172,7 @@ public class GameContract {
         void onGameOver(Player winner);
 
         void onNumOfHumansEnteredError();
+
+        void showClimbedLadder();
     }
 }

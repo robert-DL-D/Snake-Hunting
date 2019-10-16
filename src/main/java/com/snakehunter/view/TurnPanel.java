@@ -2,6 +2,8 @@ package com.snakehunter.view;
 
 import com.snakehunter.GameContract.GameModel;
 import com.snakehunter.GameStage;
+import com.snakehunter.model.piece.Human;
+import com.snakehunter.model.piece.Ladder;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -37,7 +39,7 @@ public class TurnPanel
 
     private boolean showPieceButtons = false;
 
-    private final String[] humanButtons = {"Roll Dice", "Place Guard"};
+    private final String[] humanButtons = {"Roll Dice", "Place Guard", "Check Climbed Ladder"};
     private final String[] pieceButtons = {"1", "2", "3", "4"};
     private final String[] wideSnakeButtons = {"Up", "Down"};
     private final String[] longSnakeButtons = {"Left", "Right"};
@@ -165,8 +167,11 @@ public class TurnPanel
     public void updateParalyzedTurn() {
         if (gameModel.getGameStage().equals(GameStage.SECOND)) {
             for (int i = 0; i < piecesParalyzedLabels.size(); i++) {
-                piecesParalyzedLabels.get(i).setText(
-                        PIECE + " " + (i + 1) + ": " + gameModel.getHumanList().get(i).getParalyzeTurns());
+                if (gameModel.getHumanList().get(i).getParalyzeTurns() == 4) {
+                    piecesParalyzedLabels.get(i).setText(PIECE + " " + (i + 1) + ": " + 3);
+                } else {
+                    piecesParalyzedLabels.get(i).setText(PIECE + " " + (i + 1) + ": " + gameModel.getHumanList().get(i).getParalyzeTurns());
+                }
             }
         } else if (gameModel.getGameStage().equals(GameStage.FINAL)) {
             remove(paralyzeLabel);
@@ -203,7 +208,7 @@ public class TurnPanel
             for (String buttonStr : humanButtons) {
                 JButton button = new JButton(buttonStr);
                 hButtons.add(button);
-                button.setPreferredSize(new Dimension(150, 35));
+                button.setPreferredSize(new Dimension(150, 25));
                 button.addActionListener(this);
                 add(button);
             }
@@ -338,6 +343,25 @@ public class TurnPanel
         add(humanJList);
     }
 
+    public void showClimbedLadder() {
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0; i < gameModel.getHumanList().size(); i++) {
+            Human human = gameModel.getHumanList().get(i);
+
+            stringBuilder.append("Piece ").append((i + 1)).append(" @ ").append(human.getPosition()).append(":");
+
+            for (Ladder ladder : human.getLadderClimbedList()) {
+                stringBuilder.append(ladder.getPosition()).append("|");
+            }
+
+            stringBuilder.append(System.lineSeparator());
+        }
+
+        JOptionPane.showMessageDialog(this, stringBuilder.toString(), "Climbed Ladder of each Piece", JOptionPane.INFORMATION_MESSAGE);
+    }
+
     //endregion
 
     //region getters
@@ -436,5 +460,6 @@ public class TurnPanel
         }
 
     }
+
     //end region
 }
