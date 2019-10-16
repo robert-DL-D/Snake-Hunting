@@ -344,7 +344,7 @@ public class SaveLoadGame {
 
     private void setClimbedLadder(String[] stringArray) {
         for (int i = 0; i < NUM_OF_HUMANS; i++) {
-            for (int j = 1; j < HUMAN_LADDER_CLIMBED_MINIMUM; j++) {
+            for (int j = 1; j <= HUMAN_LADDER_CLIMBED_MINIMUM; j++) {
                 int ladderPosition = Integer.parseInt(stringArray[i * HUMAN_LADDER_CLIMBED_MINIMUM + j]);
 
                 if (ladderPosition != -1) {
