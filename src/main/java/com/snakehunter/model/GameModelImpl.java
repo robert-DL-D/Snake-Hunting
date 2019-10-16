@@ -24,6 +24,7 @@ public class GameModelImpl
 
     private static final int MAX_GUARDS = 3;
     private static final double NUM_OF_HUMANS = 4;
+    private static final int HUMAN_INITAL_PARALYZED_TURN = 3;
 
     private Square[][] squares = new Square[10][10];
 
@@ -144,6 +145,15 @@ public class GameModelImpl
 
     @Override
     public void nextTurn() {
+        if (gameStage == GameStage.SECOND) {
+            Player player = getCurrentPlayer();
+            if (player == humanPlayer) {
+                for (Human h : getHumanList()) {
+                    h.isParalyzed(numOfTurns);
+                }
+            }
+        }
+
         numOfTurns++;
 
         for (int i = 0; i < snakePlayer.getPieceList().size(); i++) {
@@ -156,15 +166,6 @@ public class GameModelImpl
         if (numOfTurns >= getGameStage().getMaxTurns()) {
             listener.onGameOver(snakePlayer);
             return;
-        }
-
-        if (gameStage == GameStage.SECOND) {
-            Player player = getCurrentPlayer();
-            if (player == snakePlayer) {
-                for (Human h : getHumanList()) {
-                    h.isParalyzed();
-                }
-            }
         }
 
         if (listener != null) {
@@ -203,6 +204,9 @@ public class GameModelImpl
     public int movePlayer(int index, int steps) {
         try {
             String movementMsg = humanPlayer.getPiece(index).move(squares, steps);
+            if (humanPlayer.getPiece(index).getParalyzeTurns() == HUMAN_INITAL_PARALYZED_TURN) {
+                humanPlayer.getPiece(index).setParalyzedAtTurn(numOfTurns);
+            }
             listener.onHumanMoved(movementMsg);
         } catch (MaxPositionExceedException e) {
             listener.onExceedMaxPosition();

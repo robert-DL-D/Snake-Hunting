@@ -20,6 +20,7 @@ public class Human
     private static final int PARALYZE_TURNS = 3;
     private static final int NUM_OF_LADDER_CLIMBED_THRESHOLD = 3;
     private boolean isDead = false;
+    private int paralyzedAtTurn;
 
     private int paralyzedTurns = 0;
     private List<Ladder> ladderClimbedList;
@@ -38,11 +39,13 @@ public class Human
         isDead = true;
     }
 
-    public boolean isParalyzed() {
+    public boolean isParalyzed(int numOfTurns) {
         if (paralyzedTurns == 0) {
             return false;
         } else {
-            paralyzedTurns--;
+            if (paralyzedAtTurn != numOfTurns) {
+                paralyzedTurns--;
+            }
             return true;
         }
     }
@@ -262,6 +265,10 @@ public class Human
 
     public void setParalyzedTurns(int paralyzedTurns) {
         this.paralyzedTurns = paralyzedTurns;
+    }
+
+    public void setParalyzedAtTurn(int paralyzedAtTurn) {
+        this.paralyzedAtTurn = paralyzedAtTurn;
     }
 
     // Method for testing
