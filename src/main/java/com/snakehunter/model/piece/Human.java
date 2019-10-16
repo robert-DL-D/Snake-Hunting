@@ -94,9 +94,9 @@ public class Human
         // Check if the destSquare has snakes or ladders
         Square destSquare = getSquare(squares, newPosition);
         ConnectorPiece connectorPiece = null;
-        if (destSquare.getSquareNo() == destSquare.getLadder().getPosition()) {
+        if (destSquare.getLadder() != null && destSquare.getSquareNo() == destSquare.getLadder().getPosition()) {
             connectorPiece = destSquare.getLadder();
-        } else if (destSquare.getSquareNo() == destSquare.getSnake().getPosition()) {
+        } else if (destSquare.getSnake() != null && destSquare.getSquareNo() == destSquare.getSnake().getPosition()) {
             connectorPiece = destSquare.getSnake();
         }
 
