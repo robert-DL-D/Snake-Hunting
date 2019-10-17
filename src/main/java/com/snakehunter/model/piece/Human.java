@@ -156,14 +156,6 @@ public class Human
             System.out.println("killing snake");
             killSnake(squares);
         }
-
-//        try {
-//            move(squares, newSquare.getSquareNo() - getPosition());
-//            return getSquare(squares, getPosition());
-//        } catch (Exception e){
-//            System.out.println(e.getMessage());
-//            return null;
-//        }
         return newSquare;
     }
 
@@ -205,24 +197,7 @@ public class Human
                 validSquares.add(squares[currCol + knightCoords[i][0]][currRow + knightCoords[i][1]]);
             }
         }
-
-//        Square[] potentialKnightMoves = {squares[currCol - 1][currRow + 2], squares[currCol + 1][currRow + 2],
-//                squares[currCol + 2][currRow + 1], squares[currCol + 2][currRow - 1], squares[currCol + 1][currRow
-//                - 2],
-//                squares[currCol - 1][currRow - 2], squares[currCol - 2][currRow - 1],
-//                squares[currCol - 2][currRow + 1]};
-//
-//        for (int i = 0; i < potentialKnightMoves.length; i++) {
-//            int newCol = potentialKnightMoves[i].getColumn();
-//            int newRow = potentialKnightMoves[i].getRow();
-//
-//            if ((newCol >= 0 && newCol <= 9) && (newRow >= 0 && newRow <= 9)) {
-//                validSquares.add(potentialKnightMoves[i]);
-//            }
-//        }
-
         return validSquares;
-
     }
 
     //region private methods
