@@ -160,7 +160,7 @@ public class GameController
             gameModel.setGameStage(GameStage.FINAL);
             gameModel.getHumanList().get(player).setUnkillable(true);
             gameModel.resetGameModel();
-
+            gameView.getTurnPanel().hidePieceButtons();
         } else if (num == 6) {
             gameView.getTurnPanel().updateParalyzedTurn();
             gameView.showInfoDialog("Human rolled a 6, they can roll again!");
