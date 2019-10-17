@@ -1,10 +1,11 @@
 package com.snakehunter.controller;
 
-import com.snakehunter.GameContract;
 import com.snakehunter.Main;
+import com.snakehunter.model.GameModel;
 import com.snakehunter.model.GameModelImpl;
 import com.snakehunter.model.SaveLoadGame;
 import com.snakehunter.model.exceptions.InvalidDetailException;
+import com.snakehunter.view.GameView;
 import com.snakehunter.view.GameViewImpl;
 import com.snakehunter.view.LoginView;
 
@@ -220,8 +221,8 @@ public class LoginController {
     private void startGame(String[] playersUsername) {
         loginView.getjFrame().setVisible(false);
 
-        GameContract.GameModel gameModel = new GameModelImpl();
-        GameContract.GameView gameView = new GameViewImpl(gameModel);
+        GameModel gameModel = new GameModelImpl();
+        GameView gameView = new GameViewImpl(gameModel);
         SaveLoadGame saveLoadGame = new SaveLoadGame();
         GameController gameController = new GameController(gameView, gameModel, saveLoadGame);
 

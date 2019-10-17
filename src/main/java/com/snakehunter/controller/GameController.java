@@ -1,8 +1,8 @@
 package com.snakehunter.controller;
 
-import com.snakehunter.GameContract.GameModel;
-import com.snakehunter.GameContract.GameView;
-import com.snakehunter.GameContract.ViewEventListener;
+import com.snakehunter.model.GameModel;
+import com.snakehunter.view.GameView;
+import com.snakehunter.view.ViewEventListener;
 import com.snakehunter.GameStage;
 import com.snakehunter.model.GameModelImpl;
 import com.snakehunter.model.SaveLoadGame;

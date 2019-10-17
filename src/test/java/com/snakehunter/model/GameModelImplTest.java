@@ -1,7 +1,6 @@
 package com.snakehunter.model;
 
-import com.snakehunter.GameContract.DataChangedListener;
-import com.snakehunter.GameContract.GameModel;
+import com.snakehunter.model.DataChangedListener;
 import com.snakehunter.model.piece.Human;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Piece;

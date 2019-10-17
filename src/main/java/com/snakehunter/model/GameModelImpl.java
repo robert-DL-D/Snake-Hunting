@@ -1,7 +1,5 @@
 package com.snakehunter.model;
 
-import com.snakehunter.GameContract;
-import com.snakehunter.GameContract.DataChangedListener;
 import com.snakehunter.GameStage;
 import com.snakehunter.model.exceptions.LadderClimbedThresholdException;
 import com.snakehunter.model.exceptions.MaxPositionExceedException;
@@ -20,7 +18,7 @@ import java.util.List;
  * @date 2019-09-02
  */
 public class GameModelImpl
-        implements GameContract.GameModel {
+        implements GameModel {
 
     private static final int MAX_GUARDS = 3;
     private static final double NUM_OF_HUMANS = 4;

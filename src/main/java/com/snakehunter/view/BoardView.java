@@ -1,6 +1,6 @@
 package com.snakehunter.view;
 
-import com.snakehunter.GameContract.GameModel;
+import com.snakehunter.model.GameModel;
 import com.snakehunter.model.Square;
 import com.snakehunter.model.piece.Human;
 import com.snakehunter.model.piece.Ladder;

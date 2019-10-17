@@ -1,8 +1,7 @@
 package com.snakehunter.view;
 
-import com.snakehunter.GameContract;
-import com.snakehunter.GameContract.GameModel;
-import com.snakehunter.GameContract.ViewEventListener;
+import com.snakehunter.model.GameModel;
+import com.snakehunter.view.ViewEventListener;
 import com.snakehunter.GameStage;
 import com.snakehunter.Main;
 import com.snakehunter.controller.GameNotReadyException;
@@ -27,7 +26,7 @@ import javax.swing.JTextField;
  */
 public class GameViewImpl
         extends JFrame
-        implements GameContract.GameView,
+        implements com.snakehunter.view.GameView,
                    ActionListener {
 
     private GameModel gameModel;

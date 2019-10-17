@@ -1,7 +1,6 @@
 package com.snakehunter.view;
 
-import com.snakehunter.GameContract.GameModel;
-import com.snakehunter.GameContract.GameView;
+import com.snakehunter.model.GameModel;
 import com.snakehunter.controller.GameController;
 import com.snakehunter.controller.GameNotReadyException;
 import com.snakehunter.model.GameModelImpl;

@@ -1,10 +1,10 @@
 package com.snakehunter.model;
 
-import com.snakehunter.GameContract;
 import com.snakehunter.GameStage;
 import com.snakehunter.model.piece.Human;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Snake;
+import com.snakehunter.view.GameView;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -30,7 +30,7 @@ public class SaveLoadGame {
     private static final int PLACEHOLDER_FOR_NO_LADDER_CLIMBED = -1;
 
     private GameModelImpl gameModel;
-    private GameContract.GameView gameView;
+    private GameView gameView;
 
     private static final String DELIMITER = ":";
     private static final String saveFileNameTemplate = "savefile";
@@ -384,7 +384,7 @@ public class SaveLoadGame {
         this.gameModel = gameModel;
     }
 
-    public void setGameView(GameContract.GameView gameView) {
+    public void setGameView(GameView gameView) {
         this.gameView = gameView;
     }
 }

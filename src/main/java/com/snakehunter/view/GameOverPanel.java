@@ -1,6 +1,6 @@
 package com.snakehunter.view;
 
-import com.snakehunter.GameContract.GameModel;
+import com.snakehunter.model.GameModel;
 import com.snakehunter.model.piece.Player;
 
 import java.awt.Dimension;
