@@ -19,6 +19,10 @@ public class Human
 
     private static final int PARALYZE_TURNS = 3;
     private static final int NUM_OF_LADDER_CLIMBED_THRESHOLD = 3;
+    private static final int MAX_LADDERS_CLIMBED = 3;
+    private static final int MAX_POSITION = 100;
+
+
     private boolean isDead = false;
     private boolean unkillable = false;
     private int paralyzedAtTurn;
@@ -57,7 +61,7 @@ public class Human
 
     /**
      * 1. Check params is valid
-     * 2. Check new position is not exceed 100
+     * 2. Check new position is not exceed MAX_POSITION
      * 3. Move by the dice number
      * 4. Move to Snake'stail / Ladder'stop if the piece lands on a Snake / Ladder
      * 5. Paralyze the piece if it swallowed by a Snake
@@ -75,14 +79,14 @@ public class Human
 
         // Calculate new position
         int newPosition = getPosition() + steps;
-        if (newPosition > 100) {
+        if (newPosition > MAX_POSITION) {
             throw new MaxPositionExceedException();
-        } else if (newPosition == 100) {
+        } else if (newPosition == MAX_POSITION) {
             if (ladderClimbedList.size() >= NUM_OF_LADDER_CLIMBED_THRESHOLD) {
-                setPosition(100);
+                setPosition(MAX_POSITION);
                 currentSquare.removePiece(this);
-                getSquare(squares, 100).addPiece(this);
-                return "Lands on Square 100! Enter Final stage";
+                getSquare(squares, MAX_POSITION).addPiece(this);
+                return "Lands on Square max position! Enter Final stage";
             } else {
                 setPosition(1);
                 getSquare(squares, 1).addPiece(this);
@@ -135,10 +139,7 @@ public class Human
 
         setPosition(newPosition);
 
-        return stringBuilder.append(message).
-
-                toString();
-
+        return stringBuilder.append(message).toString();
     }
 
     @Override
@@ -208,7 +209,7 @@ public class Human
     void addLadderClimbed(Ladder ladder) throws LadderClimbedException, MaxClimbNumExceedException {
         if (ladderClimbedList.contains(ladder)) {
             throw new LadderClimbedException();
-        } else if (ladderClimbedList.size() == 3) {
+        } else if (ladderClimbedList.size() == MAX_LADDERS_CLIMBED) {
             throw new MaxClimbNumExceedException();
         }
 
