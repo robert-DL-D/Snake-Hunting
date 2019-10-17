@@ -156,14 +156,6 @@ public class Human
             System.out.println("killing snake");
             killSnake(squares);
         }
-
-//        try {
-//            move(squares, newSquare.getSquareNo() - getPosition());
-//            return getSquare(squares, getPosition());
-//        } catch (Exception e){
-//            System.out.println(e.getMessage());
-//            return null;
-//        }
         return newSquare;
     }
 
