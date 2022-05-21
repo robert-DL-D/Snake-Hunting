@@ -3,14 +3,10 @@ package com.snakehunter.model.piece;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author WeiYi Yu
- * @date 2019-09-16
- */
 public class Player<T> {
 
     private String name;
-    private List<T> pieceList;
+    private final List<T> pieceList;
 
     public Player(String name) {
         this.name = name;
@@ -26,7 +22,7 @@ public class Player<T> {
     }
 
     public void addPiece(T piece) {
-        this.pieceList.add(piece);
+        pieceList.add(piece);
     }
 
     public T getPiece(int index) {

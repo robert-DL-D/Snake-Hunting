@@ -4,156 +4,111 @@ import com.snakehunter.model.GameModel;
 import com.snakehunter.model.Square;
 import com.snakehunter.model.piece.Human;
 import com.snakehunter.model.piece.Ladder;
+import com.snakehunter.model.piece.Piece;
 import com.snakehunter.model.piece.Snake;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Polygon;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
 
-/**
- * @author WeiYi Yu
- * @date 2019-09-02
- */
 public class BoardView
         extends JPanel
         implements Runnable {
     private static final int X_MARGIN = 20;
     private static final int Y_MARGIN = 20;
 
-    private static final Color boardColor1 = new Color(71, 83, 105);
-    private static final Color boardColor2 = new Color(49, 62, 87);
-
-    private static final Color snakeHeadHereColor = new Color(255, 90, 90);
-    private static final Color snakeTailHereColor = new Color (150, 70, 70);
-
-    private static final Color ladderBaseHereColor = new Color(81, 140, 97);
+    private static final Color snakeTailHereColor = new Color(150, 70, 70);
 
     private static final Color piece1Color = new Color(136, 94, 209);
     private static final Color piece2Color = new Color(194, 94, 209);
     private static final Color piece3Color = new Color(94, 144, 209);
     private static final Color piece4Color = new Color(25, 181, 158);
-
-    private static final Color boardNumberColor = new Color(255, 255, 255);
-
-    private static final Color snakeColor1 = new Color(219, 70, 44);
-    private static final Color snakeColor2 = new Color(166, 49, 28);
+    private final Color[] color = {piece1Color, piece2Color, piece3Color, piece4Color};
 
     private static final Color ladderColor = new Color(90, 245, 90);
 
-    private static final Color guardColor = new Color(50, 190, 200);
-    private static final Color paralyse1Color = new Color(227, 44, 11);
-    private static final Color paralyse2Color = new Color(227, 112, 11);
-    private static final Color paralyse3Color = new Color(227, 148, 11);
-
     private double factor = 0.2;
 
-    private GameModel gameModel;
+    private final GameModel gameModel;
 
-    private List<Snake> snakeList;
-
-    private List<Ladder> ladderList;
-
-    public BoardView(GameModel gameModel) {
+    BoardView(GameModel gameModel) {
         this.gameModel = gameModel;
 
         setSize(440, 440);
-
-        snakeList = new ArrayList<>();
-        ladderList = new ArrayList<>();
+        //setBorder(new LineBorder(Color.BLACK));
 
         new Thread(this).start();
     }
 
-    public void addSnake(Snake snake) {
-        snakeList.add(snake);
-    }
-
-    public void addLadder(Ladder ladder) {
-        ladderList.add(ladder);
-    }
-
     @Override
-    protected void paintComponent(Graphics graphics) {
-        super.paintComponent(graphics);
-
-//        for (int i = 0; i < 10; i++) {
-//            for (int j = 0; j < 10; j++) {
-//                if ((i + j) % 2 == 0) {
-//                    graphics.setColor(Color.YELLOW);
-//                } else {
-//                    graphics.setColor(Color.ORANGE);
-//                }
-//                graphics.fillRect(20 + 40 * i, 20 + 40 * j, 40, 40);
-//            }
-//        }
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
 
         Square[][] localSquares = gameModel.getSquares();
 
         for (int i = 0; i < localSquares.length; i++) {
             for (int j = 0; j < localSquares[0].length; j++) {
 
-                //System.out.println(i + " " + j);
-                if (localSquares[i][9 - j].getSquareNo() % 2 == 0) {
-                    graphics.setColor(boardColor1);
+                Square square = localSquares[i][9 - j];
+
+                if (square.getSquareNo() % 2 == 0) {
+                    g.setColor(new Color(71, 83, 105));
                 } else {
-                    graphics.setColor(boardColor2);
+                    g.setColor(new Color(49, 62, 87));
                 }
 
-                if (localSquares[i][9 - j].getPieceList().size() != 0) {
-                    if (localSquares[i][9 - j].getSnake() != null) {
-                        if (localSquares[i][9-j].getSnake().getPosition() == localSquares[i][9-j].getSquareNo()){
-                            graphics.setColor(snakeHeadHereColor);
-                        } else {
+                if (!square.getPieceList().isEmpty()) {
+                    for (Piece piece : square.getPieceList()) {
+                        if (piece instanceof Snake) {
+                            if (piece.getPosition() == square.getSquareNo()) {
+                                g.setColor(new Color(255, 90, 90));
+                                break;
+                            }/*else {
                             graphics.setColor(snakeTailHereColor);
+                        }*/
                         }
+                    }
 
-                    } else if (localSquares[i][9 - j].getLadder() != null) {
-                        graphics.setColor(ladderBaseHereColor);
+                    if (square.getLadder() != null) {
+                        g.setColor(new Color(81, 140, 97));
                     }
                 }
 
-                if (localSquares[i][9 - j].isGuarded()) {
-                    graphics.setColor(guardColor);
+                if (square.isGuarded()) {
+                    g.setColor(new Color(50, 190, 200));
                 }
 
-                graphics.fillRect(i * 40 + 20, j * 40 + 20, 40, 40);
+                g.fillRect(i * 40 + 20, j * 40 + 20, 40, 40);
+
             }
         }
+        drawSnake(g, gameModel.getSnakeList());
 
-//        for (int i = 0; i < 100; i++) {
-//            graphics.drawString("" + (i + 1), getX(i + 1), getY(i + 1) + 20);
-//        }
+        drawLadder(g, gameModel.getLadderList());
 
-        drawLadder(graphics, gameModel.getLadderList());
-
-        drawHumans(graphics, gameModel.getHumanList());
-
-        drawSnake(graphics, gameModel.getSnakeList());
+        drawHumans(g, gameModel.getHumanList());
 
         for (int i = 0; i < localSquares.length; i++) {
             for (int j = 0; j < localSquares[0].length; j++) {
-                graphics.setColor(boardNumberColor);
-                graphics.drawString(Integer.toString(localSquares[i][9 - j].getSquareNo()), i * 40 + 20, j * 40 + 30);
+                g.setColor(new Color(255, 255, 255));
+                g.drawString(Integer.toString(localSquares[i][9 - j].getSquareNo()), i * 40 + 20, j * 40 + 30);
             }
         }
+
     }
 
     private void drawSnake(Graphics g, List<Snake> snakeList) {
-        for (int j = 01; j <= snakeList.size(); j++) {
-            if (!snakeList.get(j- 1).isSnakeDead()) {
+        for (int j = 1; j <= snakeList.size(); j++) {
+            if (!snakeList.get(j - 1).isSnakeDead()) {
                 int headX = getX(snakeList.get(j - 1).getPosition());
                 int headY = getY(snakeList.get(j - 1).getPosition());
                 int tailX = getX(snakeList.get(j - 1).getConnectedPosition());
                 int tailY = getY(snakeList.get(j - 1).getConnectedPosition());
 
-                int steps =
-                        (int) Math.sqrt((tailY - headY) * (tailY - headY) + (tailX - headX) * (tailX - headX)) / 150 *
-                                18 +
-                                24;
+                int steps = (int) Math.sqrt((tailY - headY) * (tailY - headY) + (tailX - headX) * (tailX - headX)) / 150 * 18 + 24;
 
                 double xstep = (double) (tailX - headX) / (steps + 1);
                 double ystep = (double) (tailY - headY) / (steps + 1);
@@ -188,15 +143,18 @@ public class BoardView
                     } else {
                         inc = -10 * factor;
                     }
+
                     x += xstep;
                     y += ystep;
+
                     if (odd) {
-                        g.setColor(snakeColor1);
+                        g.setColor(new Color(219, 70, 44));
                         odd = false;
                     } else {
-                        g.setColor(snakeColor2);
+                        g.setColor(new Color(166, 49, 28));
                         odd = true;
                     }
+
                     if (tailX > headX) {
                         g.fillOval((int) (x + inc), (int) (y - inc), 20 - 10 * i / steps, 20 - 10 * i / steps);
                     } else {
@@ -208,16 +166,12 @@ public class BoardView
     }
 
     private void drawLadder(Graphics g, List<Ladder> ladderList) {
-
         for (Ladder ladder : ladderList) {
 
             int bottomX = getX(ladder.getPosition()) + 10;
             int bottomY = getY(ladder.getPosition()) + 10;
             int topX = getX(ladder.getConnectedPosition()) + 10;
             int topY = getY(ladder.getConnectedPosition()) + 10;
-
-//        g.setColor(Color.red);
-//        g.drawLine(bottomX, bottomY, topX, topY);
 
             g.setColor(ladderColor);
 
@@ -236,9 +190,8 @@ public class BoardView
             int rungMin = 3;
             int rungMax = 40;
             int rungSpacing = 10;
-            //
-            //int rungNo = int(constrain(dist/rungSpacing, rungMin, rungMax));
-            int rungNo = (int) Math.min(rungMax, Math.max((int) dist / rungSpacing, rungMin));
+
+            int rungNo = Math.min(rungMax, Math.max((int) dist / rungSpacing, rungMin));
 
             int firstxpoint = 0;
             int firstypoint = 0;
@@ -266,7 +219,10 @@ public class BoardView
                     fourthypoint = (int) (ypoint + ladderWidth * dx);
 
                 } else {
-                    g.drawLine((int) (xpoint + ladderWidth * dy), (int) (ypoint - ladderWidth * dx), (int) (xpoint - ladderWidth * dy), (int) (ypoint + ladderWidth * dx));
+                    g.drawLine((int) (xpoint + ladderWidth * dy),
+                            (int) (ypoint - ladderWidth * dx),
+                            (int) (xpoint - ladderWidth * dy),
+                            (int) (ypoint + ladderWidth * dx));
                 }
             }
 
@@ -279,16 +235,13 @@ public class BoardView
             p.addPoint(fourthxpoint, fourthypoint);
             p.addPoint(thirdxpoint, thirdypoint);
 
-            Color temp = new Color(ladderColor.getRed(), ladderColor.getGreen(), ladderColor.getBlue(), 64);
-
-            g.setColor(temp);
+            g.setColor(new Color(ladderColor.getRed(), ladderColor.getGreen(), ladderColor.getBlue(), 64));
             g.drawPolygon(p);
             g.fillPolygon(p);
         }
     }
 
     private void drawHumans(Graphics g, List<Human> humanList) {
-        Color[] color = new Color[]{piece1Color, piece2Color, piece3Color, piece4Color};
 
         for (int i = 1; i <= humanList.size(); i++) {
             if (!humanList.get(i - 1).isDead()) {
@@ -310,18 +263,17 @@ public class BoardView
 
                 if (humanList.get(i - 1).getParalyzeTurns() > 0) {
                     if (humanList.get(i - 1).getParalyzeTurns() >= 3) {
-                        g.setColor(paralyse1Color);
+                        g.setColor(new Color(227, 44, 11));
                     } else if (humanList.get(i - 1).getParalyzeTurns() >= 2) {
-                        g.setColor(paralyse2Color);
+                        g.setColor(new Color(227, 112, 11));
                     } else {
-                        g.setColor(paralyse3Color);
+                        g.setColor(new Color(227, 148, 11));
                     }
                     g.fillOval(getX(humanPosition) - xOffset, getY(humanPosition) - yOffset, 20, 20);
                 }
 
                 g.setColor(Color.BLACK);
-                g.drawString(String.valueOf(i), getX(humanPosition) - (xOffset - 5),
-                             getY(humanPosition) + (-yOffset + 15));
+                g.drawString(String.valueOf(i), getX(humanPosition) - (xOffset - 5), getY(humanPosition) + (-yOffset + 15));
             }
         }
     }
@@ -342,16 +294,19 @@ public class BoardView
 
     public void run() {
         double inc = 0.05;
+
         while (true) {
             try {
                 Thread.sleep(50);
             } catch (Exception e) {
             }
+
             factor += inc;
 
             if (factor > 0.5 || factor < -0.5) {
                 inc = -inc;
             }
+
             repaint();
         }
     }

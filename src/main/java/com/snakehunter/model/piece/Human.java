@@ -9,10 +9,6 @@ import com.snakehunter.model.exceptions.MaxPositionExceedException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author David Manolitsas
- * @date 2019-09-08
- */
 public class Human
         extends Piece
         implements Movable {
@@ -22,36 +18,28 @@ public class Human
     private static final int MAX_LADDERS_CLIMBED = 3;
     private static final int MAX_POSITION = 100;
 
-
-    private boolean isDead = false;
-    private boolean unkillable = false;
+    private boolean isDead;
+    private boolean unkillable;
     private int paralyzedAtTurn;
 
-    private int paralyzedTurns = 0;
-    private List<Ladder> ladderClimbedList;
+    private int paralyzedTurns;
+    private final List<Ladder> ladderClimbedList = new ArrayList<>();
 
     public Human(int position) {
         super(position);
-
-        ladderClimbedList = new ArrayList<>();
     }
 
     public boolean isDead() {
         return isDead;
     }
 
-    public void killHuman() {
+    void killHuman() {
         isDead = true;
     }
 
-    public boolean isParalyzed(int numOfTurns) {
-        if (paralyzedTurns == 0) {
-            return false;
-        } else {
-            if (paralyzedAtTurn != numOfTurns) {
-                paralyzedTurns--;
-            }
-            return true;
+    public void isParalyzed(int numOfTurns) {
+        if (paralyzedTurns != 0 && paralyzedAtTurn != numOfTurns) {
+            paralyzedTurns--;
         }
     }
 
@@ -68,10 +56,11 @@ public class Human
      *
      * @param squares board array
      * @param steps   number rolled from dice
+     * @param index
      * @return Message about this movement
      */
     @Override
-    public String move(Square[][] squares, int steps) throws MaxPositionExceedException,
+    public String move(Square[][] squares, int steps, int index) throws MaxPositionExceedException,
             LadderClimbedThresholdException {
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -97,7 +86,7 @@ public class Human
         // Remove piece from current square
         currentSquare.removePiece(this);
 
-        stringBuilder.append(String.format("Move to position %1s", newPosition));
+        stringBuilder.append(String.format("Piece " + (index + 1) + " moved to position %1s", newPosition));
 
         // Check if the destSquare has snakes or ladders
         Square destSquare = getSquare(squares, newPosition);
@@ -120,7 +109,7 @@ public class Human
         } else if (connectorPiece instanceof Ladder) { // connector piece is a Ladder
             try {
                 addLadderClimbed((Ladder) connectorPiece);
-                message = String.format(" then climb a ladder to position %1s", connectorPiece.getConnectedPosition());
+                message = String.format("\nthen climb a ladder to position %1s", connectorPiece.getConnectedPosition());
             } catch (LadderClimbedException | MaxClimbNumExceedException e) {
                 destSquare.addPiece(this);
                 setPosition(newPosition);
@@ -132,9 +121,7 @@ public class Human
         }
 
         newPosition = connectorPiece.getConnectedPosition();
-        destSquare =
-
-                getSquare(squares, newPosition);
+        destSquare = getSquare(squares, newPosition);
         destSquare.addPiece(this);
 
         setPosition(newPosition);
@@ -154,7 +141,6 @@ public class Human
 
         //Check if Snake is on new Square
         if (isLandOnSnakeTail(getSquare(squares, getPosition()))) {
-            System.out.println("killing snake");
             killSnake(squares);
         }
         return newSquare;
@@ -170,7 +156,7 @@ public class Human
         return squareNoList;
     }
 
-    public ArrayList<Square> getValidMoves(Square[][] squares) {
+    private ArrayList<Square> getValidMoves(Square[][] squares) {
         ArrayList<Square> validSquares = new ArrayList<>();
 
         Square currSquare = getSquare(squares, getPosition());
@@ -192,21 +178,20 @@ public class Human
                 {1, -1}
         };
 
-        for (int i = 0; i < knightCoords.length; i++) {
-            if (currCol + knightCoords[i][0] <= 9 && currCol + knightCoords[i][0] >= 0 &&
-                    currRow + knightCoords[i][1] <= 9 && currRow + knightCoords[i][1] >= 0) {
-                validSquares.add(squares[currCol + knightCoords[i][0]][currRow + knightCoords[i][1]]);
+        for (int[] knightCoord : knightCoords) {
+            if (currCol + knightCoord[0] <= 9 && currCol + knightCoord[0] >= 0 &&
+                    currRow + knightCoord[1] <= 9 && currRow + knightCoord[1] >= 0) {
+                validSquares.add(squares[currCol + knightCoord[0]][currRow + knightCoord[1]]);
             }
         }
         return validSquares;
     }
 
-    //region private methods
-    void paralyze() {
+    private void paralyze() {
         paralyzedTurns = PARALYZE_TURNS;
     }
 
-    void addLadderClimbed(Ladder ladder) throws LadderClimbedException, MaxClimbNumExceedException {
+    private void addLadderClimbed(Ladder ladder) throws LadderClimbedException, MaxClimbNumExceedException {
         if (ladderClimbedList.contains(ladder)) {
             throw new LadderClimbedException();
         } else if (ladderClimbedList.size() == MAX_LADDERS_CLIMBED) {
@@ -218,14 +203,13 @@ public class Human
 
     private boolean isLandOnSnakeTail(Square square) {
         Snake snake = square.getSnake();
-        System.out.println(snake != null && snake.getConnectedPosition() == square.getSquareNo());
         return snake != null && snake.getConnectedPosition() == square.getSquareNo();
     }
 
     String paralyzeHuman(ConnectorPiece connectorPiece) {
         String message;
         paralyze();
-        message = String.format(" then swallowed by a snake and back to position %1s",
+        message = String.format("\nthen swallowed by a snake and back to position %1s",
                 connectorPiece.getConnectedPosition());
         return message;
     }
@@ -238,7 +222,6 @@ public class Human
         currentSquare.removePiece(snake);
         snakeHeadSquare.removePiece(snake);
     }
-    //endregion
 
     public void setParalyzedTurns(int paralyzedTurns) {
         this.paralyzedTurns = paralyzedTurns;
@@ -252,7 +235,7 @@ public class Human
         ladderClimbedList.add(ladder);
     }
 
-    public boolean isUnkillable() {
+    boolean isUnkillable() {
         return unkillable;
     }
 

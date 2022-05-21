@@ -1,8 +1,11 @@
 package com.snakehunter.model.piece;
 
+import com.snakehunter.model.GameModel;
 import com.snakehunter.model.Square;
 import com.snakehunter.model.exceptions.SnakeMoveOutOfBoundsException;
 import com.snakehunter.model.exceptions.SnakeMoveToGuardedSquareException;
+
+import java.util.LinkedList;
 
 /**
  * @author David Manolitsas
@@ -20,9 +23,9 @@ public class Snake
     private static final int DOWN = 1;
     private static final int LEFT = 2;
     private static final int RIGHT = 3;
-    private boolean isSnakeDead = false;
+    private boolean isSnakeDead;
 
-    public void killSnake() {
+    void killSnake() {
         isSnakeDead = true;
     }
 
@@ -31,50 +34,71 @@ public class Snake
     }
 
     @Override
-    public String move(Square[][] squares, int steps) throws SnakeMoveOutOfBoundsException, SnakeMoveToGuardedSquareException {
-        String message;
+    public String move(Square[][] squares, int steps, int index) {
         Square currSquare = getSquare(squares, getPosition());
 
         try {
-            if (steps == UP) {
-                if (moveUp(squares, currSquare)) {
-                    return null;
-                }
-            } else if (steps == DOWN) {
-                if (moveDown(squares, currSquare)) {
-                    return null;
-                }
+            switch (steps) {
+                case UP:
+                    if (moveUp(squares, currSquare)) {
+                        return null;
+                    }
+                    break;
+                case DOWN:
+                    if (moveDown(squares, currSquare)) {
+                        return null;
+                    }
 
-            } else if (steps == LEFT) {
-                if (moveLeft(squares, currSquare)) {
-                    return null;
-                }
+                    break;
+                case LEFT:
+                    if (moveLeft(squares, currSquare)) {
+                        return null;
+                    }
 
-            } else if (steps == RIGHT) {
-                if (moveRight(squares, currSquare)) {
-                    return null;
-                }
-            } else {
-                return message = "Invalid Input";
+                    break;
+                case RIGHT:
+                    if (moveRight(squares, currSquare)) {
+                        return null;
+                    }
+                    break;
             }
         } catch (SnakeMoveOutOfBoundsException | SnakeMoveToGuardedSquareException e) {
-            return message = e.getMessage();
+            return e.getMessage();
         }
-        return message = "invalid move";
+        return "";
     }
 
     @Override
-    public Square moveKnight(Square[][] squares, Square destSquare) {
+    public Square moveKnight(Square[][] squares, Square newSquare) {
         return null;
     }
 
-    public void eatHuman(Square newHeadSquare) {
+    public String eatHuman(GameModel gameModel, Square newHeadSquare) {
+        LinkedList<Piece> tempList = new LinkedList<>();
+
         for (Piece p : newHeadSquare.getPieceList()) {
             if (p instanceof Human) {
-                ((Human) p).paralyzeHuman(this);
-                p.setPosition(getConnectedPosition());
+                if (((Human) p).getParalyzeTurns() == 0) {
+                    tempList.add(p);
+                }
             }
         }
+
+        if (!tempList.isEmpty()) {
+            for (Piece piece : tempList) {
+                gameModel.getSquare(newHeadSquare.getSquareNo()).removePiece(piece);
+
+                piece.setPosition(getConnectedPosition());
+                gameModel.getSquare(getConnectedPosition()).addPiece(piece);
+
+                ((Human) piece).paralyzeHuman(this);
+
+                return "and swallowed piece " + (gameModel.getHumanList().indexOf(piece) + 1)
+                        + " and dragged it down to position " + gameModel.getSquare(getConnectedPosition()).getSquareNo();
+            }
+        }
+
+        return null;
     }
 
     public void killHuman(Square newHeadSquare) {
@@ -87,146 +111,100 @@ public class Snake
         }
     }
 
-    public boolean moveUp(Square[][] squares, Square currSquare) throws SnakeMoveOutOfBoundsException, SnakeMoveToGuardedSquareException {
+    /*private boolean moveToDirection(int step, Square[][] squares, Square currSquare) throws SnakeMoveOutOfBoundsException, SnakeMoveToGuardedSquareException {
         int headRow = currSquare.getRow();
         int headCol = currSquare.getColumn();
         Square tail = getSquare(squares, getConnectedPosition());
-        int newHeadPosition;
-        Square newHeadSquare, newTailSquare;
-        int intialLength = getLength();
+        Square newHeadSquare;
+        int initialLength = getLength();
 
         if (headRow + 1 > 9) {
             throw new SnakeMoveOutOfBoundsException();
         } else {
             newHeadSquare = squares[headCol][headRow + 1];
-            if (newHeadSquare.isGuarded()) {
-                throw new SnakeMoveToGuardedSquareException();
-            } else {
-                //move head up
-                currSquare.removePiece(this);
-                tail.removePiece(this);
-                newHeadPosition = newHeadSquare.getSquareNo();
-                setPosition(newHeadPosition);
-                newHeadSquare = getSquare(squares, getPosition());
-                newHeadSquare.addPiece(this);
-
-                //move tail up
-                setConnectedPosition(getPosition() - intialLength);
-                newTailSquare = getSquare(squares, getConnectedPosition());
-                newTailSquare.addPiece(this);
-
-                return true;
-            }
+            return moveSnake(squares, currSquare, tail, newHeadSquare, initialLength);
         }
-    }
+    }*/
 
-    public boolean moveDown(Square[][] squares, Square currSquare) throws SnakeMoveOutOfBoundsException, SnakeMoveToGuardedSquareException {
+    private boolean moveUp(Square[][] squares, Square currSquare) throws SnakeMoveOutOfBoundsException, SnakeMoveToGuardedSquareException {
         int headRow = currSquare.getRow();
         int headCol = currSquare.getColumn();
         Square tail = getSquare(squares, getConnectedPosition());
-        int tailRow = tail.getRow();
-        int tailCol = tail.getColumn();
-        int newHeadPosition, newTailPosition;
-        Square newHeadSquare, newTailSquare;
-        int intialLength = getLength();
+        Square newHeadSquare;
+        int initialLength = getLength();
+
+        if (headRow + 1 > 9) {
+            throw new SnakeMoveOutOfBoundsException();
+        } else {
+            newHeadSquare = squares[headCol][headRow + 1];
+            return moveSnake(squares, currSquare, tail, newHeadSquare, initialLength);
+        }
+    }
+
+    private boolean moveDown(Square[][] squares, Square currSquare) throws SnakeMoveOutOfBoundsException, SnakeMoveToGuardedSquareException {
+        int headRow = currSquare.getRow();
+        int headCol = currSquare.getColumn();
+        Square tail = getSquare(squares, getConnectedPosition());
+        Square newHeadSquare;
+        int initialLength = getLength();
 
         if (headRow - 1 < 0) {
             throw new SnakeMoveOutOfBoundsException();
         } else {
             newHeadSquare = squares[headCol][headRow - 1];
-            if (newHeadSquare.isGuarded()) {
-                throw new SnakeMoveToGuardedSquareException();
-            } else {
-                //move head down
-                currSquare.removePiece(this);
-                tail.removePiece(this);
-                newHeadPosition = newHeadSquare.getSquareNo();
-                setPosition(newHeadPosition);
-                newHeadSquare = getSquare(squares, getPosition());
-                newHeadSquare.addPiece(this);
-
-                //move tail
-                if (getPosition() - intialLength < 1) {
-                    setConnectedPosition(1);
-                } else {
-                    setConnectedPosition(getPosition() - intialLength);
-                }
-                newTailSquare = getSquare(squares, getConnectedPosition());
-                newTailSquare.addPiece(this);
-                return true;
-            }
+            return moveSnake(squares, currSquare, tail, newHeadSquare, initialLength);
         }
     }
 
-    public boolean moveRight(Square[][] squares, Square currSquare) throws SnakeMoveOutOfBoundsException, SnakeMoveToGuardedSquareException {
+    private boolean moveRight(Square[][] squares, Square currSquare) throws SnakeMoveOutOfBoundsException, SnakeMoveToGuardedSquareException {
         int headRow = currSquare.getRow();
         int headCol = currSquare.getColumn();
         Square tail = getSquare(squares, getConnectedPosition());
-        int newHeadPosition;
-        Square newHeadSquare, newTailSquare;
-        int intialLength = getLength();
+        Square newHeadSquare;
+        int initialLength = getLength();
 
         if ((headCol + 1 > 9)) {
             throw new SnakeMoveOutOfBoundsException();
         } else {
             newHeadSquare = squares[headCol + 1][headRow];
-            if (newHeadSquare.isGuarded()) {
-                throw new SnakeMoveToGuardedSquareException();
-            } else {
-                //move head right
-                currSquare.removePiece(this);
-                tail.removePiece(this);
-                newHeadPosition = newHeadSquare.getSquareNo();
-                setPosition(newHeadPosition);
-                newHeadSquare = getSquare(squares, getPosition());
-                newHeadSquare.addPiece(this);
-
-                //move tail right
-                if (getPosition() - intialLength < 1) {
-                    setConnectedPosition(1);
-                } else {
-                    setConnectedPosition(getPosition() - intialLength);
-                }
-                newTailSquare = getSquare(squares, getConnectedPosition());
-                newTailSquare.addPiece(this);
-                return true;
-            }
+            return moveSnake(squares, currSquare, tail, newHeadSquare, initialLength);
         }
     }
 
-    public boolean moveLeft(Square[][] squares, Square currSquare) throws SnakeMoveOutOfBoundsException, SnakeMoveToGuardedSquareException {
-        int headRow = currSquare.getRow();
+    private boolean moveLeft(Square[][] squares, Square currSquare) throws SnakeMoveOutOfBoundsException, SnakeMoveToGuardedSquareException {
         int headCol = currSquare.getColumn();
+        int headRow = currSquare.getRow();
         Square tail = getSquare(squares, getConnectedPosition());
-        int newHeadPosition;
-        Square newHeadSquare, newTailSquare;
-        int intialLength = getLength();
+        Square newHeadSquare = squares[headCol - 1][headRow];
+        int initialLength = getLength();
 
         if ((headCol - 1 < 0)) {
             throw new SnakeMoveOutOfBoundsException();
         } else {
-            newHeadSquare = squares[headCol - 1][headRow];
-            if (newHeadSquare.isGuarded()) {
-                throw new SnakeMoveToGuardedSquareException();
-            } else {
-                //move head left
-                currSquare.removePiece(this);
-                tail.removePiece(this);
-                newHeadPosition = newHeadSquare.getSquareNo();
-                setPosition(newHeadPosition);
-                newHeadSquare = getSquare(squares, getPosition());
-                newHeadSquare.addPiece(this);
 
-                //move tail left
-                if (getPosition() - intialLength < 1) {
-                    setConnectedPosition(1);
-                } else {
-                    setConnectedPosition(getPosition() - intialLength);
-                }
-                newTailSquare = getSquare(squares, getConnectedPosition());
-                newTailSquare.addPiece(this);
-                return true;
-            }
+            return moveSnake(squares, currSquare, tail, newHeadSquare, initialLength);
+        }
+    }
+
+    private boolean moveSnake(Square[][] squares, Square currSquare, Square tail, Square newHeadSquare, int initialLength) throws SnakeMoveToGuardedSquareException, SnakeMoveOutOfBoundsException {
+
+        if (newHeadSquare.isGuarded()) {
+            throw new SnakeMoveToGuardedSquareException();
+        } else if ((newHeadSquare.getSquareNo() - initialLength) < 1) {
+            throw new SnakeMoveOutOfBoundsException();
+        } else {
+            //move head up
+            currSquare.removePiece(this);
+            tail.removePiece(this);
+            setPosition(newHeadSquare.getSquareNo());
+            newHeadSquare = getSquare(squares, getPosition());
+            newHeadSquare.addPiece(this);
+
+            //move tail up
+            setConnectedPosition(getPosition() - initialLength);
+            getSquare(squares, getConnectedPosition()).addPiece(this);
+
+            return true;
         }
     }
 }

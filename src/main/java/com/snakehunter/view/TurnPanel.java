@@ -1,7 +1,8 @@
 package com.snakehunter.view;
 
-import com.snakehunter.model.GameModel;
 import com.snakehunter.GameStage;
+import com.snakehunter.controller.GameController;
+import com.snakehunter.model.GameModel;
 import com.snakehunter.model.piece.Human;
 import com.snakehunter.model.piece.Ladder;
 
@@ -9,9 +10,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.AbstractSequentialList;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -28,50 +30,44 @@ public class TurnPanel
         extends JPanel
         implements ActionListener {
 
+    private static final String TURN_NO = "Turn No: ";
     private static final String saveGameString = "Save Game";
-    private final String turnNoString = "Turn No: %s/%s";
-    private final String stageLabelString = "Stage: ";
-    private final String playerturnString = " turn: ";
-    private final String humanGuardString = "Guards left: ";
+    private static final String stageLabelString = "Stage: ";
+    private static final String playerTurnString = " turn: ";
+    private static final String humanGuardString = "Guards left: ";
     private static final String PIECES_PARALYSED_TURN = "Pieces Paralysed Turn";
-    private static final String PIECE = "Piece";
     private static final String SHOW_VALID_MOVES = "Show Valid Moves";
-
-    private boolean showPieceButtons = false;
-
-    private final String[] humanButtons = {"Roll Dice", "Place Guard", "Check Climbed Ladder"};
+    private final String[] humanButtons = {"Place Guard", "Check Ladder"};
     private final String[] pieceButtons = {"1", "2", "3", "4"};
     private final String[] wideSnakeButtons = {"Up", "Down"};
     private final String[] longSnakeButtons = {"Left", "Right"};
+    private static final String moveKnightButton = "Move Human";
 
-    private final String moveKnightButton = "Move Human";
-    private final JButton moveKnightBut = new JButton(moveKnightButton);
-
+    private final Collection<JButton> hButtons = new ArrayList<>();
+    private final Collection<JButton> pButtons = new ArrayList<>();
+    private final AbstractSequentialList<JLabel> piecesParalyzedLabels = new LinkedList<>();
+    private final Collection<JButton> sButtons = new ArrayList<>();
+    private final Collection<JButton> humanKnightMoveButtons = new LinkedList<>();
     private final JList<String> validMovesList = new JList<>();
 
-    private final List<JButton> hButtons = new ArrayList<>();
-    private final List<JButton> pButtons = new ArrayList<>();
-    private LinkedList<JLabel> piecesParalyzedLabels = new LinkedList<>();
-    private final List<JButton> sButtons = new ArrayList<>();
-    private LinkedList<JButton> humanKnightMoveButtons = new LinkedList<>();
-
-    private ActionListener listener;
-
-    private GameModel gameModel;
-    private JLabel turnNoLabel;
-    private JLabel stageNoLabel;
-    private JLabel turntakerLabel;
-    private JLabel guardLabel;
-    private JLabel knightLabel = new JLabel("Choose a human to move:");
-    private JList<String> snakeJList;
-    private JList<String> humanJList;
-    private JLabel paralyzeLabel;
-    private Color background;
-
+    private final JLabel turnNoLabel;
+    private final JLabel stageNoLabel;
+    private final JLabel turntakerLabel;
+    private final JLabel guardLabel;
+    private final JLabel knightLabel = new JLabel("Choose a human to move:");
+    private final JList<String> snakeJList;
+    private final JList<String> humanJList;
+    private final JLabel paralyzeLabel;
+    private final JButton moveKnightBut = new JButton(moveKnightButton);
     //private JList<String> validMovesList;
+
+    private final DiceView diceView;
+    private final ActionListener listener;
+    private final GameModel gameModel;
+    private final Color background;
     private StringBuilder sb = new StringBuilder();
 
-    public TurnPanel(ActionListener listener, GameModel gameModel, Color background) {
+    TurnPanel(ActionListener listener, GameModel gameModel, Color background) {
         this.listener = listener;
         this.gameModel = gameModel;
         this.background = background;
@@ -87,8 +83,7 @@ public class TurnPanel
         stageNoLabel.setPreferredSize(new Dimension(150, 20));
         add(stageNoLabel);
 
-        sb.append(String.format("Turn No: "));
-        //gameModel.getNumOfTurns()
+        sb.append(TURN_NO);
         turnNoLabel = new JLabel();
         turnNoLabel.setPreferredSize(new Dimension(150, 20));
         turnNoLabel.setText(sb.toString());
@@ -107,14 +102,13 @@ public class TurnPanel
         add(paralyzeLabel);
 
         for (int i = 0; i < gameModel.getHumanList().size(); i++) {
-            JLabel jLabel =
-                    new JLabel(PIECE + " " + (i + 1) + ": " + gameModel.getHumanList().get(i).getParalyzeTurns());
-            jLabel.setPreferredSize(new Dimension(150, 15));
+            JLabel jLabel = new JLabel(getParalyzedText(i));
+            jLabel.setPreferredSize(new Dimension(30, 10));
             piecesParalyzedLabels.add(jLabel);
             add(jLabel);
         }
 
-        turntakerLabel = new JLabel(playerturnString + gameModel.getCurrentPlayer());
+        turntakerLabel = new JLabel(playerTurnString + gameModel.getCurrentPlayer());
         turntakerLabel.setPreferredSize(new Dimension(150, 20));
         add(turntakerLabel);
 
@@ -130,15 +124,25 @@ public class TurnPanel
         validMovesList.setBackground(background);
         validMovesList.setBorder(new LineBorder(Color.BLACK));*/
 
+        diceView = new DiceView();
+        diceView.setPreferredSize(new Dimension(120, 50));
+        diceView.setLocation(100, 0);
+        add(diceView);
+
+        addPieceButtons();
     }
 
     //region functionality
 
     void updateTurnNo(int turnNo) {
         sb = new StringBuilder();
+
+        String turnNoString = "Turn No: %s/%s";
         sb.append(String.format(turnNoString, (int) Math.ceil(turnNo / 2.0),
                 (int) Math.ceil(gameModel.getGameStage().getMaxTurns() / 2.0)));
+
         turnNoLabel.setText(sb.toString());
+
         String s = "Human's";
         if (gameModel.getCurrentPlayer().isSnake()) {
             s = "Snake's";
@@ -146,13 +150,13 @@ public class TurnPanel
         } else {
             showHumanButtons();
         }
-        turntakerLabel.setText(s + playerturnString + gameModel.getCurrentPlayer().getName());
+        turntakerLabel.setText(s + playerTurnString + gameModel.getCurrentPlayer().getName().toUpperCase());
 
         updateParalyzedTurn();
     }
 
-    public void updateGuardNo() {
-        if (gameModel.getGameStage().equals(GameStage.SECOND)) {
+    void updateGuardNo() {
+        if (gameModel.getGameStage() == GameStage.SECOND) {
             guardLabel.setText(humanGuardString + gameModel.getRemainingGuards());
         } else {
             remove(guardLabel);
@@ -160,15 +164,11 @@ public class TurnPanel
     }
 
     public void updateParalyzedTurn() {
-        if (gameModel.getGameStage().equals(GameStage.SECOND)) {
+        if (gameModel.getGameStage() == GameStage.SECOND) {
             for (int i = 0; i < piecesParalyzedLabels.size(); i++) {
-                if (gameModel.getHumanList().get(i).getParalyzeTurns() == 4) {
-                    piecesParalyzedLabels.get(i).setText(PIECE + " " + (i + 1) + ": " + 3);
-                } else {
-                    piecesParalyzedLabels.get(i).setText(PIECE + " " + (i + 1) + ": " + gameModel.getHumanList().get(i).getParalyzeTurns());
-                }
+                piecesParalyzedLabels.get(i).setText(getParalyzedText(i));
             }
-        } else if (gameModel.getGameStage().equals(GameStage.FINAL)) {
+        } else if (gameModel.getGameStage() == GameStage.FINAL) {
             remove(paralyzeLabel);
             for (JLabel piecesParalyzedLabel : piecesParalyzedLabels) {
                 remove(piecesParalyzedLabel);
@@ -181,16 +181,16 @@ public class TurnPanel
         listener.actionPerformed(e);
     }
 
-    public void updateStage(GameStage s) {
-        stageNoLabel.setText(stageLabelString + s);
+    void updateStage(GameStage gameStage) {
+        stageNoLabel.setText(stageLabelString + gameStage);
     }
 
     private void showHumanButtons() {
-        for (JButton b : sButtons) {
-            remove(b);
+        for (JButton jButton : sButtons) {
+            remove(jButton);
         }
-        for (JButton b : hButtons) {
-            remove(b);
+        for (JButton jButton : hButtons) {
+            remove(jButton);
         }
 
         snakeJList.removeAll();
@@ -200,6 +200,9 @@ public class TurnPanel
         sButtons.clear();
 
         if (gameModel.getGameStage() == GameStage.SECOND) {
+
+            diceView.setVisible(true);
+
             for (String buttonStr : humanButtons) {
                 JButton button = new JButton(buttonStr);
                 hButtons.add(button);
@@ -207,7 +210,19 @@ public class TurnPanel
                 button.addActionListener(this);
                 add(button);
             }
+
+            for (JButton jButton : pButtons) {
+                jButton.setVisible(true);
+                jButton.setEnabled(false);
+            }
+
         } else {
+            diceView.setVisible(false);
+
+            for (JButton pButton : pButtons) {
+                pButton.setVisible(false);
+            }
+
             showHumanKnightJList();
 
             JButton button = new JButton(SHOW_VALID_MOVES);
@@ -222,7 +237,7 @@ public class TurnPanel
 
     }
 
-    public void hideKnightUI() {
+    private void hideKnightUI() {
 
         humanJList.setEnabled(false);
         humanJList.setVisible(false);
@@ -234,60 +249,56 @@ public class TurnPanel
         knightLabel.setVisible(false);
     }
 
-    public void addPieceButtons() {
+    private void addPieceButtons() {
         for (String pieceString : pieceButtons) {
             JButton button = new JButton(pieceString);
-            pButtons.add(button);
             button.setPreferredSize(new Dimension(50, 30));
             button.addActionListener(this);
+
+            pButtons.add(button);
+
             add(button);
+            button.setEnabled(false);
         }
-
-        showPieceButtons = true;
     }
 
-    private void removePieceButtons() {
-        for (JButton b : pButtons) {
-            remove(b);
+    void enablePieceButtons() {
+        for (JButton button : pButtons) {
+            button.setEnabled(true);
         }
-
-        repaint();
-        pButtons.clear();
-        showPieceButtons = false;
     }
 
-    public void showPieceButtons() {
-        for (JButton b : pButtons) {
-            b.setVisible(true);
+    public void disablePieceButtons() {
+        for (JButton jButton : pButtons) {
+            jButton.setEnabled(false);
         }
-        showPieceButtons = true;
     }
 
     public void hidePieceButtons() {
-        for (JButton b : pButtons) {
-            b.setVisible(false);
+        for (JButton jButton : pButtons) {
+            jButton.setVisible(false);
         }
-        showPieceButtons = false;
     }
 
-    public boolean getShowPieceButtons() {
-        return showPieceButtons;
+    public void hideDice() {
+        diceView.setVisible(false);
     }
 
     private void showSnakeButtons() {
 
-        for (JButton b : hButtons) {
-            remove(b);
+        for (JButton jButton : hButtons) {
+            remove(jButton);
         }
-        for (JButton b : sButtons) {
-            remove(b);
+        for (JButton jButton : sButtons) {
+            remove(jButton);
         }
 
         hideKnightUI();
 
-        removePieceButtons();
+        hidePieceButtons();
         repaint();
         hButtons.clear();
+        diceView.setVisible(false);
 
         String[] snakePosArray = new String[gameModel.getSnakeList().size()];
         for (int i = 0; i < gameModel.getSnakeList().size(); i++) {
@@ -295,7 +306,6 @@ public class TurnPanel
         }
 
         snakeJList.setListData(snakePosArray);
-
         add(snakeJList);
 
         String moveUp = wideSnakeButtons[0];
@@ -319,7 +329,6 @@ public class TurnPanel
         moveDownButton.setPreferredSize(new Dimension(140, 30));
         moveDownButton.addActionListener(this);
         add(moveDownButton);
-
     }
 
     private void showHumanKnightJList() {
@@ -338,7 +347,7 @@ public class TurnPanel
         add(humanJList);
     }
 
-    public void showClimbedLadder() {
+    void showClimbedLadder() {
 
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -380,39 +389,30 @@ public class TurnPanel
 //        return value;
 //    }
 
-    public List<JButton> getpButtons() {
-        return pButtons;
+    private String getParalyzedText(int i) {
+        return (i + 1) + ": " + gameModel.getHumanList().get(i).getParalyzeTurns();
     }
 
-    public JLabel getTurnNoLabel() {
-        return turnNoLabel;
+    DiceView getDiceView() {
+        return diceView;
     }
 
-    public JLabel getStageNoLabel() {
-        return stageNoLabel;
-    }
-
-    public JLabel getTurntakerLabel() {
-        return turntakerLabel;
-    }
-
-    public JLabel getGuardLabel() {
-        return guardLabel;
-    }
-
-    public void showValidMoves(int humanPiece) {
+    void showValidMoves(int humanPiece) {
         if (humanPiece <= gameModel.getHumanList().size() && humanPiece >= 0) {
 
             for (JButton humanKnightMoveButton : humanKnightMoveButtons) {
                 remove(humanKnightMoveButton);
             }
+
             humanKnightMoveButtons.clear();
 
             for (String validKnightMove : gameModel.getHumanList().get(humanPiece).getValidKnightMoves(gameModel.getSquares())) {
                 JButton humanKnighButton = new JButton(validKnightMove);
-                humanKnightMoveButtons.add(humanKnighButton);
                 humanKnighButton.setPreferredSize(new Dimension(100, 30));
                 humanKnighButton.addActionListener(this);
+
+                humanKnightMoveButtons.add(humanKnighButton);
+
                 //add(humanKnighButton);
             }
 
@@ -446,14 +446,17 @@ public class TurnPanel
 
     }
 
-    public int getMovesSquareItem() {
+    int getMovesSquareItem() {
         try {
             return Integer.parseInt(validMovesList.getSelectedValue());
-        } catch (Exception e) {
-            System.out.println("test");
-            return -10;
+        } catch (NumberFormatException e) {
+            return -1;
         }
 
+    }
+
+    void setOnDiceViewEventListener(GameController listener) {
+        diceView.setOnViewEventListener(listener);
     }
 
     //end region

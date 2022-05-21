@@ -1,9 +1,12 @@
 package com.snakehunter.model;
 
+import com.snakehunter.controller.GameController;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Piece;
 import com.snakehunter.model.piece.Snake;
+import com.snakehunter.view.ClickablePanel;
 
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,19 +14,21 @@ import java.util.List;
  * @author WeiYi Yu
  * @date 2019-08-26
  */
-public class Square {
+public class Square extends ClickablePanel {
 
-    private int squareNo;
-    private int column;
-    private int row;
-    private boolean isGuarded = false;
-    private List<Piece> pieceList;
+    private final int squareNo;
+    private final int column;
+    private final int row;
+    private boolean isGuarded;
+    private final List<Piece> pieceList = new ArrayList<>();
+
+    private GameController listener;
 
     public Square(int squareNo, int column, int row) {
         this.squareNo = squareNo;
         this.row = row;
         this.column = column;
-        pieceList = new ArrayList<>();
+        addMouseListener(this);
     }
 
     public void addPiece(Piece piece) {
@@ -42,7 +47,7 @@ public class Square {
         return squareNo;
     }
 
-    public void setGuarded(boolean guarded) {
+    void setGuarded(boolean guarded) {
         isGuarded = guarded;
     }
 
@@ -58,15 +63,11 @@ public class Square {
         return row;
     }
 
-    public boolean hasPiece(Piece piece) {
-        return pieceList.contains(piece);
-    }
-
     public Snake getSnake() {
         for (Piece piece : pieceList) {
             if (piece instanceof Snake) {
-                    return (Snake) piece;
-                }
+                return (Snake) piece;
+            }
         }
 
         return null;
@@ -78,6 +79,19 @@ public class Square {
                 return (Ladder) piece;
             }
         }
+
         return null;
     }
+
+    public void setOnViewEventListener(GameController listener) {
+        this.listener = listener;
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        System.out.println("No listener");
+
+        listener.onSquareClick(squareNo);
+    }
+
 }

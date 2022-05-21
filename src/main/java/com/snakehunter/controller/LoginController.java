@@ -1,12 +1,12 @@
 package com.snakehunter.controller;
 
 import com.snakehunter.Main;
+import com.snakehunter.file.LoadGame;
+import com.snakehunter.file.SaveGame;
 import com.snakehunter.model.GameModel;
-import com.snakehunter.model.GameModelImpl;
-import com.snakehunter.model.SaveLoadGame;
+import com.snakehunter.model.Square;
 import com.snakehunter.model.exceptions.InvalidDetailException;
 import com.snakehunter.view.GameView;
-import com.snakehunter.view.GameViewImpl;
 import com.snakehunter.view.LoginView;
 
 import java.io.BufferedReader;
@@ -24,19 +24,18 @@ import java.util.Map;
 
 public class LoginController {
 
-    private LoginView loginView;
+    private static final int NUMBER_OF_PLAYERS = 2;
+    private final LoginView loginView;
 
     private final File file = new File("src/main/java/com/snakehunter/file/UsernamePassword.txt");
     private static final String DELIMITER = ":";
 
-    private HashMap<String, String> usernamePassword = new HashMap<>();
-    private String[] playersUsername = new String[2];
-    private boolean loginSuccess = false;
+    private final Map<String, String> usernamePassword = new HashMap<>();
+    private final String[] playersUsername = new String[NUMBER_OF_PLAYERS];
+    private boolean loginSuccess;
 
     public LoginController(LoginView loginView) {
         this.loginView = loginView;
-
-        System.out.println(instruction());
 
         importUsernamePassword();
 
@@ -65,6 +64,8 @@ public class LoginController {
             playersUsername[0] = "testing";
             playersUsername[1] = "debug";
             startGame(playersUsername);
+            System.out.println(instruction());
+
         }
     }
 
@@ -105,7 +106,7 @@ public class LoginController {
         }
     }
 
-    public void validateLogin() throws InvalidDetailException {
+    private void validateLogin() throws InvalidDetailException {
         String username = loginView.getUsernameTxtF().getText().toUpperCase();
         String hashedPassword = hashPassword(loginView.getPasswordTxtF().getPassword());
 
@@ -125,21 +126,22 @@ public class LoginController {
 
     private void createNewAccount() throws InvalidDetailException {
 
-        if (loginView.getUsernameTxtF().getText().length() != 0 && loginView.getPasswordTxtF().getPassword().length != 0) {
+        if (!loginView.getUsernameTxtF().getText().isEmpty() && loginView.getPasswordTxtF().getPassword().length != 0) {
 
             String newUsername = loginView.getUsernameTxtF().getText().toUpperCase();
 
             // Write to file immediately if there are no record
-            if (usernamePassword.size() == 0) {
+            if (usernamePassword.isEmpty()) {
                 writeToFile();
                 setPlayerUsername(newUsername);
                 loginSuccess = true;
             }
 
-            for (Iterator<Map.Entry<String, String>> iterator = usernamePassword.entrySet().iterator(); iterator
-                    .hasNext(); ) {
+            for (Iterator<Map.Entry<String, String>> iterator = usernamePassword.entrySet().iterator();
+                 iterator.hasNext(); ) {
 
                 Map.Entry<String, String> entry = iterator.next();
+
                 if (entry.getKey().equals(newUsername)) {
                     throw new InvalidDetailException(loginView.getLoginMessages(), "Username already exists");
                 } else if (!iterator.hasNext()) {
@@ -169,8 +171,6 @@ public class LoginController {
             e.printStackTrace();
         }
 
-        System.out.println("New account added");
-        //JFRAME.setVisible(false);
     }
 
     private void setPlayerUsername(String username) {
@@ -221,16 +221,26 @@ public class LoginController {
     private void startGame(String[] playersUsername) {
         loginView.getjFrame().setVisible(false);
 
-        GameModel gameModel = new GameModelImpl();
-        GameView gameView = new GameViewImpl(gameModel);
-        SaveLoadGame saveLoadGame = new SaveLoadGame();
-        GameController gameController = new GameController(gameView, gameModel, saveLoadGame);
+        GameModel gameModel = new GameModel();
+        GameView gameView = new GameView(gameModel);
+        GameController gameController = new GameController(gameView, gameModel, new SaveGame(), new LoadGame());
 
         gameModel.setOnDataChangedListener(gameView);
         gameView.setOnViewEventListener(gameController);
 
-        ((GameModelImpl) gameModel).getHumanPlayer().setName(playersUsername[0]);
-        ((GameModelImpl) gameModel).getSnakePlayer().setName(playersUsername[1]);
+        gameView.setOnDiceViewEventListener(gameController);
+
+        for (Square[] squares : gameModel.getSquares()) {
+            for (Square square : squares) {
+                square.setOnViewEventListener(gameController);
+            }
+        }
+
+        gameModel.getHumanPlayer().setName(playersUsername[0]);
+        gameModel.getSnakePlayer().setName(playersUsername[1]);
+
+        gameController.onRandomLadderClick();
+        gameController.onRandomSnakeClick();
     }
 
     // For JUnit test only

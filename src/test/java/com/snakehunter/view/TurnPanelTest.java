@@ -3,7 +3,6 @@ package com.snakehunter.view;
 import com.snakehunter.model.GameModel;
 import com.snakehunter.controller.GameController;
 import com.snakehunter.controller.GameNotReadyException;
-import com.snakehunter.model.GameModelImpl;
 import com.snakehunter.model.SaveLoadGame;
 import com.snakehunter.model.piece.Ladder;
 import com.snakehunter.model.piece.Piece;
@@ -29,13 +28,13 @@ import static org.junit.Assert.fail;
  */
 public class TurnPanelTest {
 
-    GameModel gameModel = new GameModelImpl();
-    GameView gameView = new GameViewImpl(gameModel);
+    GameModel gameModel = new GameModel();
+    GameView gameView = new GameView(gameModel);
     SaveLoadGame saveLoadGame = new SaveLoadGame();
     GameController gameController = new GameController(gameView, gameModel, saveLoadGame);
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
 
         gameModel.setOnDataChangedListener(gameView);
         gameView.setOnViewEventListener(gameController);

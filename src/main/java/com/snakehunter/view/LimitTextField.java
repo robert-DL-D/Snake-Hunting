@@ -5,14 +5,10 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
-/**
- * @author WeiYi Yu
- * @date 2019-09-03
- */
-public class LimitTextField
+class LimitTextField
         extends JFormattedTextField {
 
-    public LimitTextField() {
+    LimitTextField() {
         setColumns(2);
         setDocument(new PlainDocument() {
             @Override

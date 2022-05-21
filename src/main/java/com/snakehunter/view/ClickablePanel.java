@@ -5,10 +5,6 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 
-/**
- * @author WeiYi Yu
- * @date 2019-09-02
- */
 public class ClickablePanel
         extends JPanel
         implements MouseListener {
