@@ -161,3 +161,4 @@ target/generated-test-sources/
 
 .idea/sonarlint/
 target/test-classes/
+/src/main/java/com/snakehunter/file/
